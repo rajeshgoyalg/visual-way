@@ -260,7 +260,7 @@ function switchLearner(n){
   location.reload();
 }
 function learnerChips(){
-  $$('.learner-chip').forEach(b=>{b.textContent=learners.current?'Learning as '+learners.current:'Choose learner';b.addEventListener('click',()=>openLearner(false));});
+  $$('.learner-chip').forEach(b=>{if(learners.current){b.innerHTML='<span class="lc-pre">Learning as </span><span></span>';b.lastChild.textContent=learners.current;b.title='Learning as '+learners.current+'. Click to switch learner.';}else b.textContent='Choose learner';b.addEventListener('click',()=>openLearner(false));});
 }
 
 /* ---------- backup: export, import, reset ---------- */
@@ -432,6 +432,7 @@ function initPage(){
   const p=PAGE.page;
   try{if(p==='unit'){initUnitPage();renderCourseOutcomes();}else if(p==='course')initCoursePage();else if(p==='home')initHomePage();else if(p==='progress')initProgressPage();else if(p==='practice'){initPracticePage();$$('#sprint').forEach(sprintDrill);$$('#bughunt').forEach(bugHunt);$$('#mixed').forEach(mixedQuiz);}else if(p==='search')initSearchPage();else if(p==='sdl')initSdlPage();else if(p==='exam')initExamPage();}catch(e){console.error(e);}
   $$('pre.c,.tr-code').forEach(x=>{if(!x.hasAttribute('tabindex'))x.setAttribute('tabindex','0');});
+  const cur=$('.unitnav a[aria-current="page"]'),nav=$('.unitnav');if(cur&&nav&&nav.scrollWidth>nav.clientWidth)nav.scrollLeft=cur.offsetLeft-(nav.clientWidth-cur.offsetWidth)/2;
   registerSW();
   if(!learners.current)openLearner(true);
 }

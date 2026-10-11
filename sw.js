@@ -1,7 +1,7 @@
 /* Offline support. When online, every page and file is fetched fresh from the network (the saved
    copy is only refreshed), so a published change shows up on the next visit. When offline, the saved
    copies are used. Change VERSION when you add, rename or remove files so the offline copy is rebuilt. */
-const VERSION = '2026-10-13';
+const VERSION = '2026-10-13b';
 const CACHE = 'visual-way-' + VERSION;
 const PRECACHE = [
   "./",
