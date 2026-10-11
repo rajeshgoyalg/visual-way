@@ -67,9 +67,9 @@ On first visit the site asks **who is learning**. Each name has separate progres
 
 ## Updating content
 
-Offline support serves the saved copy instantly and fetches the new version in the background, so a change you publish shows up on the **second** visit. To make every device refresh at once, change `VERSION` in `sw.js` (for example `v1` → `v2`) when you publish.
+When the device is online, the site always loads the latest published files, so a change you push appears on the next visit. Saved copies are used only when offline.
 
-If you add a new file to a course, also add its path to the `PRECACHE` list in `sw.js` so it works offline from the first visit.
+If you add a new file to a course, add its path to the `PRECACHE` list in `sw.js` and change `VERSION` (any new value, such as the date), so the offline copy includes it.
 
 ### Add or edit a quick-check question
 
