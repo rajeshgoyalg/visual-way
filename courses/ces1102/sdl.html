@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Projects | PPS, the visual way</title>
+<meta name="description" content="Visual, interactive course notes.">
+<meta name="theme-color" content="#2350B8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Visual Way">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="../../assets/icons/icon-192.png">
+<link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body data-page="sdl" data-course="ces1102" data-root="../../">
+<header class="topbar"><div class="topbar-in"><a class="brand" href="../../index.html">The Visual Way</a><nav class="unitnav" aria-label="Course"><a href="index.html">Course</a><a href="unit1.html">Unit 1</a><a href="unit2.html">Unit 2</a><a href="unit3.html">Unit 3</a><a href="unit4.html">Unit 4</a><a href="unit5.html">Unit 5</a><a href="practice.html">Practice</a><a href="sdl.html" aria-current="page">Projects</a><a href="exam.html">Exam prep</a><a href="progress.html">My progress</a></nav><button class="learner-chip" type="button">Choose learner</button></div></header>
+<main class="dashwrap">
+  <h1>Self-directed learning projects</h1>
+  <p class="small">The course plan sets 16 projects for 54 hours of self-directed learning, all for CO3 (arrays and strings). Assignment 2 is an SDL-LMS quiz, so these projects feed straight into marks. Work through the milestones in order; each has a hint. The reference solution unlocks when every milestone is ticked.</p>
+  <div class="row"><div class="tabs sdlfilter" role="group" aria-label="Filter projects"><button type="button" aria-pressed="true" data-f="all">All</button><button type="button" aria-pressed="false" data-f="todo">Not started</button><button type="button" aria-pressed="false" data-f="doing">In progress</button><button type="button" aria-pressed="false" data-f="done">Completed</button></div><p class="labcount sdlcount" aria-live="polite"></p></div>
+  <div class="cheat" style="margin:16px 0">
+    <div><h3>Student records (1 to 4, 16)</h3>Marks analysis, grading, linear search, linear versus binary search, and an integrated system that combines them.</div>
+    <div><h3>Products (5 to 8)</h3>Inventory, menu-driven search, catalogue sorting, and a measured comparison of bubble and selection sort.</div>
+    <div><h3>Text (9 to 12)</h3>Text statistics, a mini dictionary, keyword search and a library manager, all built on strings.</div>
+    <div><h3>Matrices (13 to 15)</h3>A matrix calculator, utility consumption reports and exam seating with 2-D arrays.</div>
+  </div>
+  <div id="sdl"></div>
+</main>
+<footer>Progress is saved only in this browser. Use Export on the My progress page to keep a backup.</footer>
+<script src="../../assets/engine.js"></script>
+<script src="course.js"></script>
+<script src="data/sdl.js"></script>
+<script>initPage();</script>
+</body>
+</html>

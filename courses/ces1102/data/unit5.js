@@ -77,4 +77,18 @@ PPS.init.push(function(){
     $('.stepnote',el).textContent='sizeof('+t+') = '+sz+(sz===1?' byte':' bytes')+'. If p holds 1000, then p + 1 = '+(1000+sz)+', p + 2 = '+(1000+2*sz)+', p + 3 = '+(1000+3*sz)+'. Each shaded block is one '+t+'.';}
   $$('.tabs button',el).forEach(b=>b.addEventListener('click',()=>draw(b.dataset.t)));draw('int');
 });
+
+PPS.Q.u5l6=[
+ {q:'char name[8]; strcpy(name, "Christopher"); What is the problem?',o:['Nothing, strcpy resizes name','11 characters plus \\0 need 12 bytes, so strcpy writes past the array: a buffer overflow','strcpy only copies 8 characters','It does not compile'],a:1,w:'C never checks the destination size. The extra bytes overwrite whatever lies next to name in memory.'},
+ {q:'Which line reads a word safely into char s[20]?',o:['gets(s);','scanf("%s", s);','scanf("%19s", s);','scanf("%20s", s);'],a:2,w:'The width must leave room for \\0, so it is one less than the array size.'},
+ {q:'A program prints a message typed by the user with printf(msg). Why is this risky?',o:['It is slower','Any % in the message is treated as a format code, so it can read or write memory it should not','printf cannot print strings','It adds a newline'],a:1,w:'Print user text with printf("%s", msg) so it is never interpreted as a format.'}];
+PPS.SO.u5safe={title:'Safe or risky? Judge each line',cats:['Safe','Risky'],items:[
+ {c:'fgets(line, sizeof line, stdin);',a:0,w:'fgets stops at the array size.'},
+ {c:'gets(line);',a:1,w:'gets cannot stop at the end of the array. It was removed from C for this reason.'},
+ {c:'scanf("%s", name);   /* char name[10] */',a:1,w:'No width, so a long word overflows name. Use %9s.'},
+ {c:'printf("%s", userText);',a:0,w:'The user\u2019s text is printed as data, never read as a format.'},
+ {c:'marks[i] = m;   /* i typed by the user, not checked */',a:1,w:'An unchecked index can write outside the array. Check 0 <= i < n first.'},
+ {c:'if (scanf("%d", &n) != 1 || n < 1 || n > 100) return 1;',a:0,w:'Checks both that a number was read and that it is in range.'},
+ {c:'snprintf(dest, sizeof dest, "%s", src);',a:0,w:'snprintf never writes more than sizeof dest bytes, including \\0.'},
+ {c:'int *p; *p = 5;',a:1,w:'p points nowhere in particular. Writing through it corrupts memory.'}]};
 })();

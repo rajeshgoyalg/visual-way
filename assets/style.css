@@ -351,8 +351,12 @@ a.btn{display:inline-flex;align-items:center;text-decoration:none}
 @media print{
   body{background:#fff}
   .topbar,footer,.toast,.selfmark,.wq-tools,[data-wq-summary],details>summary{display:none !important}
-  body.print-mode .dashwrap>:not(#written){display:none !important}
-  body.print-mode #written>p.small{display:none}
+  body.print-mode .dashwrap>:not(.print-target){display:none !important}
+  body.print-mode .print-target>p.small{display:none}
+  body.print-mode #papers>:not(.print-target){display:none !important}
+  body.print-mode .dashwrap>#papers{display:block !important}
+  .xq{break-inside:avoid}
+  .qtag{color:#333 !important}
   .wq{break-inside:avoid;border:1px solid #999;background:#fff}
   pre.c{background:#f3f3f3 !important;color:#000 !important;white-space:pre-wrap;border:1px solid #ccc}
   pre.c span{color:#000 !important}
@@ -360,3 +364,37 @@ a.btn{display:inline-flex;align-items:center;text-decoration:none}
   body.print-questions .answer-space{display:block;height:7cm;border-top:1px dashed #999;margin-top:10px}
   .tr-out{background:#f3f3f3 !important;color:#000 !important}
 }
+
+/* ---------- tags, readiness, projects, mock papers, security ---------- */
+.qtag{font:500 .76rem var(--head);color:var(--soft);margin:-2px 0 6px 6px}
+.xpart .qtag{margin:0 0 0 6px;white-space:nowrap}
+.focus{background:var(--blue-tint);border-color:var(--blue);margin:10px 0 14px}
+.miles{padding-left:1.3em;margin:6px 0 12px}
+.miles li{margin-bottom:8px}
+.ms{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.ms input{width:20px;height:20px;margin-top:3px;accent-color:var(--good);flex:none}
+details.hint{margin:4px 0 0 30px}
+details.hint summary{cursor:pointer;font:500 .85rem var(--head);color:var(--blue)}
+.pstate{font:500 .8rem var(--head);padding:2px 10px;border-radius:20px;border:1.5px solid var(--line);color:var(--soft)}
+.pstate.done{border-color:var(--good);color:var(--good);background:var(--good-tint)}
+.pstate.doing{border-color:var(--blue);color:var(--blue)}
+.paper{margin:30px 0}
+.paper-h{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.xq{border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin:14px 0;background:var(--card)}
+.xpart{border-top:1px dashed var(--line);padding-top:10px;margin-top:10px}
+.xpart:first-of-type{border-top:0}
+.exam-timer{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;display:flex;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+#examTimerText{font:700 1.3rem var(--mono);color:var(--blue)}
+#examTimerText.warn{color:var(--bad)}
+.plan{list-style:none;padding:0;margin:10px 0}
+.plan li{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;padding:8px 0;border-bottom:1px solid var(--line);font-size:.95rem}
+.pday{font:600 .9rem var(--head);color:var(--blue)}
+.security{border:1px solid var(--blue);background:var(--blue-tint);border-radius:12px;padding:14px 18px;margin:18px 0}
+.security h3{color:var(--blue)}
+.cell.admin .box{background:var(--good-tint)}
+.matrix td,.matrix th{text-align:center}
+.matrix td:first-child,.matrix th:first-child{text-align:left}
+@media (max-width:640px){.plan li{grid-template-columns:1fr;gap:2px}}
+@media print{.exam-timer,.sdlfilter{display:none !important}}
+
+@media (min-width:961px){.unitnav{flex-wrap:wrap;overflow:visible}}

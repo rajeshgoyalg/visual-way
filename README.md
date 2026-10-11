@@ -2,7 +2,7 @@
 
 Visual, interactive course notes that run entirely in the browser. No server, no database, no build step: every file in this repository is served as it is.
 
-The first course is **PPS, the visual way** (CES 1102, B.Tech CSE Semester 1): five units, 29 lessons, 37 practice problems, 5 unit quizzes.
+The first course is **PPS, the visual way** (CES 1102 Programming for Problem Solving, B.Tech CS stream, Semester I): five units, 30 lessons plus orientation, 37 lab problems, 5 unit quizzes, 16 self-directed learning projects, assessment practice and two mock end-semester papers.
 
 ## What is where
 
@@ -17,9 +17,16 @@ assets/
 courses/ces1102/
   index.html                  Course home with the unit roadmap
   unit1.html … unit5.html     One page per unit (lessons, lab, quiz, cheat sheet)
-  progress.html               "My progress" dashboard and data controls
+  practice.html               Practice for Assignments 2 and 3 (timed quizzes, written questions)
+  sdl.html                    The 16 self-directed learning projects
+  exam.html                   End-semester mock papers and revision plan
+  progress.html               "My progress": readiness by course outcome, scores, questions to revisit
   course.js                   Course outline: lesson ids and lab problem ids per unit
   data/unit1.js … unit5.js    Questions and widget data for each unit
+  data/tags.js                Bloom's level of every quick-check and quiz question
+  data/practice.js            Assessment practice question banks
+  data/sdl.js                 Project briefs, milestones and tested reference solutions
+  data/exam.js                Mock papers with model answers and marking schemes
 ```
 
 ## Try it on your computer
@@ -104,6 +111,14 @@ Copy an `<article class="prob" …>` block in the unit's practice lab section. G
 - `PPS.WQ.<key>` is a list of written questions: `id`, `co`, `bl` (Bloom level), `marks`, `q` (use a line break between parts), optional `qcode`, the model answer `code` (set `plain: true` for a non-code answer), a `note`, a `scheme` of `[marks, what for]` rows, and an optional `sample` of `[input, output]`.
 
 Put `<div class="tq" data-set="KEY"></div>` or `<div class="wq-list" data-set="KEY"></div>` on the page to show one. Attempts, answers and self-marks are saved per learner and appear on My progress. Add new questions at the end of a pool so saved answers stay matched.
+
+### Projects and mock papers
+
+`data/sdl.js` holds `PPS.SDL`, one entry per project: `n`, `title`, `hours`, the course-plan text in `plan`, a `brief`, `concepts` (lesson id and label pairs), `milestones` (text and hint pairs), the reference solution `code`, its sample input `stdin` and expected output `out`, and an `extend` idea. Milestone ticks are saved as `sdl<n>m<k>`.
+
+`data/exam.js` holds `PPS.EXAM`, a list of papers. Each paper has 5 `questions`, each with a `co` and 3 `parts` (`m` marks, `bl`, `q`, optional `qcode`, answer `a`, `plain` for non-code answers, `scheme`). Self-marks are saved per part as `Q1a`, `Q1b` and so on. The revision plan on the exam page reads the exam start date from `exam` in `course.js` and the official course outcomes from `cos`.
+
+Every C answer in the lab problems, practice questions, projects and mock papers was compiled with `gcc -Wall -Wextra` and run before publishing. If you add or change one, test it the same way.
 
 ### Building blocks you can reuse
 

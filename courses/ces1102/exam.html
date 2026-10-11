@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Exam preparation | PPS, the visual way</title>
+<meta name="description" content="Visual, interactive course notes.">
+<meta name="theme-color" content="#2350B8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Visual Way">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="../../assets/icons/icon-192.png">
+<link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body data-page="exam" data-course="ces1102" data-root="../../">
+<header class="topbar"><div class="topbar-in"><a class="brand" href="../../index.html">The Visual Way</a><nav class="unitnav" aria-label="Course"><a href="index.html">Course</a><a href="unit1.html">Unit 1</a><a href="unit2.html">Unit 2</a><a href="unit3.html">Unit 3</a><a href="unit4.html">Unit 4</a><a href="unit5.html">Unit 5</a><a href="practice.html">Practice</a><a href="sdl.html">Projects</a><a href="exam.html" aria-current="page">Exam prep</a><a href="progress.html">My progress</a></nav><button class="learner-chip" type="button">Choose learner</button></div></header>
+<main class="dashwrap">
+  <h1>End-semester exam preparation</h1>
+  <div class="cheat" style="margin:14px 0 6px">
+    <div><h3>When</h3>14 to 28 November 2026. 180 minutes, 50 marks.</div>
+    <div><h3>Format</h3>Answer all 5 full questions of 10 marks each. Each question can have 3 parts of 2, 3, 4 or 5 marks.</div>
+    <div><h3>Covers</h3>Lectures 1 to 36, all five course outcomes. Bloom’s levels 3 to 6: apply, analyse, evaluate, create.</div>
+  </div>
+  <h2 style="margin-top:30px">Your revision plan</h2>
+  <div id="plan"></div>
+  <div class="exam-timer" id="examTimer" hidden><span id="examTimerText"></span><span class="small">Mock paper timer</span></div>
+  <div id="papers"></div>
+  <h2 style="margin-top:30px">How marks are given</h2>
+  <div class="prose"><p>Marks are awarded for each step, so write the steps even when you are unsure of the final answer. For a program: the declarations and input, the main logic, and the output each earn marks. For a predict-the-output question: show how each value is worked out. For a trace: write every step, not just the answer. Under time pressure, attempt every part; a blank earns nothing.</p></div>
+</main>
+<footer>Progress is saved only in this browser. Use Export on the My progress page to keep a backup.</footer>
+<script src="../../assets/engine.js"></script>
+<script src="course.js"></script>
+<script src="data/unit1.js"></script>
+<script src="data/unit2.js"></script>
+<script src="data/unit3.js"></script>
+<script src="data/unit4.js"></script>
+<script src="data/unit5.js"></script>
+<script src="data/tags.js"></script>
+<script src="data/practice.js"></script>
+<script src="data/sdl.js"></script>
+<script src="data/exam.js"></script>
+<script>initPage();</script>
+</body>
+</html>

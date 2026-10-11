@@ -19,7 +19,7 @@
 </head>
 <body data-page="unit" data-course="ces1102" data-unit="5" data-root="../../">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><marker id="mk" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="currentColor" stroke-width="1.6"/></marker></defs></svg>
-<header class="topbar"><div class="topbar-in"><a class="brand" href="../../index.html">The Visual Way</a><nav class="unitnav" aria-label="Course"><a href="index.html">Course home</a><a href="unit1.html">Unit 1</a><a href="unit2.html">Unit 2</a><a href="unit3.html">Unit 3</a><a href="unit4.html">Unit 4</a><a href="unit5.html" aria-current="page">Unit 5</a><a href="practice.html">Practice</a><a href="progress.html">My progress</a></nav><button class="learner-chip" type="button">Choose learner</button></div></header>
+<header class="topbar"><div class="topbar-in"><a class="brand" href="../../index.html">The Visual Way</a><nav class="unitnav" aria-label="Course"><a href="index.html">Course</a><a href="unit1.html">Unit 1</a><a href="unit2.html">Unit 2</a><a href="unit3.html">Unit 3</a><a href="unit4.html">Unit 4</a><a href="unit5.html" aria-current="page">Unit 5</a><a href="practice.html">Practice</a><a href="sdl.html">Projects</a><a href="exam.html">Exam prep</a><a href="progress.html">My progress</a></nav><button class="learner-chip" type="button">Choose learner</button></div></header>
 <div class="wrap layout" style="margin-top:28px">
 <nav class="rail" aria-label="Lessons in this unit"><h4>Unit 5 lessons</h4><ol id="railList"></ol><div class="bar" aria-hidden="true"><i id="barFill"></i></div><small id="progText"></small></nav>
 <main>
@@ -253,7 +253,55 @@ int main(void)
     <div class="complete row"><button class="btn ghost" data-done="u5l5"></button></div>
   </section>
 
-  <section class="lesson" id="u5lab" data-title="Practice lab" data-kind="lab" aria-labelledby="u5labh">
+    <!-- 5.6 -->
+  <section class="lesson" id="u5l6" data-title="5.6 Writing secure C" aria-labelledby="u5l6h">
+    <div class="lesson-head"><span class="num">5.6</span><h2 id="u5l6h">Writing secure C</h2><span class="lec">Learning outcome C1: problems that pertain to computer security</span></div>
+    <p class="hook">C trusts you completely. It will copy 50 characters into a 10-character array without complaint. Most security holes in C programs come from a handful of mistakes you have already met in this course.</p>
+    <div class="prose">
+      <p>A <mark>buffer overflow</mark> happens when a program writes past the end of an array. The extra bytes land on whatever sits next to the array in memory: another variable, or the information a function needs to return safely. An attacker who controls the input can choose those bytes. The Morris worm of 1988, one of the first worms to spread across the internet, got into computers through exactly this mistake: a server program read input with <code>gets</code>, which has no way to stop at the end of the array.</p>
+      <p>The lab below shows the idea. <code>name</code> has room for 7 characters plus <code>'\0'</code>, and an <code>isAdmin</code> flag sits right after it. Type a longer name and watch what <code>strcpy</code> does, then switch to the safe version.</p>
+    </div>
+    <div class="widget ovlab"></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Risky code</th><th>What can go wrong</th><th>Safer habit</th></tr></thead>
+      <tbody>
+        <tr><td><code>gets(s);</code></td><td>No length limit at all; removed from the C language</td><td><code>fgets(s, sizeof s, stdin);</code></td></tr>
+        <tr><td><code>scanf("%s", s);</code></td><td>A long word overflows s</td><td>Give a width one less than the size: <code>scanf("%19s", s);</code> for <code>char s[20]</code></td></tr>
+        <tr><td><code>strcpy(d, s);</code> <code>strcat(d, s);</code></td><td>The destination can be too small</td><td>Check <code>strlen</code> first, or use <code>snprintf(d, sizeof d, "%s", s);</code></td></tr>
+        <tr><td><code>a[i] = x;</code> with i from the user</td><td>Writes outside the array</td><td>Check <code>0 &lt;= i &amp;&amp; i &lt; n</code> before using i</td></tr>
+        <tr><td><code>printf(text);</code></td><td>A % in the text is treated as a format code and reads or writes memory</td><td><code>printf("%s", text);</code></td></tr>
+        <tr><td><code>scanf("%d", &amp;n);</code> with no check</td><td>Letters leave n unset, and later code uses garbage</td><td>Check that scanf returned 1, and check the range</td></tr>
+        <tr><td><code>int f = 1;</code> for 20!</td><td>Integer overflow gives wrong, even negative, results</td><td>Use a wider type such as <code>unsigned long long</code> and check limits</td></tr>
+        <tr><td><code>int *p; *p = 5;</code></td><td>Writes to a random address</td><td>Initialise pointers: <code>int *p = NULL;</code> and check before use</td></tr>
+        <tr><td><code>fp = fopen(...);</code> with no check</td><td>A missing file crashes the program</td><td><code>if (fp == NULL) { ... }</code></td></tr>
+      </tbody>
+    </table></div>
+    <div class="prose"><p>The most useful habit of all is to <mark>validate input</mark>: never assume the user typed what you asked for. This loop keeps asking until it gets a whole number in range, and throws away anything else that was typed.</p></div>
+<pre class="c" data-hl>
+int marks, c, r;
+printf("Marks (0 to 100): ");
+while ((r = scanf("%d", &amp;marks)) != 1 || marks &lt; 0 || marks &gt; 100) {
+    if (r == EOF) return 1;             /* no input left at all */
+    while ((c = getchar()) != '\n' &amp;&amp; c != EOF) {
+        /* discard the rest of the bad line */
+    }
+    printf("Please type a whole number from 0 to 100: ");
+}</pre>
+    <div class="widget sorterw" data-s="u5safe"></div>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li><code>char s[10]</code> holds at most 9 characters plus '\0'. The width in scanf is therefore 9: <code>%9s</code>.</li>
+        <li><code>strncpy(d, s, n)</code> does not add '\0' when s is too long. Add it yourself: <code>d[n - 1] = '\0';</code></li>
+        <li>"It worked when I tested it" proves nothing about long or unexpected input. Test with empty, very long and wrong-type input too.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u5l6"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u5l6"></button></div>
+  </section>
+
+<section class="lesson" id="u5lab" data-title="Practice lab" data-kind="lab" aria-labelledby="u5labh">
 <div class="lesson-head"><h2 id="u5labh">Unit 5 practice lab</h2><span class="lec">Tutorials T10, T11, T12 and lectures L32, L34, L36</span></div>
 <p class="prose">Try each problem on paper or in gcc before opening the solution. Easy problems apply one idea, medium ones combine ideas, and exam-level ones are the complete programs asked in end-semester papers. Solutions skip input prompts to stay short; add a printf prompt before each scanf in your lab record. Every C solution here compiles cleanly with gcc -Wall and was run on the sample input shown.</p>
 <div class="row"><div class="tabs labfilter" role="group" aria-label="Filter problems by level"><button type="button" aria-pressed="true" data-f="all">All</button><button type="button" aria-pressed="false" data-f="easy">Easy</button><button type="button" aria-pressed="false" data-f="medium">Medium</button><button type="button" aria-pressed="false" data-f="exam">Exam level</button></div><p class="labcount" aria-live="polite"></p></div>
@@ -568,6 +616,16 @@ fscanf(fp, "%d", &amp;m);
 fclose(fp);   // saves, releases</pre>
         <p class="watch"><b>Always</b> check for NULL before using fp. <b>Pairs to know:</b> <code>fprintf</code>/<code>fscanf</code> for formatted data, <code>fputc</code>/<code>fgetc</code> for one character, <code>fputs</code>/<code>fgets</code> for one line.</p>
       </div>
+      <div>
+        <h3>Writing secure C</h3>
+        <p>Never let input decide how much is written into an array.</p>
+<pre class="c" data-hl>
+fgets(s, sizeof s, stdin);  // not gets
+scanf("%19s", name);        // width = size - 1
+printf("%s", text);         // not printf(text)
+if (fp == NULL) return 1;   // check fopen</pre>
+        <p class="watch"><b>Remember:</b> check every index, every size and every return value. Validate input before using it.</p>
+      </div>
     </div>
     <h3 style="margin-top:22px">Which file mode?</h3>
     <div class="tbl"><table>
@@ -588,6 +646,7 @@ fclose(fp);   // saves, releases</pre>
 <footer>Progress is saved only in this browser. Use Export on the My progress page to keep a backup.</footer>
 <script src="../../assets/engine.js"></script>
 <script src="data/unit5.js"></script>
+<script src="data/tags.js"></script>
 <script>initPage();</script>
 </body>
 </html>

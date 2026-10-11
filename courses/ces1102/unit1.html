@@ -19,13 +19,22 @@
 </head>
 <body data-page="unit" data-course="ces1102" data-unit="1" data-root="../../">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><marker id="mk" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="currentColor" stroke-width="1.6"/></marker></defs></svg>
-<header class="topbar"><div class="topbar-in"><a class="brand" href="../../index.html">The Visual Way</a><nav class="unitnav" aria-label="Course"><a href="index.html">Course home</a><a href="unit1.html" aria-current="page">Unit 1</a><a href="unit2.html">Unit 2</a><a href="unit3.html">Unit 3</a><a href="unit4.html">Unit 4</a><a href="unit5.html">Unit 5</a><a href="practice.html">Practice</a><a href="progress.html">My progress</a></nav><button class="learner-chip" type="button">Choose learner</button></div></header>
+<header class="topbar"><div class="topbar-in"><a class="brand" href="../../index.html">The Visual Way</a><nav class="unitnav" aria-label="Course"><a href="index.html">Course</a><a href="unit1.html" aria-current="page">Unit 1</a><a href="unit2.html">Unit 2</a><a href="unit3.html">Unit 3</a><a href="unit4.html">Unit 4</a><a href="unit5.html">Unit 5</a><a href="practice.html">Practice</a><a href="sdl.html">Projects</a><a href="exam.html">Exam prep</a><a href="progress.html">My progress</a></nav><button class="learner-chip" type="button">Choose learner</button></div></header>
 <div class="wrap layout" style="margin-top:28px">
 <nav class="rail" aria-label="Lessons in this unit"><h4>Unit 1 lessons</h4><ol id="railList"></ol><div class="bar" aria-hidden="true"><i id="barFill"></i></div><small id="progText"></small></nav>
 <main>
-<section class="unit" id="unit-1"><div class="intro"><h2>Unit 1: How computers think</h2><p>Before writing C you need a picture of the machine you are talking to and a habit of thinking in clear steps. This unit covers what is inside a computer, how languages evolved, algorithms, flowcharts and your first C program.</p><div class="mindmap" data-center="Unit 1|How computers think"></div></div>  <section class="lesson" id="u1start" data-title="Start here: how this course works" data-kind="orient" aria-labelledby="u1starth">
+  <section class="lesson" id="u1start" data-title="Start here: how this course works" data-kind="orient" aria-labelledby="u1starth">
     <div class="lesson-head"><span class="num">0</span><h2 id="u1starth">Start here: how this course works</h2><span class="lec">Lecture L0</span></div>
     <p class="hook">Before the first line of code: what you will be able to do by the end of this course, and how that will be checked.</p>
+    <div class="tbl"><table>
+      <tbody>
+        <tr><th>Course</th><td>CES 1102 Programming for Problem Solving (core), B.Tech first year, CS stream, Semester I</td></tr>
+        <tr><th>School</th><td>School of Computer Engineering, Manipal Institute of Technology</td></tr>
+        <tr><th>Faculty</th><td>Dr. Venkatesh Bhandage</td></tr>
+        <tr><th>Hours per week</th><td>2 lectures, 1 tutorial, 0 practical: 3 credits</td></tr>
+        <tr><th>Total learning</th><td>36 contact hours plus 54 hours of self-directed learning (one credit is 30 hours of learning, so 3 credits is 90 hours)</td></tr>
+      </tbody>
+    </table></div>
     <figure class="fig-r">
       <svg viewBox="0 0 320 230" role="img" aria-labelledby="obeT">
         <title id="obeT">The outcome-based education cycle: define outcomes, teach and practise, assess, review and improve, then repeat</title>
@@ -44,26 +53,52 @@
       <figcaption>Outcome-based education starts from the end: what a student should be able to do.</figcaption>
     </figure>
     <div class="prose">
-      <p>This course follows <mark>outcome-based education</mark> (OBE). Instead of starting from a list of topics and asking "what will we teach?", OBE starts from the end and asks "what should a student be able to do?" Those statements are the <mark>course outcomes</mark> (COs). Lectures, tutorials, labs and exams are then designed to build and measure them, and the results are used to improve the course the next time it runs.</p>
-      <p>Accreditation bodies check that this loop really works. In India, the <b>National Board of Accreditation (NBA)</b> accredits engineering programmes. The <b>Institution of Engineering and Technology (IET)</b>, a UK professional engineering body, also accredits degree programmes. Both look for clearly stated outcomes, evidence that students achieve them, and continuous improvement. Your quiz, lab and exam performance is part of that evidence.</p>
+      <p>This course follows <mark>outcome-based education</mark> (OBE). Instead of starting from a list of topics and asking "what will we teach?", OBE starts from the end and asks "what should a student be able to do?" Those statements are the <mark>course outcomes</mark> (COs). Lectures, tutorials, self-directed learning and assessments are designed to build and measure them, and the results are used to improve the course the next time it runs.</p>
+      <p>Accreditation bodies check that this loop really works. In India, the <b>National Board of Accreditation (NBA)</b> accredits engineering programmes. The <b>Institution of Engineering and Technology (IET)</b>, a UK professional engineering body, also accredits programmes and adds its own learning outcomes (below). Both look for clearly stated outcomes, evidence that students achieve them, and continuous improvement. Your assignment and exam results are part of that evidence.</p>
     </div>
     <div class="clear"></div>
 
-    <h3>What each course outcome covers</h3>
-    <p class="prose">Your official course plan states each CO in its own words. The summaries below describe what each one covers in this material, and where.</p>
+    <h3>The five course outcomes</h3>
     <div class="tbl"><table>
-      <thead><tr><th>Outcome</th><th>You will be able to</th><th>Lectures</th><th>Unit</th></tr></thead>
+      <thead><tr><th>CO</th><th>By the end you will be able to</th><th>Hours</th><th>Marks</th><th>POs</th><th>Learning outcomes</th><th>Unit</th></tr></thead>
       <tbody>
-        <tr><td>CO1</td><td>Explain how a computer is organised and how programs are translated, and express solutions as algorithms and flowcharts</td><td>L1 to L5</td><td>Unit 1</td></tr>
-        <tr><td>CO2</td><td>Write C programs using data types, operators, expressions, decisions and loops</td><td>L6 to L13</td><td>Unit 2</td></tr>
-        <tr><td>CO3</td><td>Store and process collections of data with arrays and strings, including searching and sorting</td><td>L14 to L21</td><td>Unit 3</td></tr>
-        <tr><td>CO4</td><td>Break programs into functions, share data through pointers, and solve problems recursively</td><td>L22 to L29</td><td>Unit 4</td></tr>
-        <tr><td>CO5</td><td>Model records with structures, work with memory through pointers, and keep data in files</td><td>L30 to L36</td><td>Unit 5</td></tr>
+        <tr><td>CO1</td><td>Solve simple problems using C language.</td><td>5</td><td>12</td><td>1, 2, 9, 11</td><td>C1, C2</td><td><a href="unit1.html">Unit 1</a></td></tr>
+        <tr><td>CO2</td><td>Apply appropriate operators, decision-making constructs, and looping statements in C to implement logical and repeatable programs.</td><td>8</td><td>28</td><td>1, 2, 9, 11</td><td>C2</td><td><a href="unit2.html">Unit 2</a></td></tr>
+        <tr><td>CO3</td><td>Apply the derived data types like arrays and strings to efficiently manage and manipulate collections of data.</td><td>8</td><td>25</td><td>1, 2, 9, 11</td><td>C3</td><td><a href="unit3.html">Unit 3</a></td></tr>
+        <tr><td>CO4</td><td>Apply the concept of modular programming to decompose a problem into functions and synthesize a complete program.</td><td>8</td><td>20</td><td>1, 2, 9, 11</td><td>C3</td><td><a href="unit4.html">Unit 4</a></td></tr>
+        <tr><td>CO5</td><td>Solve complex programming problems using structures, pointers, and file pointers.</td><td>7</td><td>15</td><td>1, 2, 4, 9, 11</td><td>C3</td><td><a href="unit5.html">Unit 5</a></td></tr>
+        <tr><td></td><td><b>Total</b></td><td><b>36</b></td><td><b>100</b></td><td></td><td></td><td></td></tr>
       </tbody>
     </table></div>
-    <div class="prose">
-      <p><b>CO-PO mapping.</b> The B.Tech programme as a whole has <mark>programme outcomes</mark> (POs): abilities every graduate should have, such as applying engineering knowledge, analysing problems, designing solutions and using modern tools. Each course outcome contributes to some of them. The <mark>CO-PO mapping</mark> is a table showing how strongly each CO supports each PO, usually on a scale of 1 (low), 2 (medium) and 3 (high). For example, writing and testing your own programs (CO2 to CO5) builds problem analysis and solution design, and working in gcc and RAPTOR builds modern tool use. The exact mapping for this course is in your department's course plan.</p>
-    </div>
+    <p class="small">The recommended Bloom's level for every CO is 3 to 6: questions mostly ask you to apply, analyse, evaluate and create, not just recall. CO2 and CO3 together carry 53 of the 100 marks.</p>
+
+    <h3>CO-PO articulation matrix</h3>
+    <div class="prose"><p>Programme outcomes (POs) are the abilities every graduate of the programme should have. Each number shows how strongly a course outcome supports a PO: 3 is high, 2 medium, 1 low, and a dash means not addressed. The POs are PO1 Engineering knowledge, PO2 problem analysis, PO3 design/development of solutions, PO4 investigations of complex problems, PO5 engineering tool usage, PO6 the engineer and the world, PO7 ethics, PO8 individual and collaborative team work, PO9 communication, PO10 project management and finance, PO11 life-long learning. PSO1 to PSO4 are the programme-specific outcomes.</p></div>
+    <div class="tbl"><table class="matrix"><thead><tr><th>Outcome</th><th title="Engineering knowledge">PO1</th><th title="Problem analysis">PO2</th><th title="Design/development of solutions">PO3</th><th title="Investigations of complex problems">PO4</th><th title="Engineering tool usage">PO5</th><th title="The Engineer and the world">PO6</th><th title="Ethics">PO7</th><th title="Individual and collaborative team work">PO8</th><th title="Communication">PO9</th><th title="Project management and finance">PO10</th><th title="Life-long learning">PO11</th><th title="Programme specific outcome">PSO1</th><th title="Programme specific outcome">PSO2</th><th title="Programme specific outcome">PSO3</th><th title="Programme specific outcome">PSO4</th></tr></thead><tbody><tr><td>CO1</td><td>3</td><td>3</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>1</td><td>-</td><td>2</td><td>3</td><td>-</td><td>-</td><td>-</td></tr><tr><td>CO2</td><td>3</td><td>3</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>1</td><td>-</td><td>2</td><td>3</td><td>-</td><td>-</td><td>-</td></tr><tr><td>CO3</td><td>3</td><td>3</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>1</td><td>-</td><td>2</td><td>3</td><td>-</td><td>-</td><td>-</td></tr><tr><td>CO4</td><td>3</td><td>3</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>1</td><td>-</td><td>2</td><td>3</td><td>-</td><td>-</td><td>-</td></tr><tr><td>CO5</td><td>3</td><td>3</td><td>-</td><td>1</td><td>-</td><td>-</td><td>-</td><td>-</td><td>1</td><td>-</td><td>2</td><td>3</td><td>-</td><td>-</td><td>-</td></tr><tr><td><b>Average</b></td><td><b>3</b></td><td><b>3</b></td><td><b>0</b></td><td><b>1</b></td><td><b>0</b></td><td><b>0</b></td><td><b>0</b></td><td><b>0</b></td><td><b>1</b></td><td><b>0</b></td><td><b>2</b></td><td><b>3</b></td><td><b>0</b></td><td><b>0</b></td><td><b>0</b></td></tr></tbody></table></div>
+    <p class="small">In plain words: every CO strongly builds engineering knowledge (PO1), problem analysis (PO2) and PSO1; all of them also build life-long learning (PO11) and some individual and team work (PO9); CO5 adds some investigation of complex problems (PO4).</p>
+
+    <h3>IET learning outcomes</h3>
+    <div class="tbl"><table>
+      <thead><tr><th>LO</th><th>Statement</th><th>How it is delivered</th><th>How it is assessed</th></tr></thead>
+      <tbody>
+        <tr><td>C1</td><td>Apply knowledge of mathematics, statistics, natural science and engineering principles to the solution of complex problems. Some of the knowledge will be at the forefront of the particular subject of study.</td><td>Lectures on arithmetic and logical problem solving; pointers and structures (<a href="unit4.html#u4l3">4.3</a>, <a href="unit5.html">Unit 5</a>); computer security (<a href="unit5.html#u5l6">5.6 Writing secure C</a>).</td><td>Mid-term and end-semester exams</td></tr>
+        <tr><td>C2</td><td>Analyse complex problems to reach substantiated conclusions using first principles of mathematics, statistics, natural science and engineering principles.</td><td>Lectures on arithmetic and logical problem solving and on analysing situations for decision making (<a href="unit2.html#u2l5">2.5</a>).</td><td>Assignment 1, mid-term and end-semester exams</td></tr>
+        <tr><td>C3</td><td>Select and apply appropriate computational and analytical techniques to model complex problems, recognising the limitations of the techniques employed.</td><td>Decision making, repetition, searching and sorting, and their limitations (<a href="unit3.html#u3l2">3.2</a>, <a href="unit3.html#u3l3">3.3</a>, <a href="sdl.html">projects</a>).</td><td>Assignments 2, 3 and 4, mid-term and end-semester exams</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small">Module matrix: CLO1 addresses LO1 and LO2 (C1, C2), CLO2 addresses LO2, and CLO3 to CLO5 address LO3.</p>
+
+    <h3>How you are assessed</h3>
+    <div class="tbl"><table>
+      <thead><tr><th>Assessment</th><th>When</th><th>Format</th><th>Marks</th><th>Covers</th></tr></thead>
+      <tbody>
+        <tr><td>Assignment 1 (quiz)</td><td>17 to 29 Aug 2026</td><td>20 min, objective</td><td>5</td><td>L6 to L13 (CO2)</td></tr>
+        <tr><td>Mid-term test (Epad)</td><td>25 Sep to 1 Oct 2026</td><td>90 min, 5 objective and 25 descriptive</td><td>30</td><td>L1 to L21 (CO1 to CO3)</td></tr>
+        <tr><td>Assignment 2 (SDL-LMS quiz)</td><td>19 to 31 Oct 2026</td><td>20 min, objective. <a href="practice.html#a2-sec">Practise</a></td><td>5</td><td>L14 to L21 (CO3) and the <a href="sdl.html">SDL projects</a></td></tr>
+        <tr><td>Assignment 3 (surprise, pen and paper)</td><td>19 to 31 Oct 2026</td><td>30 min, objective and descriptive. <a href="practice.html#a3-sec">Practise</a></td><td>10</td><td>L22 to L36 (CO4, CO5)</td></tr>
+        <tr><td>End-semester exam</td><td>14 to 28 Nov 2026</td><td>180 min: 5 full questions of 10 marks, each in 3 parts of 2/3/4/5 marks. <a href="exam.html">Mock papers</a></td><td>50</td><td>L1 to L36 (CO1 to CO5)</td></tr>
+      </tbody>
+    </table></div>
 
     <h3>Bloom's taxonomy: the levels of a question</h3>
     <div class="fig">
@@ -85,9 +120,9 @@
       </svg>
     </div>
     <div class="prose">
-      <p>Questions are written at different levels of <mark>Bloom's revised taxonomy</mark>. The lower levels check that you know and understand an idea; the higher levels check that you can use it, take it apart and build something new with it. Exam papers spread marks across these levels, and the verb in a question tells you which one is being tested: "list" and "define" sit at the bottom, "write a program" sits at the top. This material climbs the same ladder: quick checks are mostly remember and understand, tracers and quizzes reach apply and analyse, and the practice labs end with exam-level programs you create yourself.</p>
-      <p><b>Prerequisites.</b> None beyond school mathematics and basic computer use; no previous programming is assumed. You will need a C compiler (gcc, as used in the labs) and, for Unit 1, the free RAPTOR flowchart tool.</p>
-      <p><b>How to use this material.</b> Every lesson follows the same rhythm: an everyday analogy, a picture, a short explanation, code, something to try, the traps that cost marks, and a quick check. Each unit ends with a practice lab, a 10-question quiz and a one-screen cheat sheet. Mark lessons complete as you go; your progress is saved in this browser.</p>
+      <p>Questions are written at different levels of <mark>Bloom's revised taxonomy</mark>. The course plan prefers level 3 (apply) and above. The verb in a question tells you the level: "list" and "define" sit at the bottom; "predict", "trace" and "find the bug" are analyse; "write a program" is create. Every question in this material shows its course outcome and level, so you can see where you are working.</p>
+      <p><b>Prerequisites.</b> None beyond school mathematics and basic computer use; no previous programming is assumed. You will need a C compiler (gcc) and, for Unit 1, the free RAPTOR flowchart tool.</p>
+      <p><b>How to use this material.</b> Every lesson follows the same rhythm: an everyday analogy, a picture, a short explanation, code, something to try, the traps that cost marks, and a quick check. Each unit ends with a practice lab, a 10-question quiz and a one-screen cheat sheet. The <a href="sdl.html">projects</a> cover the 54 hours of self-directed learning, <a href="practice.html">Practice</a> prepares you for Assignments 2 and 3, and <a href="exam.html">Exam prep</a> has mock papers and a revision plan. My progress shows how ready you are for each course outcome.</p>
     </div>
   </section>
 
@@ -543,6 +578,7 @@ int main(void)
 <footer>Progress is saved only in this browser. Use Export on the My progress page to keep a backup.</footer>
 <script src="../../assets/engine.js"></script>
 <script src="data/unit1.js"></script>
+<script src="data/tags.js"></script>
 <script>initPage();</script>
 </body>
 </html>

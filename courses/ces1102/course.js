@@ -200,6 +200,10 @@ PPS_MANIFEST["ces1102"]={
     [
      "u5l5",
      "5.5 Files"
+    ],
+    [
+     "u5l6",
+     "5.6 Writing secure C"
     ]
    ],
    "labs": [
@@ -213,6 +217,66 @@ PPS_MANIFEST["ces1102"]={
     "u5labH",
     "u5labI"
    ]
+  }
+ ],
+ "name": "Programming for Problem Solving",
+ "cos": [
+  {
+   "id": "CO1",
+   "short": "C basics",
+   "marks": 12,
+   "hours": 5,
+   "pos": "1, 2, 9, 11",
+   "text": "Solve simple problems using C language."
+  },
+  {
+   "id": "CO2",
+   "short": "operators, decisions, loops",
+   "marks": 28,
+   "hours": 8,
+   "pos": "1, 2, 9, 11",
+   "text": "Apply appropriate operators, decision-making constructs, and looping statements in C to implement logical and repeatable programs."
+  },
+  {
+   "id": "CO3",
+   "short": "arrays and strings",
+   "marks": 25,
+   "hours": 8,
+   "pos": "1, 2, 9, 11",
+   "text": "Apply the derived data types like arrays and strings to efficiently manage and manipulate collections of data."
+  },
+  {
+   "id": "CO4",
+   "short": "functions",
+   "marks": 20,
+   "hours": 8,
+   "pos": "1, 2, 9, 11",
+   "text": "Apply the concept of modular programming to decompose a problem into functions and synthesize a complete program."
+  },
+  {
+   "id": "CO5",
+   "short": "structures, pointers, files",
+   "marks": 15,
+   "hours": 7,
+   "pos": "1, 2, 4, 9, 11",
+   "text": "Solve complex programming problems using structures, pointers, and file pointers."
+  }
+ ],
+ "exam": {
+  "start": "2026-11-14",
+  "label": "14 November 2026"
+ },
+ "assessments": [
+  {
+   "label": "Assignments 2 and 3",
+   "start": "2026-10-19",
+   "cos": [
+    "CO3",
+    "CO4",
+    "CO5"
+   ],
+   "task": "one timed <a href=\"practice.html#a2-sec\">Assignment 2 practice</a> and two written <a href=\"practice.html#written\">Assignment 3 questions</a>, then check your project milestones.",
+   "end": "2026-10-31"
   }
  ]
 };

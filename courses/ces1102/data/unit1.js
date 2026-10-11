@@ -21,9 +21,9 @@ const QC={
   {q:'What does #include <stdio.h> do?',o:['Starts the program','Brings in declarations for input and output functions like printf','Ends the program','Declares main'],a:1,w:'It is a preprocessor directive that pastes in the standard input/output header before compiling.'}]
 };
 const UQ=[
- {q:'In the IPO model, what does the "P" stand for?',o:['Program','Process','Printer','Pointer'],a:1,w:'Input, Process, Output: the three things every computer does.'},
- {q:'Which memory loses its contents when power is switched off?',o:['ROM','SSD','RAM','Hard disk'],a:2,w:'RAM is volatile. ROM and storage devices keep their contents.'},
- {q:'Which of these is written in mnemonics such as MOV and ADD?',o:['Machine language','Assembly language','C','Pseudocode'],a:1,w:'Assembly uses short readable words that an assembler converts to binary.'},
+ {q:'A calculator app reads two numbers, adds them and shows the result. Which step is the Process in the IPO model?',o:['Reading the two numbers','Adding them','Showing the result','Installing the app'],a:1,w:'Input is reading the numbers, Process is the addition done by the CPU, and Output is showing the result.'},
+ {q:'A program\u2019s data must still be there after a power cut. Where should the program write it?',o:['RAM','A CPU register','Secondary storage such as an SSD','The ALU'],a:2,w:'RAM and registers are volatile and lose everything at power-off. Secondary storage keeps data permanently.'},
+ {q:'A student writes MOV AX, 5 and ADD AX, 3. Which language is this, and which translator turns it into machine code?',o:['High-level, compiler','Assembly, assembler','Machine language, none needed','Assembly, interpreter'],a:1,w:'MOV and ADD are assembly mnemonics. An assembler converts each one into a machine instruction.'},
  {q:'Which is NOT a required property of an algorithm?',o:['Finiteness','Definiteness','It must be written in C','At least one output'],a:2,w:'An algorithm is language-independent. It can be written in English, pseudocode or as a flowchart.'},
  {q:'Which flowchart symbol has exactly two exits labelled Yes and No?',o:['Oval','Rectangle','Diamond','Parallelogram'],a:2,w:'The diamond is the decision symbol.'},
  {q:'Predict the output of printf("A\\nB");',o:['A\\nB on one line','A and B on separate lines','AB','A B'],a:1,w:'\\n is a newline character, so B is printed on the next line.'},

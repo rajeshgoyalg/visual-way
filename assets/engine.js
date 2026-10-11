@@ -51,6 +51,7 @@ function makeQ(item,host,opt){
   fs.innerHTML='<legend></legend>'+item.o.map((t,i)=>'<label class="opt"><input type="radio" name="'+id+'" value="'+i+'"><span></span></label>').join('')+
    '<div class="row" style="margin-top:8px"><button type="button" class="btn qcheck">Check answer</button>'+(opt.retry?'<button type="button" class="btn ghost qretry" hidden>Try again</button>':'')+'<span class="err" aria-live="polite"></span></div><div class="fb" aria-live="polite"></div>';
   $('legend',fs).textContent=item.q;
+  if(opt.qid&&typeof qTag==='function'){const tg=qTag(opt.qid,item);if(tg){const d=document.createElement('div');d.className='qtag';d.textContent=tg;$('legend',fs).after(d);}}
   $$('.opt span',fs).forEach((s,i)=>s.textContent=item.o[i]);
   const btn=$('.qcheck',fs),retry=$('.qretry',fs),err=$('.err',fs),fb=$('.fb',fs);
   function show(v,ok,prev){
@@ -351,7 +352,7 @@ function initProgressPage(){
   const tot=(f)=>rows.reduce((a,r)=>a+f(r),0);
   const meter=(v,t)=>'<span class="meter" aria-hidden="true"><i style="width:'+(t?Math.round(v/t*100):0)+'%"></i></span>';
   const L=tot(r=>r.lessons),LT=tot(r=>r.u.lessons.length),QA=tot(r=>r.qAns),QT=tot(r=>r.qTot),QF=tot(r=>r.qFirst),B=tot(r=>r.labs),BT=tot(r=>r.u.labs.length),QZ=tot(r=>r.att.length);
-  let h='<div class="stats">'+
+  let h=readinessHTML()+'<h2>Lessons and practice</h2><div class="stats">'+
     '<div class="stat"><span class="big">'+L+'<small>/'+LT+'</small></span>Lessons completed'+meter(L,LT)+'</div>'+
     '<div class="stat"><span class="big">'+QA+'<small>/'+QT+'</small></span>Quick checks answered'+meter(QA,QT)+'</div>'+
     '<div class="stat"><span class="big">'+(QA?Math.round(QF/QA*100):0)+'%</span>Right on the first try</div>'+
@@ -380,6 +381,11 @@ function initProgressPage(){
         return '<tr><td><a href="practice.html#written">Written questions</a></td><td>'+done.length+' of '+list.length+' self-marked</td><td>'+(done.length?done.reduce((a,w)=>a+mine[w.id],0)+' of '+done.reduce((a,w)=>a+tot(w),0)+' marks':'Not tried yet')+'</td><td></td></tr>';}).join('')+
       '</tbody></table></div>';
   }
+  if(PPS.SDL.length){let dp=0,hr=0,th=0;PPS.SDL.forEach(p=>{th+=p.hours;if(sdlStatus(p).state==='done'){dp++;hr+=p.hours;}});
+    h+='<h2>Self-directed learning projects</h2><p>'+dp+' of '+PPS.SDL.length+' projects completed, '+hr+' of '+th+' learning hours. <a href="sdl.html">Open the projects</a></p>';}
+  if(PPS.EXAM.length){h+='<h2>Mock papers</h2><ul class="revisit">'+PPS.EXAM.map(p=>{const mine=(state.written||{})[p.id]||{},ks=Object.keys(mine);const got=ks.reduce((a,k)=>a+mine[k],0);
+      return '<li><a href="exam.html#'+p.id+'">'+esc(p.title)+'</a>: '+(ks.length?ks.length+' of 15 parts self-marked, '+got+' marks':'not attempted yet')+'</li>';}).join('')+'</ul>';}
+  h+=bloomHTML();
   h+='<h2>Questions to revisit</h2>';
   h+=rev.length?'<p class="small">Questions answered wrongly at least once. The ones still wrong come first.</p><ul class="revisit">'+rev.slice(0,25).map(r=>'<li><span class="lvl '+(r.a.ok?'easy':'exam')+'">'+(r.a.ok?'Fixed after '+r.a.n+' tries':'Still wrong')+'</span> <a href="'+r.href+'">'+esc(r.item.q)+'</a><span class="small"> '+esc(r.where)+', last answered '+fmtDate(r.a.t)+'</span></li>').join('')+'</ul>'
     :'<p class="small">Nothing to revisit yet. Questions answered wrongly will collect here so you can go back to them.</p>';
@@ -406,7 +412,7 @@ function registerSW(){
 function initPage(){
   learnerChips();wireData();
   const p=PAGE.page;
-  try{if(p==='unit')initUnitPage();else if(p==='course')initCoursePage();else if(p==='home')initHomePage();else if(p==='progress')initProgressPage();else if(p==='practice')initPracticePage();}catch(e){console.error(e);}
+  try{if(p==='unit')initUnitPage();else if(p==='course')initCoursePage();else if(p==='home')initHomePage();else if(p==='progress')initProgressPage();else if(p==='practice')initPracticePage();else if(p==='sdl')initSdlPage();else if(p==='exam')initExamPage();}catch(e){console.error(e);}
   registerSW();
   if(!learners.current)openLearner(true);
 }
@@ -434,7 +440,7 @@ function timedQuiz(el){
     for(let i=idx.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[idx[i],idx[j]]=[idx[j],idx[i]];}
     picks=idx.slice(0,cfg.count);startT=Date.now();end=startT+cfg.minutes*60000;warned5=warned1=false;
     el.innerHTML='<div class="tq-bar"><span class="tq-time" aria-hidden="true"></span><span class="tq-count"></span><button class="btn" type="button">Submit answers</button></div><p class="sr" aria-live="assertive"></p>'+
-      picks.map((pi,k)=>{const it=cfg.pool[pi];return '<fieldset class="q" data-pi="'+pi+'"><legend>'+(k+1)+'. '+esc(it.q)+'</legend>'+(it.c?'<pre class="c"><code>'+hl(it.c)+'</code></pre>':'')+
+      picks.map((pi,k)=>{const it=cfg.pool[pi];return '<fieldset class="q" data-pi="'+pi+'"><legend>'+(k+1)+'. '+esc(it.q)+'</legend><div class="qtag">'+esc(qTag(key+'.'+pi,it))+'</div>'+(it.c?'<pre class="c"><code>'+hl(it.c)+'</code></pre>':'')+
         it.o.map((o,i)=>'<label class="opt"><input type="radio" name="'+key+'-'+k+'" value="'+i+'"><span>'+esc(o)+'</span></label>').join('')+'<div class="fb"></div></fieldset>';}).join('')+
       '<div class="row"><button class="btn" type="button">Submit answers</button></div>';
     $$('.btn',el).forEach(b=>b.addEventListener('click',()=>submit(false)));
@@ -513,6 +519,186 @@ function printWritten(withAnswers){
 function initPracticePage(){
   $$('.tq').forEach(el=>{try{timedQuiz(el);}catch(e){console.error(e);}});
   $$('.wq-list').forEach(el=>{try{writtenBank(el);}catch(e){console.error(e);}});
-  $$('[data-print]').forEach(b=>b.addEventListener('click',()=>printWritten(b.dataset.print==='answers')));
+  $$('[data-print]').forEach(b=>b.addEventListener('click',()=>printSection('written',b.dataset.print==='answers')));
   if(location.hash){const t=document.getElementById(location.hash.slice(1));if(t)setTimeout(()=>t.scrollIntoView(),0);}
 }
+
+
+/* ---------- question tags: course outcome and Bloom's level ---------- */
+PPS.BL={};PPS.SDL=[];PPS.EXAM=[];
+function qTag(qid,item){
+  const set=String(qid||'').split('.')[0];
+  let co=item&&item.co;
+  if(!co){const m=/^u(\d)/.exec(set);if(m)co='CO'+m[1];else if(PPS.TQ[set]&&PPS.TQ[set].co)co=PPS.TQ[set].co;}
+  const bl=(item&&item.bl)||PPS.BL[qid];
+  return [co,bl].filter(Boolean).join(', ');
+}
+
+/* ---------- readiness by course outcome ---------- */
+const sumScheme=w=>w.scheme.reduce((a,s)=>a+(+s[0]),0);
+function sdlStatus(p){const ks=p.milestones.map((_,k)=>'sdl'+p.n+'m'+(k+1)),d=ks.filter(k=>state.done[k]).length;return {done:d,total:ks.length,state:d===0?'todo':d===ks.length?'done':'doing'};}
+function coReadiness(){
+  const m=window.PPS_MANIFEST[COURSE];if(!m||!m.cos)return [];
+  return m.cos.map((co,ix)=>{
+    const u=m.units[ix],cat={};
+    cat.learn=u.lessons.length?u.lessons.filter(l=>state.done[l[0]]).length/u.lessons.length:0;
+    let qT=0,qF=0;Object.keys(PPS.Q).filter(k=>k.startsWith('u'+u.n+'l')).forEach(s=>PPS.Q[s].forEach((_,i)=>{qT++;const a=state.answers[s+'.'+i];if(a&&a.first)qF++;}));
+    cat.check=qT?qF/qT:0;
+    const qn=(PPS.UQ[u.quiz]||[]).length||10;cat.quiz=state.best[u.quiz]!=null?state.best[u.quiz]/qn:0;
+    const pr=[u.labs.length?u.labs.filter(k=>state.done[k]).length/u.labs.length:0];
+    Object.keys(PPS.TQ).forEach(k=>{const c=PPS.TQ[k];if((c.cos||[c.co]).includes(co.id))pr.push(state.best[k]!=null?state.best[k]/c.count:0);});
+    Object.keys(PPS.WQ).forEach(k=>{const mine=(state.written||{})[k]||{},ws=PPS.WQ[k].filter(w=>w.co===co.id);if(!ws.length)return;
+      const got=ws.reduce((a,w)=>a+(mine[w.id]||0),0),out=ws.reduce((a,w)=>a+sumScheme(w),0);pr.push(out?got/out:0);});
+    if(co.id==='CO3'&&PPS.SDL.length){let d=0,t=0;PPS.SDL.forEach(p=>{const s=sdlStatus(p);d+=s.done;t+=s.total;});pr.push(t?d/t:0);}
+    cat.practise=pr.reduce((a,b)=>a+b,0)/pr.length;
+    let eg=0,et=0;PPS.EXAM.forEach(p=>{const mine=(state.written||{})[p.id]||{};p.questions.forEach((q,qi)=>{if(q.co!==co.id)return;q.parts.forEach((pt,pi)=>{const k='Q'+(qi+1)+'abc'[pi];if(mine[k]!=null){eg+=mine[k];et+=pt.m;}});});});
+    if(et)cat.exam=eg/et;
+    const vals=Object.values(cat),score=vals.reduce((a,b)=>a+b,0)/vals.length;
+    return {co,unit:u,cat,score,priority:co.marks*(1-score)};
+  });
+}
+function readinessHTML(){
+  const rows=coReadiness();if(!rows.length)return '';
+  const pct=v=>Math.round(v*100)+'%';
+  const meter=v=>'<span class="meter" aria-hidden="true"><i style="width:'+Math.round(v*100)+'%"></i></span>';
+  const focus=rows.slice().sort((a,b)=>b.priority-a.priority).slice(0,2);
+  let h='<h2>Readiness by course outcome</h2><p class="small">Each course outcome carries different marks. Readiness combines lessons completed, quick checks right first time, the unit quiz, practice (labs, assessment practice and projects) and mock-paper self-marks. Focus first where the marks are high and readiness is low.</p>';
+  h+='<div class="focus panel"><b>Focus next:</b> '+focus.map(r=>esc(r.co.id)+' ('+esc(r.co.short)+', '+r.co.marks+' marks, '+pct(r.score)+' ready)').join(' and then ')+'.</div>';
+  h+='<div class="tbl"><table class="ptable"><thead><tr><th>Outcome</th><th>Marks</th><th>Lessons</th><th>Checks</th><th>Quiz</th><th>Practice</th><th>Mocks</th><th>Readiness</th></tr></thead><tbody>'+
+    rows.map(r=>'<tr><td><a href="'+r.unit.href+'">'+esc(r.co.id)+'</a> <span class="small">'+esc(r.co.short)+'</span></td><td>'+r.co.marks+'</td><td>'+pct(r.cat.learn)+'</td><td>'+pct(r.cat.check)+'</td><td>'+pct(r.cat.quiz)+'</td><td>'+pct(r.cat.practise)+'</td><td>'+(r.cat.exam!=null?pct(r.cat.exam):'not tried')+'</td><td><b>'+pct(r.score)+'</b>'+meter(r.score)+'</td></tr>').join('')+'</tbody></table></div>';
+  return h;
+}
+function bloomHTML(){
+  const lv=['Remember','Understand','Apply','Analyse','Evaluate','Create'],c={};
+  Object.keys(state.answers).forEach(qid=>{const a=state.answers[qid],[set,i]=qid.split('.');let it=null;
+    if(PPS.TQ[set])it=PPS.TQ[set].pool[+i];else if(set.endsWith('quiz'))it=(PPS.UQ[set.replace('quiz','')]||[])[+i];else it=(PPS.Q[set]||[])[+i];
+    const bl=(it&&it.bl)||PPS.BL[qid];if(!bl)return;c[bl]=c[bl]||{n:0,f:0};c[bl].n++;if(a.first)c[bl].f++;});
+  if(!Object.keys(c).length)return '';
+  return '<h2>Answers by thinking level</h2><p class="small">Exams prefer apply level and above. Right-first-time rates show which kinds of question need more practice.</p><div class="tbl"><table class="ptable"><thead><tr><th>Bloom\u2019s level</th><th>Questions answered</th><th>Right first time</th></tr></thead><tbody>'+
+    lv.filter(l=>c[l]).map(l=>'<tr><td>'+l+'</td><td>'+c[l].n+'</td><td>'+Math.round(c[l].f/c[l].n*100)+'%</td></tr>').join('')+'</tbody></table></div>';
+}
+
+/* ---------- printing any section (written questions, mock papers) ---------- */
+function printSection(id,withAnswers){
+  const root=document.documentElement,prev=root.getAttribute('data-theme'),sec=document.getElementById(id);if(!sec)return;
+  const ds=$$('details',sec),was=ds.map(d=>d.open);
+  root.setAttribute('data-theme','light');sec.classList.add('print-target');document.body.classList.add('print-mode',withAnswers?'print-answers':'print-questions');
+  ds.forEach(d=>d.open=withAnswers);
+  const done=()=>{document.body.classList.remove('print-mode','print-answers','print-questions');sec.classList.remove('print-target');ds.forEach((d,i)=>d.open=was[i]);
+    if(prev==null)root.removeAttribute('data-theme');else root.setAttribute('data-theme',prev);window.removeEventListener('afterprint',done);};
+  window.addEventListener('afterprint',done);window.print();setTimeout(()=>{if(document.body.classList.contains('print-mode'))done();},60000);
+}
+
+/* ---------- self-directed learning projects ---------- */
+function initSdlPage(){
+  const el=$('#sdl');if(!el)return;const list=PPS.SDL;
+  el.innerHTML=list.map(p=>{
+    const uses=p.concepts.map(c=>'<a href="unit'+c[0][1]+'.html#'+c[0]+'">'+esc(c[1])+'</a>').join(', ');
+    return '<article class="proj prob" id="p'+p.n+'" data-n="'+p.n+'"><div class="prob-h"><span class="lvl medium">Project '+p.n+'</span><h3>'+esc(p.title)+'</h3><span class="lec">'+p.hours+' hours, CO3</span><span class="pstate"></span></div>'+
+      '<p class="small"><b>Course plan:</b> '+esc(p.plan)+'</p><p>'+esc(p.brief)+'</p><p class="small"><b>Uses:</b> '+uses+'</p>'+
+      '<div class="tr-l">Milestones (tick each one when it works)</div><ol class="miles">'+p.milestones.map((ms,k)=>'<li><label class="ms"><input type="checkbox" data-ms="sdl'+p.n+'m'+(k+1)+'"><span>'+esc(ms[0])+'</span></label><details class="hint"><summary>Hint</summary><p>'+esc(ms[1])+'</p></details></li>').join('')+'</ol>'+
+      (p.stdin!=null?'<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">'+esc(p.stdin||'(none)')+'</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">'+esc(p.out)+'</pre></div></div>':'')+
+      '<details class="reveal sol"><summary>Reference solution</summary><div class="solbody"></div></details>'+
+      '<p class="small"><b>Take it further:</b> '+esc(p.extend)+'</p></article>';}).join('');
+  function paint(){
+    let doneP=0,hrs=0;
+    list.forEach(p=>{const s=sdlStatus(p),card=$('#p'+p.n);card.dataset.state=s.state;
+      $('.pstate',card).textContent=s.state==='done'?'Completed':s.state==='doing'?s.done+' of '+s.total+' milestones':'Not started';
+      $('.pstate',card).className='pstate '+s.state;
+      $$('[data-ms]',card).forEach(c=>c.checked=!!state.done[c.dataset.ms]);
+      const body=$('.solbody',card),open=s.state==='done'||state.done['sdl'+p.n+'show'];
+      if(open&&!body.dataset.shown){body.dataset.shown='1';body.innerHTML='<pre class="c"><code>'+hl(p.code)+'</code></pre><p class="small">Compiled with gcc -Wall -Wextra and run on the sample input above. Your version can look different and still be right: compare outputs, not lines.</p>';}
+      if(!open){body.dataset.shown='';body.innerHTML='<p>Try the milestones first: the solution unlocks when all of them are ticked. Reading a solution before trying teaches far less than getting stuck for a while.</p><button type="button" class="btn ghost">Show it anyway</button>';
+        $('button',body).addEventListener('click',()=>{state.done['sdl'+p.n+'show']=true;save();paint();});}
+      if(s.state==='done'){doneP++;hrs+=p.hours;}});
+    $$('.sdlcount').forEach(x=>x.textContent=doneP+' of '+list.length+' projects completed, '+hrs+' of '+list.reduce((a,p)=>a+p.hours,0)+' learning hours');
+  }
+  $$('[data-ms]',el).forEach(c=>c.addEventListener('change',()=>{state.done[c.dataset.ms]=c.checked;if(!c.checked)delete state.done[c.dataset.ms];save();paint();}));
+  $$('.sdlfilter button').forEach(b=>b.addEventListener('click',()=>{$$('.sdlfilter button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    $$('.proj',el).forEach(p=>p.hidden=b.dataset.f!=='all'&&p.dataset.state!==b.dataset.f);}));
+  paint();
+  if(location.hash){const t=document.getElementById(location.hash.slice(1));if(t)setTimeout(()=>t.scrollIntoView(),0);}
+}
+
+/* ---------- end-semester mock papers ---------- */
+let examTimer=null;
+function initExamPage(){
+  const host=$('#papers');if(!host)return;
+  if(!state.written||typeof state.written!=='object')state.written={};
+  host.innerHTML=PPS.EXAM.map(p=>'<section class="paper" id="'+p.id+'"><div class="paper-h"><h2>'+esc(p.title)+'</h2><span class="labcount" data-paper-total="'+p.id+'"></span></div>'+
+    '<p class="small">Answer all 5 questions. Each carries 10 marks in 3 parts. Time: 3 hours. Write on paper, then open each model answer and mark yourself.</p>'+
+    '<div class="row wq-tools"><button class="btn" type="button" data-timer="'+p.id+'">Start a 3-hour timer</button><button class="btn ghost" type="button" data-pp="'+p.id+'" data-mode="q">Print questions with answer space</button><button class="btn ghost" type="button" data-pp="'+p.id+'" data-mode="a">Print with model answers</button></div>'+
+    p.questions.map((q,qi)=>'<article class="xq"><div class="prob-h"><span class="lvl medium">'+esc(q.co)+'</span><h3>Question '+(qi+1)+'</h3><span class="lec">10 marks</span></div>'+
+      q.parts.map((pt,pi)=>{const key='Q'+(qi+1)+'abc'[pi];return '<div class="xpart"><p><b>('+'abc'[pi]+')</b> '+esc(pt.q)+' <span class="qtag">'+pt.m+' marks, '+esc(pt.bl)+'</span></p>'+
+        (pt.qcode?'<pre class="c"><code>'+hl(pt.qcode)+'</code></pre>':'')+'<div class="answer-space" aria-hidden="true"></div>'+
+        '<details class="reveal wq-ans"><summary>Model answer and marking scheme</summary><pre class="c"><code>'+(pt.plain?esc(pt.a):hl(pt.a))+'</code></pre>'+
+        (pt.sample?'<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">'+esc(pt.sample[0]||'(none)')+'</pre></div><div><div class="tr-l">Output</div><pre class="tr-out">'+esc(pt.sample[1])+'</pre></div></div>':'')+
+        '<div class="tbl"><table class="scheme"><thead><tr><th>Marks</th><th>Awarded for</th></tr></thead><tbody>'+pt.scheme.map(s=>'<tr><td>'+esc(s[0])+'</td><td>'+esc(s[1])+'</td></tr>').join('')+'</tbody></table></div></details>'+
+        '<div class="row selfmark" role="group" aria-label="Marks for '+(qi+1)+'('+'abc'[pi]+')"><span class="small">My marks:</span>'+Array.from({length:pt.m+1},(_,v)=>'<button type="button" class="mk" data-p="'+p.id+'" data-k="'+key+'" data-v="'+v+'">'+v+'</button>').join('')+'<span class="small">of '+pt.m+'</span></div></div>';}).join('')+'</article>').join('')+'</section>').join('');
+  function sync(){
+    PPS.EXAM.forEach(p=>{const mine=state.written[p.id]||{};let got=0,out=0,n=0;
+      p.questions.forEach((q,qi)=>q.parts.forEach((pt,pi)=>{const k='Q'+(qi+1)+'abc'[pi];if(mine[k]!=null){got+=mine[k];out+=pt.m;n++;}}));
+      $$('[data-paper-total="'+p.id+'"]').forEach(s=>s.textContent=n?'Self-marked '+n+' of 15 parts: '+got+' of '+out+' marks'+(n===15?' ('+Math.round(got/50*100)+'%)':''):'Not marked yet');});
+    $$('.mk[data-p]').forEach(b=>{const mine=state.written[b.dataset.p]||{};b.setAttribute('aria-pressed',String(mine[b.dataset.k])===b.dataset.v);});
+  }
+  $$('.mk[data-p]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.p,k=b.dataset.k,v=+b.dataset.v,mine=state.written[id]||(state.written[id]={});
+    if(mine[k]===v)delete mine[k];else mine[k]=v;save();sync();}));
+  $$('[data-pp]').forEach(b=>b.addEventListener('click',()=>printSection(b.dataset.pp,b.dataset.mode==='a')));
+  $$('[data-timer]').forEach(b=>b.addEventListener('click',()=>{
+    const bar=$('#examTimer');if(examTimer){clearInterval(examTimer);examTimer=null;bar.hidden=true;$$('[data-timer]').forEach(x=>x.textContent='Start a 3-hour timer');return;}
+    const end=Date.now()+3*3600000;bar.hidden=false;$$('[data-timer]').forEach(x=>x.textContent='Stop the timer');
+    const tick=()=>{const left=Math.max(0,Math.round((end-Date.now())/1000));$('#examTimerText').textContent=Math.floor(left/3600)+':'+String(Math.floor(left%3600/60)).padStart(2,'0')+':'+String(left%60).padStart(2,'0')+' left';
+      $('#examTimerText').classList.toggle('warn',left<=900);if(left<=0){clearInterval(examTimer);examTimer=null;$('#examTimerText').textContent='Time is up. Pens down.';}};
+    tick();examTimer=setInterval(tick,1000);}));
+  sync();renderPlan();
+}
+function renderPlan(){
+  const el=$('#plan'),m=window.PPS_MANIFEST[COURSE];if(!el||!m)return;
+  const today=new Date();today.setHours(0,0,0,0);
+  const dayOf=iso=>Math.round((new Date(iso+'T00:00:00')-today)/86400000);
+  const days=dayOf(m.exam.start);
+  if(days<=0){el.innerHTML='<p>The end-semester exam window has started ('+esc(m.exam.label)+'). Use the cheat sheets and your Questions to revisit list for last-minute review.</p>';return;}
+  const rows=coReadiness(),slots=[];
+  const mock1=Math.max(1,Math.round(days*0.6)),mock2=Math.max(mock1+1,Math.round(days*0.85));
+  const fixed={};fixed[mock1]='<b>Mock paper 1</b> under exam conditions (3 hours), then self-mark with the schemes.';
+  fixed[mock2]='<b>Mock paper 2</b> under exam conditions, then fix every part that lost marks.';
+  fixed[days-1]='<b>Light revision:</b> all five cheat sheets and your Questions to revisit list. Early night.';
+  const soon=(m.assessments||[]).map(x=>({...x,d:dayOf(x.start),e:dayOf(x.end||x.start)})).filter(x=>x.e>0&&x.d<days);
+  soon.forEach(x=>{if(x.d>1&&!fixed[x.d-1])fixed[x.d-1]='<b>'+esc(x.label)+' start tomorrow:</b> '+x.task;});
+  const tasks=['re-read the traps and the cheat sheet, then redo the unit quiz','solve two lab problems on paper first, then check them','answer this outcome\u2019s questions from a mock paper on paper and self-mark','redo every question from this unit in your Questions to revisit list'];
+  const turn={},weight=r=>r.co.marks*(1-r.score)+r.co.marks*0.25,given={};
+  for(let d=1;d<days;d++){
+    if(fixed[d]){slots.push([d,fixed[d]]);continue;}
+    const next=soon.find(x=>d<=x.e);
+    const w=r=>weight(r)*(next&&next.cos.includes(r.co.id)?3:1);
+    const pick=rows.slice().sort((a,b)=>((given[a.co.id]||0)/w(a))-((given[b.co.id]||0)/w(b)))[0];
+    given[pick.co.id]=(given[pick.co.id]||0)+1;const t=turn[pick.co.id]=(turn[pick.co.id]||0)+1;
+    slots.push([d,'<b>'+esc(pick.co.id)+'</b> ('+esc(pick.co.short)+', <a href="'+pick.unit.href+'">Unit '+pick.unit.n+'</a>): '+tasks[(t-1)%tasks.length]+'.'+(next&&next.cos.includes(pick.co.id)?' <span class="small">Also prepares you for '+esc(next.label)+'.</span>':'')]);
+  }
+  const fmt=d=>{const x=new Date(today);x.setDate(x.getDate()+d);return x.toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short'});};
+  el.innerHTML='<p class="small">'+days+' days until the exam window opens on '+esc(m.exam.label)+'. Outcomes tested in the in-semester assessments still ahead get extra days until those assessments end. Days are shared out by marks and by how ready each outcome is, so the plan changes as you make progress. Each day is about 1 to 2 hours.</p><ol class="plan">'+slots.map(s=>'<li><span class="pday">'+fmt(s[0])+'</span><span>'+s[1]+'</span></li>').join('')+'</ol>';
+}
+
+/* ---------- lesson 5.6: buffer overflow lab ---------- */
+function overflowLab(el){
+  el.innerHTML='<div class="label">Overflow lab: char name[8] sits next to int isAdmin = 0</div>'+
+    '<p class="small">A simplified picture of memory. Real compilers may arrange variables differently, but the danger is the same: C copies past the end of the array without checking.</p>'+
+    '<div class="row ap-ctl"><label for="ovIn">Name typed by the user</label><input id="ovIn" type="text" value="Aryan" maxlength="20" style="width:220px">'+
+    '<div class="tabs" role="group" aria-label="Copy method"><button type="button" aria-pressed="true" data-m="unsafe">strcpy(name, input)</button><button type="button" aria-pressed="false" data-m="safe">snprintf(name, sizeof name, "%s", input)</button></div></div>'+
+    '<div class="ov-mem"></div><p class="stepnote" aria-live="polite"></p>';
+  let mode='unsafe';const inp=$('#ovIn',el);
+  function draw(){
+    const s=inp.value,cells=[];
+    const write=mode==='unsafe'?s+'\0':(s.length>7?s.slice(0,7):s)+'\0';
+    for(let i=0;i<12;i++)cells.push(i<write.length?write[i]:(i<8?'':'0'));
+    const spill=Math.max(0,write.length-8),admin=cells.slice(8,12).some(b=>b!=='0'&&b!==''&&b!=='\0');
+    $('.ov-mem',el).innerHTML='<div class="cells">'+cells.map((c,i)=>'<div class="cell'+(i>=8?(i<write.length?' bad':' admin'):(i<write.length?' hot':''))+'"><div class="box">'+esc(c==='\0'?'\\0':c===''?' ':c)+'</div><div class="idx">'+(i<8?i:'+'+(i-8))+'</div></div>').join('')+'</div><p class="small">Cells 0 to 7 are name[0] to name[7]. The green cells after them are the 4 bytes of isAdmin.</p>';
+    $('.stepnote',el).textContent=admin?'Overflow! '+spill+' byte(s) spilled past name into isAdmin, which is no longer 0. if (isAdmin) now grants admin access to anyone who types a long name.':
+      spill?'The \\0 spilled one byte into isAdmin. Its value happens to stay 0, but memory that is not yours was overwritten. One more character changes isAdmin.':
+      (mode==='safe'&&s.length>7?'snprintf stopped at 7 characters plus \\0, so the name was cut short but isAdmin is untouched. Safe.':'The name and its \\0 fit in 8 bytes. isAdmin is still 0. Try a name longer than 7 characters.');
+  }
+  inp.addEventListener('input',draw);
+  $$('[data-m]',el).forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.m;$$('[data-m]',el).forEach(x=>x.setAttribute('aria-pressed',x===b));draw();}));
+  draw();
+}
+PPS.init.push(()=>$$('.ovlab').forEach(overflowLab));
