@@ -332,3 +332,31 @@ a.btn{display:inline-flex;align-items:center;text-decoration:none}
 .cheat-fig svg{width:100%;max-width:300px;height:auto;display:block;margin:4px 0 10px}
 
 @media (max-width:640px){.cheat-v2 pre.c{font-size:.76rem;padding:10px 12px}}
+
+/* ---------- assessment practice ---------- */
+.tq-bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.tq-time{font:700 1.3rem var(--mono);color:var(--blue)}
+.tq-time.warn{color:var(--bad)}
+.tq-count{font:500 .92rem var(--head);color:var(--soft);margin-right:auto}
+.tq fieldset pre.c{margin:6px 0 10px;font-size:.86rem}
+.tq-hist ul{margin:6px 0 0;padding-left:1.2em;font:400 .9rem var(--head)}
+.tq-result{margin-bottom:18px}
+.wq{border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;background:var(--card)}
+.wq p{margin:0 0 8px}
+.scheme td:first-child{width:70px;text-align:center;font:600 .95rem var(--head)}
+.selfmark{margin-top:12px}
+.mk{min-width:40px;min-height:40px;border:1.5px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:600 .95rem var(--head)}
+.mk[aria-pressed="true"]{background:var(--good);border-color:var(--good);color:var(--card)}
+.answer-space{display:none}
+@media print{
+  body{background:#fff}
+  .topbar,footer,.toast,.selfmark,.wq-tools,[data-wq-summary],details>summary{display:none !important}
+  body.print-mode .dashwrap>:not(#written){display:none !important}
+  body.print-mode #written>p.small{display:none}
+  .wq{break-inside:avoid;border:1px solid #999;background:#fff}
+  pre.c{background:#f3f3f3 !important;color:#000 !important;white-space:pre-wrap;border:1px solid #ccc}
+  pre.c span{color:#000 !important}
+  body.print-questions details.wq-ans{display:none !important}
+  body.print-questions .answer-space{display:block;height:7cm;border-top:1px dashed #999;margin-top:10px}
+  .tr-out{background:#f3f3f3 !important;color:#000 !important}
+}

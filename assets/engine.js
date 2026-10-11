@@ -13,9 +13,9 @@ let learners=readJSON(LKEY,{current:'',list:[]});
 if(!Array.isArray(learners.list))learners.list=[];
 if(typeof learners.current!=='string')learners.current='';
 const learnerKey=n=>'pps:learner:'+n;
-const emptyCourse=()=>({done:{},best:{},answers:{},quizzes:{}});
+const emptyCourse=()=>({done:{},best:{},answers:{},quizzes:{},written:{}});
 let ldata={courses:{}},state=emptyCourse();
-function courseState(id){const c=ldata.courses[id]||(ldata.courses[id]=emptyCourse());['done','best','answers','quizzes'].forEach(k=>{if(!c[k]||typeof c[k]!=='object')c[k]={};});return c;}
+function courseState(id){const c=ldata.courses[id]||(ldata.courses[id]=emptyCourse());['done','best','answers','quizzes','written'].forEach(k=>{if(!c[k]||typeof c[k]!=='object')c[k]={};});return c;}
 function loadLearner(){
   ldata=learners.current?readJSON(learnerKey(learners.current),{courses:{}}):{courses:{}};
   if(!ldata.courses||typeof ldata.courses!=='object')ldata.courses={};
@@ -365,11 +365,21 @@ function initProgressPage(){
       '<td>'+(r.best!=null?'Best '+r.best+'/10, '+r.att.length+' attempt'+(r.att.length===1?'':'s')+', last '+fmtDate(r.att[r.att.length-1].t):'Not taken yet')+'</td></tr>').join('')+'</tbody></table></div>';
   const rev=[];
   Object.keys(state.answers).forEach(qid=>{const a=state.answers[qid];if(!a.w)return;const [set,i]=qid.split('.');
-    let item,href,where;const un=set.match(/^u(\d)/);if(!un)return;const unit=m.units.find(u=>String(u.n)===un[1]);if(!unit)return;
+    let item,href,where;
+    if(PPS.TQ[set]){item=PPS.TQ[set].pool[+i];if(item)rev.push({a,item,href:'practice.html#'+set+'-sec',where:PPS.TQ[set].title});return;}
+    const un=set.match(/^u(\d)/);if(!un)return;const unit=m.units.find(u=>String(u.n)===un[1]);if(!unit)return;
     if(set.endsWith('quiz')){item=(PPS.UQ[set.replace('quiz','')]||[])[+i];href=unit.href+'#'+set;where='Unit '+unit.n+' quiz';}
     else{item=(PPS.Q[set]||[])[+i];href=unit.href+'#'+set;const l=unit.lessons.find(x=>x[0]===set);where=l?l[1]:'Unit '+unit.n;}
     if(item)rev.push({a,item,href,where});});
   rev.sort((x,y)=>(x.a.ok===y.a.ok?0:x.a.ok?1:-1)||y.a.w-x.a.w||y.a.t-x.a.t);
+  const tqs=Object.keys(PPS.TQ),wqs=Object.keys(PPS.WQ);
+  if(tqs.length){
+    h+='<h2>Assessment practice</h2><div class="tbl"><table class="ptable"><thead><tr><th>Practice</th><th>Attempts</th><th>Best</th><th>Last attempt</th></tr></thead><tbody>'+
+      tqs.map(k=>{const at=state.quizzes[k]||[],c=PPS.TQ[k];return '<tr><td><a href="practice.html#'+k+'-sec">'+esc(c.title)+'</a></td><td>'+at.length+'</td><td>'+(state.best[k]!=null?state.best[k]+'/'+c.count:'Not tried yet')+'</td><td>'+(at.length?at[at.length-1].s+'/'+at[at.length-1].n+' on '+fmtDate(at[at.length-1].t):'')+'</td></tr>';}).join('')+
+      wqs.map(k=>{const mine=(state.written||{})[k]||{},list=PPS.WQ[k],done=list.filter(w=>mine[w.id]!=null),tot=w=>w.scheme.reduce((a,s)=>a+(+s[0]),0);
+        return '<tr><td><a href="practice.html#written">Written questions</a></td><td>'+done.length+' of '+list.length+' self-marked</td><td>'+(done.length?done.reduce((a,w)=>a+mine[w.id],0)+' of '+done.reduce((a,w)=>a+tot(w),0)+' marks':'Not tried yet')+'</td><td></td></tr>';}).join('')+
+      '</tbody></table></div>';
+  }
   h+='<h2>Questions to revisit</h2>';
   h+=rev.length?'<p class="small">Questions answered wrongly at least once. The ones still wrong come first.</p><ul class="revisit">'+rev.slice(0,25).map(r=>'<li><span class="lvl '+(r.a.ok?'easy':'exam')+'">'+(r.a.ok?'Fixed after '+r.a.n+' tries':'Still wrong')+'</span> <a href="'+r.href+'">'+esc(r.item.q)+'</a><span class="small"> '+esc(r.where)+', last answered '+fmtDate(r.a.t)+'</span></li>').join('')+'</ul>'
     :'<p class="small">Nothing to revisit yet. Questions answered wrongly will collect here so you can go back to them.</p>';
@@ -396,7 +406,113 @@ function registerSW(){
 function initPage(){
   learnerChips();wireData();
   const p=PAGE.page;
-  try{if(p==='unit')initUnitPage();else if(p==='course')initCoursePage();else if(p==='home')initHomePage();else if(p==='progress')initProgressPage();}catch(e){console.error(e);}
+  try{if(p==='unit')initUnitPage();else if(p==='course')initCoursePage();else if(p==='home')initHomePage();else if(p==='progress')initProgressPage();else if(p==='practice')initPracticePage();}catch(e){console.error(e);}
   registerSW();
   if(!learners.current)openLearner(true);
+}
+
+/* ---------- assessment practice: timed objective quizzes ---------- */
+PPS.TQ={};PPS.WQ={};
+const fmtTime=s=>Math.floor(s/60)+' min '+String(s%60).padStart(2,'0')+' s';
+let tqRunning=0;
+window.addEventListener('beforeunload',e=>{if(tqRunning){e.preventDefault();e.returnValue='';}});
+function timedQuiz(el){
+  const key=el.dataset.set,cfg=PPS.TQ[key];if(!cfg)return;
+  let picks=[],timer=null,end=0,startT=0,warned5=false,warned1=false;
+  const stop=()=>{if(timer){clearInterval(timer);timer=null;tqRunning=Math.max(0,tqRunning-1);}};
+  const marksOf=s=>cfg.marks?' ('+(Math.round(s*cfg.marks/cfg.count*2)/2)+' of '+cfg.marks+' marks)':'';
+  function intro(){
+    const hist=(state.quizzes[key]||[]).slice(-5).reverse();
+    el.innerHTML='<div class="panel tq-intro"><p><b>'+cfg.count+' questions, '+cfg.minutes+' minutes.</b> '+esc(cfg.intro)+'</p>'+
+      '<p class="small">Each attempt draws a fresh set from '+cfg.pool.length+' questions. As in the real quiz, answers are revealed only after you submit.</p>'+
+      '<div class="row"><button class="btn" type="button">Start a '+cfg.minutes+'-minute attempt</button></div>'+
+      (hist.length?'<div class="tq-hist"><div class="tr-l">Recent attempts</div><ul>'+hist.map(h=>'<li>'+fmtDate(h.t)+': '+h.s+' of '+h.n+' correct'+marksOf(h.s)+', in '+fmtTime(h.used||0)+'</li>').join('')+'</ul></div>':'')+'</div>';
+    $('.btn',el).addEventListener('click',start);
+  }
+  function start(){
+    const idx=cfg.pool.map((_,i)=>i);
+    for(let i=idx.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[idx[i],idx[j]]=[idx[j],idx[i]];}
+    picks=idx.slice(0,cfg.count);startT=Date.now();end=startT+cfg.minutes*60000;warned5=warned1=false;
+    el.innerHTML='<div class="tq-bar"><span class="tq-time" aria-hidden="true"></span><span class="tq-count"></span><button class="btn" type="button">Submit answers</button></div><p class="sr" aria-live="assertive"></p>'+
+      picks.map((pi,k)=>{const it=cfg.pool[pi];return '<fieldset class="q" data-pi="'+pi+'"><legend>'+(k+1)+'. '+esc(it.q)+'</legend>'+(it.c?'<pre class="c"><code>'+hl(it.c)+'</code></pre>':'')+
+        it.o.map((o,i)=>'<label class="opt"><input type="radio" name="'+key+'-'+k+'" value="'+i+'"><span>'+esc(o)+'</span></label>').join('')+'<div class="fb"></div></fieldset>';}).join('')+
+      '<div class="row"><button class="btn" type="button">Submit answers</button></div>';
+    $$('.btn',el).forEach(b=>b.addEventListener('click',()=>submit(false)));
+    $$('input',el).forEach(r=>r.addEventListener('change',count));
+    count();tqRunning++;timer=setInterval(tick,1000);tick();
+    el.scrollIntoView();
+  }
+  function count(){const n=$$('fieldset',el).filter(f=>$('input:checked',f)).length;$('.tq-count',el).textContent=n+' of '+picks.length+' answered';}
+  function tick(){
+    const left=Math.max(0,Math.round((end-Date.now())/1000));
+    const t=$('.tq-time',el);t.textContent=Math.floor(left/60)+':'+String(left%60).padStart(2,'0')+' left';t.classList.toggle('warn',left<=120);
+    const live=$('.sr',el);
+    if(left<=300&&!warned5&&left>60){warned5=true;live.textContent='5 minutes left.';}
+    if(left<=60&&!warned1){warned1=true;live.textContent='1 minute left.';}
+    if(left<=0)submit(true);
+  }
+  function submit(auto){
+    if(!timer)return;
+    const sets=$$('fieldset',el),unans=sets.filter(f=>!$('input:checked',f)).length;
+    if(!auto&&unans&&!confirm(unans+' question'+(unans>1?'s are':' is')+' unanswered. Submit anyway?'))return;
+    stop();
+    const used=Math.min(cfg.minutes*60,Math.round((Date.now()-startT)/1000));let score=0;
+    sets.forEach(f=>{const pi=+f.dataset.pi,it=cfg.pool[pi],pick=$('input:checked',f),v=pick?+pick.value:-1,ok=v===it.a;if(ok)score++;
+      if(v>=0)record(key+'.'+pi,v,ok);
+      $$('.opt',f).forEach((l,i)=>{l.classList.toggle('right',i===it.a);l.classList.toggle('wrong',i===v&&!ok);});
+      $$('input',f).forEach(r=>r.disabled=true);
+      const fb=$('.fb',f);fb.className='fb '+(ok?'ok':'no');
+      const h=document.createElement('b');h.textContent=ok?'Correct.':(v<0?'Not answered. ':'Not quite. ')+'The answer is "'+it.o[it.a]+'".';
+      const w=document.createElement('span');w.className='why';w.textContent=it.w;fb.append(h,w);});
+    state.quizzes[key]=(state.quizzes[key]||[]).concat({s:score,n:picks.length,t:Date.now(),used}).slice(-20);
+    if(state.best[key]==null||score>state.best[key])state.best[key]=score;save();
+    $('.tq-bar',el).remove();$$(':scope > .row',el).forEach(r=>r.remove());
+    const msg=score>=8?'Strong result. Review any you missed, then try a fresh set.':score>=5?'Solid start. Read the explanations below for the ones you missed.':'Go back over the lessons for the questions you missed, then try again.';
+    const p=document.createElement('div');p.className='panel tq-result';
+    p.innerHTML='<div class="score">'+score+'/'+picks.length+'</div><p></p><p class="small"></p><div class="row"><button class="btn" type="button">Try a fresh set</button><a class="btn ghost" href="progress.html">See my progress</a></div>';
+    $$('p',p)[0].textContent=(auto?'Time is up. ':'')+msg;
+    $$('p',p)[1].textContent='Time used: '+fmtTime(used)+'.'+(cfg.marks?' That is about '+(Math.round(score*cfg.marks/cfg.count*2)/2)+' of '+cfg.marks+' marks.':'')+' Best so far: '+state.best[key]+'/'+cfg.count+'.';
+    $('button',p).addEventListener('click',intro);el.prepend(p);p.scrollIntoView();
+  }
+  intro();
+}
+
+/* ---------- assessment practice: written questions with self-marking ---------- */
+function writtenBank(el){
+  const key=el.dataset.set,list=PPS.WQ[key]||[];
+  if(!state.written||typeof state.written!=='object')state.written={};
+  const mine=state.written[key]||(state.written[key]={});
+  const total=w=>w.scheme.reduce((a,s)=>a+(+s[0]),0);
+  el.innerHTML=list.map(w=>{const t=total(w);
+    return '<article class="wq" id="'+key+'-'+w.id+'"><div class="prob-h"><span class="lvl medium">'+esc(w.co)+'</span><h3>'+esc(w.id)+'</h3><span class="lec">'+esc(w.marks)+' marks, '+esc(w.bl)+'</span></div>'+
+      w.q.split('\n').map(p=>'<p>'+esc(p)+'</p>').join('')+(w.qcode?'<pre class="c"><code>'+hl(w.qcode)+'</code></pre>':'')+
+      '<div class="answer-space" aria-hidden="true"></div>'+
+      '<details class="reveal wq-ans"><summary>Model answer and marking scheme</summary>'+
+      '<pre class="c"><code>'+(w.plain?esc(w.code):hl(w.code))+'</code></pre>'+
+      (w.sample?'<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">'+esc(w.sample[0]||'(none)')+'</pre></div><div><div class="tr-l">Output</div><pre class="tr-out">'+esc(w.sample[1])+'</pre></div></div>':'')+
+      '<p>'+esc(w.note)+'</p><div class="tbl"><table class="scheme"><thead><tr><th>Marks</th><th>Awarded for</th></tr></thead><tbody>'+
+      w.scheme.map(s=>'<tr><td>'+esc(s[0])+'</td><td>'+esc(s[1])+'</td></tr>').join('')+'</tbody></table></div></details>'+
+      '<div class="row selfmark" role="group" aria-label="Marks I gave myself for '+esc(w.id)+'"><span class="small">Marks I gave myself:</span>'+
+      Array.from({length:t+1},(_,i)=>'<button type="button" class="mk" data-w="'+esc(w.id)+'" data-v="'+i+'">'+i+'</button>').join('')+'<span class="small">of '+t+'</span></div></article>';}).join('');
+  function sync(){
+    $$('.mk',el).forEach(b=>b.setAttribute('aria-pressed',String(mine[b.dataset.w])===b.dataset.v));
+    const done=list.filter(w=>mine[w.id]!=null),got=done.reduce((a,w)=>a+mine[w.id],0),out=done.reduce((a,w)=>a+total(w),0);
+    $$('[data-wq-summary="'+key+'"]').forEach(s=>s.textContent=done.length?'You have marked '+done.length+' of '+list.length+' questions: '+got+' of '+out+' marks.':'Mark yourself after each answer to track your score here.');
+  }
+  $$('.mk',el).forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.w,v=+b.dataset.v;if(mine[k]===v)delete mine[k];else mine[k]=v;save();sync();}));
+  sync();
+}
+function printWritten(withAnswers){
+  const root=document.documentElement,prevTheme=root.getAttribute('data-theme'),ds=$$('#written details'),was=ds.map(d=>d.open);
+  root.setAttribute('data-theme','light');document.body.classList.add('print-mode',withAnswers?'print-answers':'print-questions');
+  ds.forEach(d=>d.open=withAnswers);
+  const done=()=>{document.body.classList.remove('print-mode','print-answers','print-questions');ds.forEach((d,i)=>d.open=was[i]);
+    if(prevTheme==null)root.removeAttribute('data-theme');else root.setAttribute('data-theme',prevTheme);window.removeEventListener('afterprint',done);};
+  window.addEventListener('afterprint',done);window.print();setTimeout(()=>{if(document.body.classList.contains('print-mode'))done();},60000);
+}
+function initPracticePage(){
+  $$('.tq').forEach(el=>{try{timedQuiz(el);}catch(e){console.error(e);}});
+  $$('.wq-list').forEach(el=>{try{writtenBank(el);}catch(e){console.error(e);}});
+  $$('[data-print]').forEach(b=>b.addEventListener('click',()=>printWritten(b.dataset.print==='answers')));
+  if(location.hash){const t=document.getElementById(location.hash.slice(1));if(t)setTimeout(()=>t.scrollIntoView(),0);}
 }

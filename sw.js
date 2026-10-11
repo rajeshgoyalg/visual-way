@@ -1,6 +1,6 @@
 /* Offline support. Pages are served from the cache instantly and refreshed in the background,
    so an update you publish appears on the next visit after that. Change VERSION to force a full refresh. */
-const VERSION = 'v3';
+const VERSION = '2026-10-11';
 const CACHE = 'visual-way-' + VERSION;
 const PRECACHE = [
   "./",
@@ -11,6 +11,8 @@ const PRECACHE = [
   "assets/icons/icon-192.png",
   "courses/ces1102/index.html",
   "courses/ces1102/progress.html",
+  "courses/ces1102/data/practice.js",
+  "courses/ces1102/practice.html",
   "courses/ces1102/course.js",
   "courses/ces1102/unit1.html",
   "courses/ces1102/unit2.html",

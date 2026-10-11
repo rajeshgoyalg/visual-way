@@ -96,6 +96,15 @@ The side menu and the unit mind map pick up the new lesson automatically.
 
 Copy an `<article class="prob" …>` block in the unit's practice lab section. Give its **Mark as solved** button a new `data-solved` id (for example `u2labI`), set `data-level` to `easy`, `medium` or `exam`, and add the same id to the unit's `labs` list in `course.js`.
 
+### Assessment practice
+
+`courses/ces1102/practice.html` holds practice for the in-semester assessments. Its content is in `data/practice.js`:
+
+- `PPS.TQ.<key>` is a timed objective quiz: `title`, `minutes`, `count` (questions drawn per attempt), optional `marks` (to show a marks estimate), and a `pool` of questions in the usual format, plus an optional `c` field for a code snippet shown with the question.
+- `PPS.WQ.<key>` is a list of written questions: `id`, `co`, `bl` (Bloom level), `marks`, `q` (use a line break between parts), optional `qcode`, the model answer `code` (set `plain: true` for a non-code answer), a `note`, a `scheme` of `[marks, what for]` rows, and an optional `sample` of `[input, output]`.
+
+Put `<div class="tq" data-set="KEY"></div>` or `<div class="wq-list" data-set="KEY"></div>` on the page to show one. Attempts, answers and self-marks are saved per learner and appear on My progress. Add new questions at the end of a pool so saved answers stay matched.
+
 ### Building blocks you can reuse
 
 | In the HTML | Data in `data/unitN.js` | What it does |
