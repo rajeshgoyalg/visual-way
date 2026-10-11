@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Search | PPS, the visual way</title>
+<meta name="description" content="Visual, interactive course notes.">
+<meta name="theme-color" content="#2350B8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Visual Way">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="../../assets/icons/icon-192.png">
+<link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body data-page="search" data-course="ces1102" data-root="../../">
+<header class="topbar"><div class="topbar-in"><a class="brand" href="../../index.html">The Visual Way</a><nav class="unitnav" aria-label="Course"><a href="index.html">Course</a><a href="unit1.html">Unit 1</a><a href="unit2.html">Unit 2</a><a href="unit3.html">Unit 3</a><a href="unit4.html">Unit 4</a><a href="unit5.html">Unit 5</a><a href="practice.html">Practice</a><a href="sdl.html">Projects</a><a href="exam.html">Exam prep</a><a href="progress.html">My progress</a></nav><a class="searchlink" href="search.html" aria-current="page" aria-label="Search the course" title="Search"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a><button class="learner-chip" type="button">Choose learner</button></div></header>
+<main class="dashwrap">
+  <h1>Search</h1>
+  <label class="sr-only" for="q">Search the course</label>
+  <input id="q" type="search" class="search-in" placeholder="strcmp, recursion, fopen, binary search…" autocomplete="off">
+  <div id="results" aria-live="polite"></div>
+</main>
+<footer>Progress is saved only in this browser. Use Export on the My progress page to keep a backup.</footer>
+<script src="../../assets/engine.js"></script>
+<script src="course.js"></script>
+<script src="data/search.js"></script>
+<script>initPage();</script>
+</body>
+</html>

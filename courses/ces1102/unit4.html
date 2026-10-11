@@ -19,13 +19,13 @@
 </head>
 <body data-page="unit" data-course="ces1102" data-unit="4" data-root="../../">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><marker id="mk" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="currentColor" stroke-width="1.6"/></marker></defs></svg>
-<header class="topbar"><div class="topbar-in"><a class="brand" href="../../index.html">The Visual Way</a><nav class="unitnav" aria-label="Course"><a href="index.html">Course</a><a href="unit1.html">Unit 1</a><a href="unit2.html">Unit 2</a><a href="unit3.html">Unit 3</a><a href="unit4.html" aria-current="page">Unit 4</a><a href="unit5.html">Unit 5</a><a href="practice.html">Practice</a><a href="sdl.html">Projects</a><a href="exam.html">Exam prep</a><a href="progress.html">My progress</a></nav><button class="learner-chip" type="button">Choose learner</button></div></header>
+<header class="topbar"><div class="topbar-in"><a class="brand" href="../../index.html">The Visual Way</a><nav class="unitnav" aria-label="Course"><a href="index.html">Course</a><a href="unit1.html">Unit 1</a><a href="unit2.html">Unit 2</a><a href="unit3.html">Unit 3</a><a href="unit4.html" aria-current="page">Unit 4</a><a href="unit5.html">Unit 5</a><a href="practice.html">Practice</a><a href="sdl.html">Projects</a><a href="exam.html">Exam prep</a><a href="progress.html">My progress</a></nav><a class="searchlink" href="search.html" aria-label="Search the course" title="Search"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a><button class="learner-chip" type="button">Choose learner</button></div></header>
 <div class="wrap layout" style="margin-top:28px">
 <nav class="rail" aria-label="Lessons in this unit"><h4>Unit 4 lessons</h4><ol id="railList"></ol><div class="bar" aria-hidden="true"><i id="barFill"></i></div><small id="progText"></small></nav>
 <main>
 <section class="unit" id="unit-4">
   <div class="intro">
-    <h2>Unit 4: Functions and pointers</h2>
+    <h1 class="unit-title">Unit 4: Functions and pointers</h1>
     <p>Big programs are built from small, named pieces. This unit shows how to split work into functions, how values travel between them, what a memory address is, and how a function can call itself.</p>
     <div class="mindmap" data-center="Unit 4|Functions and pointers"></div>
   </div>
@@ -133,11 +133,27 @@ int isPrime(int n)
       <p>Once <code>p = &amp;x;</code>, the expression <code>*p</code> means "the value at the address in p", which is x itself. This is <mark>dereferencing</mark>. Reading <code>*p</code> reads x; writing <code>*p = 20;</code> changes x. The star does two jobs: in a declaration it says "this is a pointer"; in an expression it says "go to that address".</p>
     </div>
     <div class="widget tracer" data-t="u4ptr"></div>
+    <h3>Read any pointer expression</h3>
+    <div class="tbl"><table>
+      <thead><tr><th>Expression</th><th>Read it as</th><th>Value for <code>int x = 7; int *p = &amp;x;</code></th></tr></thead>
+      <tbody>
+        <tr><td><code>x</code></td><td>the value in x</td><td>7</td></tr>
+        <tr><td><code>&amp;x</code></td><td>the address of x</td><td>1000</td></tr>
+        <tr><td><code>p</code></td><td>the address stored in p</td><td>1000</td></tr>
+        <tr><td><code>*p</code></td><td>the value at the address in p</td><td>7</td></tr>
+        <tr><td><code>&amp;p</code></td><td>the address of p itself</td><td>2000</td></tr>
+        <tr><td><code>*&amp;x</code></td><td>the value at the address of x</td><td>7</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small">Addresses are made up for clarity: x lives at 1000 and p at 2000. &amp; and * undo each other, so *&amp;x is just x.</p>
+    <div class="widget ptrplay"></div>
+    <div class="prose"><p><b>Why pointers matter.</b> They let a function change the caller&#8217;s variables (lesson 4.4), let functions work on whole arrays without copying them (4.5), and are how C walks through arrays and strings (5.3). Most exam questions on CO4 and CO5 use them.</p></div>
     <div class="traps">
       <h3>Traps that cost marks</h3>
       <ul>
         <li><code>int *p;</code> followed by <code>*p = 5;</code> writes to a random address. Initialise pointers: <code>int *p = NULL;</code> or <code>= &amp;x</code>.</li>
         <li>In <code>int *p, q;</code> only p is a pointer. q is a plain int.</li>
+        <li>Using <code>*p</code> before p holds a real address (uninitialised or NULL) is the most common pointer crash. Give it an address first.</li>
         <li>Print an address with <code>%p</code>, not <code>%d</code>.</li>
       </ul>
     </div>
@@ -215,6 +231,20 @@ float average(int a[], int n) { return (float)total(a, n) / n; }  // nesting: ca
     </div>
     <div class="widget tracer" data-t="u4fact"></div>
     <div class="widget tabsw" data-k="u4rec"></div>
+    <h3>Write any recursive function in three steps</h3>
+    <ol class="steps3">
+      <li><b>Base case.</b> The smallest input you can answer directly, with no recursion: n == 0, an empty array, a single digit.</li>
+      <li><b>Smaller problem.</b> Call the same function on a smaller input that moves towards the base case: n &#8722; 1, the first n &#8722; 1 elements, n / 10.</li>
+      <li><b>Combine.</b> Build this answer from the smaller one: n &#215; fact(n &#8722; 1), the last element plus the sum of the rest.</li>
+    </ol>
+<pre class="c" data-hl>
+int sumArr(int a[], int n)
+{
+    if (n == 0)                          // 1. base case: no elements
+        return 0;
+    return a[n - 1] + sumArr(a, n - 1);  // 2. smaller problem, 3. combine
+}</pre>
+    <div class="widget tabsw" data-k="u4updown"></div>
     <div class="prose"><p>Recursion is a different way of thinking, not a faster one. A loop usually uses less memory. Recursion shines when the problem is naturally self-similar: factorials, Fibonacci, GCD, reversing, and later trees and divide-and-conquer sorts.</p></div>
     <div class="traps">
       <h3>Traps that cost marks</h3>

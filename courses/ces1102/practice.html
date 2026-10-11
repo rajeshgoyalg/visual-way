@@ -18,13 +18,14 @@
 <link rel="stylesheet" href="../../assets/style.css">
 </head>
 <body data-page="practice" data-course="ces1102" data-root="../../">
-<header class="topbar"><div class="topbar-in"><a class="brand" href="../../index.html">The Visual Way</a><nav class="unitnav" aria-label="Course"><a href="index.html">Course</a><a href="unit1.html">Unit 1</a><a href="unit2.html">Unit 2</a><a href="unit3.html">Unit 3</a><a href="unit4.html">Unit 4</a><a href="unit5.html">Unit 5</a><a href="practice.html" aria-current="page">Practice</a><a href="sdl.html">Projects</a><a href="exam.html">Exam prep</a><a href="progress.html">My progress</a></nav><button class="learner-chip" type="button">Choose learner</button></div></header>
+<header class="topbar"><div class="topbar-in"><a class="brand" href="../../index.html">The Visual Way</a><nav class="unitnav" aria-label="Course"><a href="index.html">Course</a><a href="unit1.html">Unit 1</a><a href="unit2.html">Unit 2</a><a href="unit3.html">Unit 3</a><a href="unit4.html">Unit 4</a><a href="unit5.html">Unit 5</a><a href="practice.html" aria-current="page">Practice</a><a href="sdl.html">Projects</a><a href="exam.html">Exam prep</a><a href="progress.html">My progress</a></nav><a class="searchlink" href="search.html" aria-label="Search the course" title="Search"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a><button class="learner-chip" type="button">Choose learner</button></div></header>
 <main class="dashwrap">
   <h1>Assessment practice</h1>
+  <p class="small jump">Jump to: <a href="#a2-sec">Assignment 2</a> · <a href="#a3-sec">Assignment 3</a> · <a href="#sprint-h">Output sprint</a> · <a href="#bughunt-h">Bug hunt</a> · <a href="#mixed-h">Mixed practice</a></p>
   <p class="small">Practise in the same format as the real assessments. Scores and self-marks are saved in this browser and appear on My progress.</p>
   <div class="cheat" style="margin:18px 0 8px">
-    <div><h3>Assignment 2: SDL-LMS quiz</h3>19 to 31 October. 20 minutes, objective questions, 5 marks. Covers lectures 14 to 21 (CO3: arrays and strings) and the self-directed learning topics.</div>
-    <div><h3>Assignment 3: surprise class test</h3>19 to 31 October. 30 minutes, pen and paper, objective and descriptive questions, 10 marks. Covers lectures 22 to 36 (CO4 and CO5).</div>
+    <div><h2 class="h3">Assignment 2: SDL-LMS quiz</h2>19 to 31 October. 20 minutes, objective questions, 5 marks. Covers lectures 14 to 21 (CO3: arrays and strings) and the self-directed learning topics.</div>
+    <div><h2 class="h3">Assignment 3: surprise class test</h2>19 to 31 October. 30 minutes, pen and paper, objective and descriptive questions, 10 marks. Covers lectures 22 to 36 (CO4 and CO5).</div>
   </div>
 
   <section id="a2-sec">
@@ -47,10 +48,28 @@
     <p class="labcount" data-wq-summary="a3" style="margin:10px 0 0"></p>
     <div class="wq-list" data-set="a3"></div>
   </section>
+  <section id="drills">
+    <h2 style="margin-top:40px">Drills</h2>
+    <p class="small">Short, replayable practice for any day. They mirror the exam: predicting output, finding bugs and mixing topics.</p>
+    <h3 id="sprint-h">Predict-the-output sprint</h3>
+    <div class="panel" id="sprint"></div>
+    <h3 id="bughunt-h" style="margin-top:30px">Bug hunt</h3>
+    <div id="bughunt"></div>
+    <h3 id="mixed-h" style="margin-top:30px">Mixed practice</h3>
+    <p class="small">10 questions from all five units, in about the proportion the end-semester exam gives each one marks. Mixing topics trains you to choose the method, which the exam tests on every question.</p>
+    <div class="uq" id="mixed"></div>
+  </section>
 </main>
 <footer>Progress is saved only in this browser. Use Export on the My progress page to keep a backup.</footer>
 <script src="../../assets/engine.js"></script>
+<script src="course.js"></script>
 <script src="data/practice.js"></script>
+<script src="data/drills.js"></script>
+<script src="data/unit1.js"></script>
+<script src="data/unit2.js"></script>
+<script src="data/unit3.js"></script>
+<script src="data/unit4.js"></script>
+<script src="data/unit5.js"></script>
 <script src="data/tags.js"></script>
 <script>initPage();</script>
 </body>

@@ -20,6 +20,7 @@ courses/ces1102/
   practice.html               Practice for Assignments 2 and 3 (timed quizzes, written questions)
   sdl.html                    The 16 self-directed learning projects
   exam.html                   End-semester mock papers and revision plan
+  search.html                 Search across lessons, labs, cheat sheets and projects
   progress.html               "My progress": readiness by course outcome, scores, questions to revisit
   course.js                   Course outline: lesson ids and lab problem ids per unit
   data/unit1.js … unit5.js    Questions and widget data for each unit
@@ -27,6 +28,8 @@ courses/ces1102/
   data/practice.js            Assessment practice question banks
   data/sdl.js                 Project briefs, milestones and tested reference solutions
   data/exam.js                Mock papers with model answers and marking schemes
+  data/drills.js              Predict-the-output sprint and bug-hunt ladder (answers checked with gcc)
+  data/search.js              Search index; rebuild with python3 tools/search_build.py after editing lesson text
 ```
 
 ## Try it on your computer

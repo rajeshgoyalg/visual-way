@@ -105,6 +105,7 @@ function unitQuiz(el,u){
       const msg=score>=9?'Excellent. You are ready for the next unit.':score>=6?'Good foundation. Revisit the lessons behind the questions you missed.':'Worth another pass. Re-read the traps boxes, then retry.';
       d.innerHTML='<div class="score">'+score+'/'+Q.length+'</div><p style="margin-top:10px"></p><p class="small"></p><div class="row"><button class="btn" type="button">Try a fresh set</button><a class="btn ghost" href="progress.html">See my progress</a></div>';
       const ps=$$('p',d);ps[0].textContent=msg;ps[1].textContent='Best score '+state.best[u]+'/'+Q.length+'. Attempts so far: '+tries+'. Each attempt draws 10 of '+(pool.quiz.length+pool.checks.length)+' questions in a new order, with the options shuffled.';
+      const pd=passDays(u),ck=document.createElement('p');ck.className='small';ck.textContent=score>=8?(pd>=2?'Checkpoint: 8 or more on two different days. This unit counts as exam-ready once its quick checks are practised.':'Checkpoint passed today. Pass again on another day to mark this unit exam-ready.'):'Checkpoint: score 8 or more on two different days to mark this unit exam-ready.';ps[1].after(ck);
       $('button',d).addEventListener('click',()=>{Q=drawUnitQuiz(u);qi=0;score=0;show();});el.appendChild(d);return;
     }
     const head=document.createElement('div');head.className='uq-head';head.innerHTML='<span>Question '+(qi+1)+' of '+Q.length+'</span><span>Score '+score+'</span>';el.appendChild(head);
@@ -218,7 +219,7 @@ function tabset(el){
 function mindmap(el){
   const unit=el.closest('.unit');const ls=$$('.lesson[data-title]',unit).filter(s=>!s.dataset.kind);
   const [c1,c2]=el.dataset.center.split('|');const n=ls.length,rowH=50,H=Math.max(n*rowH+10,130);
-  const cy=H/2;let s='<svg viewBox="0 0 680 '+H+'" role="img" aria-label="Mind map of the lessons in '+esc(c1+' '+c2)+'">';
+  const cy=H/2;let s='<svg viewBox="0 0 680 '+H+'" role="group" aria-label="Mind map of the lessons in '+esc(c1+' '+c2)+'">';
   ls.forEach((l,i)=>{const y=10+i*rowH,my=y+20;s+='<path class="mm-l" d="M222 '+cy+' C 250 '+cy+', 246 '+my+', 278 '+my+'" fill="none"/>';});
   s+='<rect class="mm-c" x="20" y="'+(cy-40)+'" width="200" height="80" rx="40"/><text class="mm-ct" x="120" y="'+(cy-6)+'" text-anchor="middle">'+esc(c1)+'</text><text class="mm-cs" x="120" y="'+(cy+16)+'" text-anchor="middle">'+esc(c2)+'</text>';
   ls.forEach((l,i)=>{const y=10+i*rowH,done=!!state.done[l.id];
@@ -348,6 +349,7 @@ function initCoursePage(){
     $('.prog',a).textContent=s.lessons+' of '+s.u.lessons.length+' lessons'+(s.best!=null?', quiz '+s.best+'/10':'');});
   initTerminal();
   const dr=$('#daily');if(dr)dailyReview(dr);
+  const ms=$('#mastery');if(ms)ms.innerHTML=masteryHTML(true)+'<p class="small"><a href="progress.html">What each stage needs, and your next step</a></p>';
 }
 function initHomePage(){
   $$('[data-course-card]').forEach(card=>{const sum=courseSummary(card.dataset.courseCard);if(!sum)return;
@@ -368,7 +370,7 @@ function initProgressPage(){
   const tot=(f)=>rows.reduce((a,r)=>a+f(r),0);
   const meter=(v,t)=>'<span class="meter" aria-hidden="true"><i style="width:'+(t?Math.round(v/t*100):0)+'%"></i></span>';
   const L=tot(r=>r.lessons),LT=tot(r=>r.u.lessons.length),QA=tot(r=>r.qAns),QT=tot(r=>r.qTot),QF=tot(r=>r.qFirst),B=tot(r=>r.labs),BT=tot(r=>r.u.labs.length),QZ=tot(r=>r.att.length);
-  let h=readinessHTML()+'<h2>Lessons and practice</h2><div class="stats">'+
+  let h=masteryHTML(false)+readinessHTML()+'<h2>Lessons and practice</h2><div class="stats">'+
     '<div class="stat"><span class="big">'+L+'<small>/'+LT+'</small></span>Lessons completed'+meter(L,LT)+'</div>'+
     '<div class="stat"><span class="big">'+QA+'<small>/'+QT+'</small></span>Quick checks answered'+meter(QA,QT)+'</div>'+
     '<div class="stat"><span class="big">'+(QA?Math.round(QF/QA*100):0)+'%</span>Right on the first try</div>'+
@@ -428,7 +430,8 @@ function registerSW(){
 function initPage(){
   learnerChips();wireData();
   const p=PAGE.page;
-  try{if(p==='unit'){initUnitPage();renderCourseOutcomes();}else if(p==='course')initCoursePage();else if(p==='home')initHomePage();else if(p==='progress')initProgressPage();else if(p==='practice')initPracticePage();else if(p==='sdl')initSdlPage();else if(p==='exam')initExamPage();}catch(e){console.error(e);}
+  try{if(p==='unit'){initUnitPage();renderCourseOutcomes();}else if(p==='course')initCoursePage();else if(p==='home')initHomePage();else if(p==='progress')initProgressPage();else if(p==='practice'){initPracticePage();$$('#sprint').forEach(sprintDrill);$$('#bughunt').forEach(bugHunt);$$('#mixed').forEach(mixedQuiz);}else if(p==='search')initSearchPage();else if(p==='sdl')initSdlPage();else if(p==='exam')initExamPage();}catch(e){console.error(e);}
+  $$('pre.c,.tr-code').forEach(x=>{if(!x.hasAttribute('tabindex'))x.setAttribute('tabindex','0');});
   registerSW();
   if(!learners.current)openLearner(true);
 }
@@ -727,7 +730,7 @@ function renderCourseOutcomes(){
   if(unitN&&!$('.cobox')){const co=coForUnit(unitN),u=m.units[unitN-1];
     if(co){const d=document.createElement('div');d.className='cobox';
       d.innerHTML='<div class="cobox-h"><span class="lvl medium">'+esc(co.id)+'</span><b>Course outcome for this unit</b></div><p>'+esc(co.text)+'</p><p class="small">'+co.hours+' contact hours, '+co.marks+' of the 100 marks, programme outcomes '+esc(co.pos)+', learning outcomes '+esc(co.los)+', Bloom\u2019s levels '+esc(co.bl)+'. '+esc((u.sub||'').replace(/^CO\d+,\s*/,'').replace(/^./,c=>c.toUpperCase()))+'.</p>';
-      const host=$('section.unit > .intro h2');
+      const host=$('section.unit > .intro h1');
       if(host)host.after(d);else{const mn=$('main');if(mn)mn.prepend(d);}}}
   const tbl=$('#coTable');
   if(tbl&&!tbl.dataset.done){tbl.dataset.done='1';
@@ -807,3 +810,208 @@ function dailyReview(el){
   show();
 }
 PPS.init.push(()=>addRunLinks());
+
+/* ---------- lesson 4.3: pointer playground ---------- */
+function ptrPlay(el){
+  const mem={a:5,b:9},addr={a:1000,b:1004,p:2000};let p=null;
+  const cmds=[['p = &a;','pa'],['p = &b;','pb'],['*p = *p + 1;','inc'],['*p = 0;','zero'],['p = NULL;','null']];
+  el.innerHTML='<div class="label">Pointer playground: run a statement and watch memory change</div>'+
+    '<div class="row pp-btns">'+cmds.map(c=>'<button type="button" class="btn ghost" data-k="'+c[1]+'"><code>'+esc(c[0])+'</code></button>').join('')+'<button type="button" class="btn ghost" data-k="reset">Reset</button></div>'+
+    '<div class="pp-mem"></div><pre class="tr-out pp-out"></pre><p class="stepnote" aria-live="polite"></p>';
+  function draw(note,bad){
+    const box=n=>'<div class="pp-var'+(p===n?' tgt':'')+'"><div class="pp-name">'+n+'</div><div class="box">'+mem[n]+'</div><div class="idx">address '+addr[n]+'</div></div>';
+    $('.pp-mem',el).innerHTML=box('a')+box('b')+'<div class="pp-var ptr"><div class="pp-name">p</div><div class="box">'+(p?addr[p]+' \u2192 '+p:'NULL')+'</div><div class="idx">address '+addr.p+'</div></div>';
+    $('.pp-out',el).textContent='a = '+mem.a+'    b = '+mem.b+'    *p = '+(p?mem[p]:'(none: p is NULL)');
+    const n=$('.stepnote',el);n.textContent=note;n.classList.toggle('bad',!!bad);
+  }
+  $$('button',el).forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.k;
+    if(k==='reset'){mem.a=5;mem.b=9;p=null;draw('Back to the start: a = 5, b = 9, p = NULL.');return;}
+    if(k==='pa'){p='a';draw('p now holds 1000, the address of a, so *p means a.');return;}
+    if(k==='pb'){p='b';draw('p now holds 1004. The same expression *p now means b.');return;}
+    if(k==='null'){p=null;draw('p = NULL: it points nowhere. Check p != NULL before using *p.');return;}
+    if(!p){draw('Crash! *p with p = NULL follows a null pointer: the program stops with a segmentation fault. Give p an address first.',true);return;}
+    if(k==='inc'){mem[p]++;draw('*p = *p + 1 adds 1 to '+p+' through the pointer: '+p+' is now '+mem[p]+'.');}
+    else{mem[p]=0;draw('*p = 0 writes 0 into '+p+'. The other variable is untouched.');}
+  }));
+  draw('Start: a = 5 at address 1000, b = 9 at 1004, p = NULL. Click a statement to run it.');
+}
+
+/* ---------- lesson 5.4: where is a[i][j]? ---------- */
+function addr2d(el){
+  const R=3,C=4,base=2000,sz=4;let i=1,j=2;
+  el.innerHTML='<div class="label">int a[3][4] = {1, 2, ..., 12} at address 2000, with 4-byte ints</div>'+
+    '<div class="row ap-ctl"><label>Row i <select class="a2i">'+[0,1,2].map(v=>'<option'+(v===i?' selected':'')+'>'+v+'</option>').join('')+'</select></label>'+
+    '<label>Column j <select class="a2j">'+[0,1,2,3].map(v=>'<option'+(v===j?' selected':'')+'>'+v+'</option>').join('')+'</select></label></div>'+
+    '<div class="a2-grid" aria-hidden="true"></div><div class="tr-l">The same 12 ints in memory, row after row</div><div class="cells a2-mem" aria-hidden="true"></div><div class="tbl"><table class="a2-eq"><tbody></tbody></table></div>';
+  function draw(){
+    const off=i*C+j,val=off+1;let g='';
+    for(let r=0;r<R;r++){g+='<div class="a2-row'+(r===i?' on':'')+'"><span class="a2-rl">a['+r+']</span>';for(let c=0;c<C;c++)g+='<span class="a2-cell'+(r===i&&c===j?' hot':'')+'">'+(r*C+c+1)+'</span>';g+='</div>';}
+    $('.a2-grid',el).innerHTML=g;
+    let m='';for(let k=0;k<R*C;k++){const rr=Math.floor(k/C);m+='<div class="cell'+(k===off?' hot':rr===i?' row':'')+'"><div class="box">'+(k+1)+'</div><div class="idx">'+(base+k*sz)+'</div></div>';}
+    $('.a2-mem',el).innerHTML=m;
+    const rows=[['a['+i+']['+j+']','the element',val],['*(*(a + '+i+') + '+j+')','pointer form: row, then column, then read',val],['*(a['+i+'] + '+j+')','row '+i+' as a 1-D array, then column '+j,val],
+      ['a + '+i,'address where row '+i+' starts (each row is '+C*sz+' bytes)',base+i*C*sz],['&a['+i+']['+j+']','address of the element',base+off*sz],['offset','('+i+' \u00d7 '+C+' + '+j+') elements \u00d7 '+sz+' bytes',off*sz+' bytes']];
+    $('.a2-eq tbody',el).innerHTML=rows.map(r=>'<tr><td><code>'+esc(r[0])+'</code></td><td>'+esc(r[1])+'</td><td><b>'+esc(r[2])+'</b></td></tr>').join('');
+  }
+  $('.a2i',el).addEventListener('change',e=>{i=+e.target.value;draw();});
+  $('.a2j',el).addEventListener('change',e=>{j=+e.target.value;draw();});
+  draw();
+}
+PPS.init.push(()=>{$$('.ptrplay').forEach(ptrPlay);$$('.addr2d').forEach(addr2d);});
+
+/* ---------- predict-the-output sprint ---------- */
+function sprintDrill(el){
+  const D=(PPS.DRILL||{}).sprint||[];if(!D.length)return;
+  let filter='all',timer=null,end=0,order=[],k=0,right=0,wrong=0,running=false;
+  const S=()=>{if(!state.sprint||typeof state.sprint!=='object')state.sprint={best:{},runs:[]};return state.sprint;};
+  const label=f=>f==='all'?'All units':'Unit '+f;
+  function intro(msg){
+    const b=S().best[filter];
+    el.innerHTML='<div class="tabs sp-filter" role="group" aria-label="Units">'+['all','2','3','4','5'].map(f=>'<button type="button" aria-pressed="'+(f===filter)+'" data-f="'+f+'">'+label(f)+'</button>').join('')+'</div>'+
+      (msg||'')+'<p class="small">Read the code, pick what it prints. 90 seconds, as many as you can. A wrong answer shows why before you continue. Personal best for '+label(filter).toLowerCase()+': <b>'+(b!=null?b:'none yet')+'</b></p><button class="btn" type="button" data-go>Start the 90-second sprint</button>';
+    $$('[data-f]',el).forEach(x=>x.addEventListener('click',()=>{filter=x.dataset.f;intro();}));
+    $('[data-go]',el).addEventListener('click',start);
+  }
+  function start(){order=shuffleArr(D.map((_,i)=>i).filter(i=>filter==='all'||String(D.at(i).u)===filter));k=0;right=0;wrong=0;running=true;end=Date.now()+90000;
+    clearInterval(timer);timer=setInterval(tick,250);next();}
+  function tick(){const left=Math.max(0,Math.ceil((end-Date.now())/1000)),t=$('.sp-time',el);if(t){t.textContent=left+' s';t.classList.toggle('warn',left<=10);}if(left<=0)finish();}
+  function next(){
+    if(!running)return;if(k>=order.length){order=shuffleArr(order);k=0;}
+    const it=D.at(order.at(k++)),opts=shuffleArr([it.a].concat(it.o));
+    el.innerHTML='<div class="sp-bar"><span class="sp-time">90 s</span><span>Right <b>'+right+'</b></span><span>Wrong <b>'+wrong+'</b></span><span class="small">Unit '+it.u+'</span></div><pre class="c"><code>'+hl(it.code)+'</code></pre><p class="sp-q">What does it print?</p><div class="sp-opts">'+opts.map(o=>'<button type="button" class="sp-opt"></button>').join('')+'</div><div class="sp-fb" aria-live="polite"></div>';
+    $$('.sp-opt',el).forEach((b,n)=>{b.textContent=opts.at(n);b.addEventListener('click',()=>{
+      if(!running||b.disabled)return;$$('.sp-opt',el).forEach(x=>x.disabled=true);
+      if(opts.at(n)===it.a){right++;b.classList.add('right');setTimeout(next,250);}
+      else{wrong++;b.classList.add('wrong');$$('.sp-opt',el).forEach(x=>{if(x.textContent===it.a)x.classList.add('right');});
+        const fb=$('.sp-fb',el);fb.innerHTML='<p></p><button type="button" class="btn">Continue</button>';$('p',fb).textContent='Answer: '+it.a+'. '+it.w;$('button',fb).addEventListener('click',next);$('button',fb).focus();}
+    });});
+    tick();
+  }
+  function finish(){
+    if(!running)return;running=false;clearInterval(timer);
+    const s=S(),prev=s.best[filter],acc=right+wrong?Math.round(right/(right+wrong)*100):0,isBest=prev==null||right>prev;
+    if(isBest)s.best[filter]=right;s.runs=(s.runs||[]).concat({f:filter,r:right,w:wrong,t:Date.now()}).slice(-30);save();
+    intro('<div class="panel sp-result"><div class="score">'+right+'</div><p>'+right+' right, '+wrong+' wrong, '+acc+'% accuracy'+(isBest&&right>0?'. A new personal best.':'.')+'</p></div>');
+  }
+  intro();
+}
+
+/* ---------- bug hunt: five levels, find the faulty line ---------- */
+function bugHunt(el){
+  const L=(PPS.DRILL||{}).bugs||[];if(!L.length)return;
+  if(!state.bugs||typeof state.bugs!=='object')state.bugs={};
+  const lvDone=lv=>L.every((b,i)=>b.lv!==lv||(state.bugs['b'+i]||{}).done);
+  const open=lv=>lv===1||lvDone(lv-1);
+  let cur=1;while(cur<5&&lvDone(cur))cur++;
+  function render(){
+    const found=L.filter((_,i)=>(state.bugs['b'+i]||{}).done).length,first=L.filter((_,i)=>(state.bugs['b'+i]||{}).first).length;
+    el.innerHTML='<p class="small bh-sum">Found '+found+' of '+L.length+' bugs, '+first+' on the first try. Finish a level to unlock the next.</p><div class="tabs bh-levels" role="group" aria-label="Levels">'+
+      [1,2,3,4,5].map(lv=>'<button type="button" data-lv="'+lv+'" aria-pressed="'+(lv===cur)+'"'+(open(lv)?'':' disabled')+'>Level '+lv+(lvDone(lv)?', done':open(lv)?'':', locked')+'</button>').join('')+'</div>'+
+      '<p class="small bh-what"></p><div class="bh-list"></div>';
+    const what=['','Level 1: code that does not compile','Level 2: compiles, but the logic is wrong','Level 3: loops and arrays','Level 4: strings, input and functions','Level 5: pointers, strings and recursion'];
+    $('.bh-what',el).textContent=what.at(cur);
+    $$('[data-lv]',el).forEach(b=>b.addEventListener('click',()=>{cur=+b.dataset.lv;render();}));
+    const host=$('.bh-list',el);
+    L.forEach((b,i)=>{if(b.lv!==cur)return;const id='b'+i,st=state.bugs[id]||{};
+      const card=document.createElement('article');card.className='prob bh-card';
+      card.innerHTML='<div class="prob-h"><span class="lvl '+(st.done?'easy':'medium')+'">'+(st.done?'Found':'Find the bug')+'</span><h3></h3></div><p class="small">Click the line that is wrong.</p><div class="bh-code" role="group" aria-label="Program lines"></div><div class="bh-fb" aria-live="polite"></div>';
+      $('h3',card).textContent=b.title;
+      const code=$('.bh-code',card);
+      b.lines.forEach((ln,k)=>{const btn=document.createElement('button');btn.type='button';btn.className='bh-line';btn.innerHTML='<span class="ln-no">'+(k+1)+'</span><code>'+hl(ln||' ')+'</code>';btn.addEventListener('click',()=>pick(k));code.appendChild(btn);});
+      function solved(){
+        $$('.bh-line',code).forEach((x,k)=>{x.disabled=true;x.classList.toggle('bad',k===b.bug);});
+        const fixed=b.lines.slice(0,b.bug).concat([b.fix],b.lines.slice(b.bug+1)).join('\n');
+        const fb=$('.bh-fb',card);fb.innerHTML='<p class="ok"><b>Line '+(b.bug+1)+'.</b> </p><div class="bh-diff"><div class="del"></div><div class="add"></div></div>';
+        $('p',fb).append(b.why);$('.del',fb).textContent='\u2212 '+b.lines.at(b.bug).trim();$('.add',fb).textContent='+ '+b.fix.trim();
+        const a=document.createElement('a');a.className='runlink';a.href=ceURL(fixed,b.stdin||'');a.target='_blank';a.rel='noopener';a.textContent='Run the fixed program';fb.appendChild(a);
+      }
+      function pick(k){
+        const s=state.bugs[id]||(state.bugs[id]={tries:0});if(s.done)return;s.tries++;
+        if(k===b.bug){s.done=true;s.first=s.tries===1;save();solved();setTimeout(()=>{if(lvDone(cur)&&cur<5){cur++;render();}},1600);}
+        else{save();const fb=$('.bh-fb',card);fb.innerHTML='<p class="no"></p>';$('p',fb).textContent='Not line '+(k+1)+'. Hint: '+b.hint;}
+      }
+      if(st.done)solved();
+      host.appendChild(card);
+    });
+  }
+  render();
+}
+
+/* ---------- mixed practice across all units, weighted by exam marks ---------- */
+function mixedDraw(){
+  const m=window.PPS_MANIFEST[COURSE],cos=m.cos,tot=cos.reduce((a,c)=>a+c.marks,0);
+  const raw=cos.map(c=>c.marks/tot*10),n=raw.map(Math.floor);let left=10-n.reduce((a,b)=>a+b,0);
+  raw.map((r,i)=>[r-Math.floor(r),i]).sort((a,b)=>b[0]-a[0]).forEach(([_,i])=>{if(left>0){n.splice(i,1,n.at(i)+1);left--;}});
+  let out=[];
+  m.units.forEach((u,ix)=>{const {quiz,checks}=unitQuizPool(u.quiz);out=out.concat(shuffleArr(quiz.concat(checks)).slice(0,n.at(ix)));});
+  return shuffleArr(out);
+}
+function mixedQuiz(el){
+  let Q=mixedDraw(),qi=0,score=0;
+  function show(){
+    el.innerHTML='';
+    if(qi>=Q.length){
+      if(state.best.mixed==null||score>state.best.mixed)state.best.mixed=score;
+      state.quizzes.mixed=(state.quizzes.mixed||[]).concat({s:score,n:Q.length,t:Date.now()}).slice(-20);save();
+      const d=document.createElement('div');d.className='panel';
+      d.innerHTML='<div class="score">'+score+'/'+Q.length+'</div><p class="small"></p><div class="row"><button class="btn" type="button">Try a fresh mix</button></div>';
+      $('p',d).textContent='Best '+state.best.mixed+'/10. Each set has about as many questions from each unit as the exam gives it marks: Unit 2 and Unit 3 the most.';
+      $('button',d).addEventListener('click',()=>{Q=mixedDraw();qi=0;score=0;show();});el.appendChild(d);return;
+    }
+    const it=Q.at(qi),head=document.createElement('div');head.className='uq-head';head.innerHTML='<span>Question '+(qi+1)+' of '+Q.length+'</span><span>Score '+score+'</span>';el.appendChild(head);
+    const fs=makeQ(it.it,el,{qid:it.qid,shuffle:true,onAnswer:ok=>{if(ok)score++;head.lastChild.textContent='Score '+score;
+      const nx=document.createElement('button');nx.className='btn';nx.type='button';nx.style.marginTop='10px';nx.textContent=qi===Q.length-1?'See my score':'Next question';
+      nx.addEventListener('click',()=>{qi++;show();});fs.appendChild(nx);nx.focus();}});
+  }
+  show();
+}
+
+/* ---------- mastery map: Started, Practised, Exam-ready, Mastered per course outcome ---------- */
+function passDays(u){return new Set((state.quizzes[u]||[]).filter(a=>a.s>=8).map(a=>dayStr(a.t))).size;}
+function masteryLevels(){
+  const m=window.PPS_MANIFEST[COURSE];if(!m||!m.cos)return [];
+  return m.cos.map((co,ix)=>{
+    const u=m.units.at(ix),pre='u'+u.n+'l';
+    const ids=Object.keys(PPS.Q).filter(k=>k.startsWith(pre)).flatMap(k=>PPS.Q[k].map((_,i)=>k+'.'+i));
+    const ans=ids.filter(q=>state.answers[q]),first=ans.filter(q=>state.answers[q].first).length;
+    const anyLesson=u.lessons.some(l=>state.done[l[0]]),anyAns=Object.keys(state.answers).some(q=>q.startsWith('u'+u.n));
+    const practised=ids.length&&ans.length>=0.8*ids.length&&first>=0.6*ans.length;
+    const days=passDays(u.quiz),ready=practised&&days>=2;
+    let mg=0,mt=0;PPS.EXAM.forEach(p=>{const mine=(state.written||{})[p.id]||{};p.questions.forEach((q,qi)=>{if(q.co!==co.id)return;q.parts.forEach((pt,pi)=>{const k='Q'+(qi+1)+'abc'[pi];if(mine[k]!=null){mg+=mine[k];mt+=pt.m;}});});});
+    const mastered=ready&&mt>=4&&mg>=0.7*mt;
+    const level=mastered?4:ready?3:practised?2:(anyLesson||anyAns)?1:0;
+    const next=level===0?'Open Unit '+u.n+' and start the first lesson.':level===1?'Answer at least 80% of Unit '+u.n+'\u2019s quick checks, 60% right first time ('+ans.length+' of '+ids.length+' answered).':
+      level===2?'Score 8 or more on the Unit '+u.n+' quiz on two different days ('+days+' so far).':level===3?'Self-mark this outcome\u2019s mock-paper parts and reach 70%.':'Keep it fresh with the daily review.';
+    return {co,u,level,next};
+  });
+}
+function masteryHTML(compact){
+  const rows=masteryLevels();if(!rows.length)return '';
+  const names=['Started','Practised','Exam-ready','Mastered'];
+  return '<div class="mastery'+(compact?' compact':'')+'">'+(compact?'':'<h2>Mastery map</h2><p class="small">Each course outcome moves through four stages, on evidence only: Started, Practised (80% of quick checks answered, 60% right first time), Exam-ready (8 or more on the unit quiz on two different days) and Mastered (70% on the outcome\u2019s mock-paper parts).</p>')+
+    rows.map(r=>'<div class="ms-row"><a class="ms-co" href="'+r.u.href+'"><b>'+esc(r.co.id)+'</b> <span class="small">'+esc(r.co.short)+'</span></a><div class="ms-steps" role="img" aria-label="'+esc(r.co.id)+': '+(r.level?names.at(r.level-1):'not started')+'">'+
+      names.map((n,i)=>'<span class="ms-step'+(i<r.level?' on':'')+'">'+n+'</span>').join('')+'</div>'+(compact?'':'<p class="small ms-next">Next: '+esc(r.next)+'</p>')+'</div>').join('')+'</div>';
+}
+
+/* ---------- search ---------- */
+function initSearchPage(){
+  const box=$('#q'),out=$('#results'),idx=PPS.SEARCH||[];if(!box||!out)return;
+  const norm=s=>s.toLowerCase();
+  function run(){
+    const q=box.value.trim(),toks=norm(q).split(/\s+/).filter(t=>t.length>1||/[&*%]/.test(t));
+    history.replaceState(null,'',q?'?q='+encodeURIComponent(q):location.pathname);
+    if(!toks.length){out.innerHTML='<p class="small">Type a word such as strcmp, recursion, fopen, binary search or pointer.</p>';return;}
+    const hits=[];
+    idx.forEach(e=>{const t=norm(e.t),x=norm(e.x);let score=0;
+      for(const k of toks){const inT=t.includes(k);let c=0,pos=x.indexOf(k);while(pos>=0&&c<20){c++;pos=x.indexOf(k,pos+k.length);}if(!inT&&!c)return;score+=(inT?10:0)+c;}
+      hits.push([score,e]);});
+    hits.sort((a,b)=>b[0]-a[0]);
+    if(!hits.length){out.innerHTML='<p>No matches. Try a shorter word or a C keyword.</p>';return;}
+    out.innerHTML='<p class="small">'+hits.length+' match'+(hits.length===1?'':'es')+'</p>'+hits.slice(0,30).map(([_,e])=>{
+      const x=e.x,lx=norm(x),p=Math.max(0,lx.indexOf(toks.at(0))),a=Math.max(0,p-70),snip=(a?'\u2026':'')+x.slice(a,p+130)+(p+130<x.length?'\u2026':'');
+      let h=esc(snip);toks.forEach(k=>{const re=new RegExp('('+esc(k).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');h=h.replace(re,'<mark>$1</mark>');});
+      return '<a class="sr-hit" href="'+e.h+'"><span class="sr-g">'+esc(e.g)+'</span><b>'+esc(e.t)+'</b><span class="sr-x">'+h+'</span></a>';}).join('');
+  }
+  let tmr=null;box.addEventListener('input',()=>{clearTimeout(tmr);tmr=setTimeout(run,120);});
+  const q=new URLSearchParams(location.search).get('q');if(q)box.value=q;run();box.focus();
+}

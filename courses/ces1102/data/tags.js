@@ -1,5 +1,10 @@
 /* Bloom's level of every quick-check and unit-quiz question, reviewed by hand. Keys match the saved answer ids. */
 PPS.BL={
+"u4l3.2": "Apply",
+"u4l3.3": "Analyse",
+"u4l6.3": "Apply",
+"u4l6.4": "Analyse",
+"u5l4.2": "Apply",
 "u5l6.0": "Analyse",
 "u5l6.1": "Apply",
 "u5l6.2": "Analyse",

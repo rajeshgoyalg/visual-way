@@ -91,4 +91,6 @@ PPS.SO.u5safe={title:'Safe or risky? Judge each line',cats:['Safe','Risky'],item
  {c:'if (scanf("%d", &n) != 1 || n < 1 || n > 100) return 1;',a:0,w:'Checks both that a number was read and that it is in range.'},
  {c:'snprintf(dest, sizeof dest, "%s", src);',a:0,w:'snprintf never writes more than sizeof dest bytes, including \\0.'},
  {c:'int *p; *p = 5;',a:1,w:'p points nowhere in particular. Writing through it corrupts memory.'}]};
+
+PPS.Q.u5l4.push({q:'int a[3][4] starts at address 2000 and an int is 4 bytes. What address is a + 2?',o:['2008','2032','2002','2016'],a:1,w:'a + 2 skips two whole rows of 4 ints: 2 \u00d7 16 bytes = 32, so 2032.'});
 })();

@@ -138,7 +138,7 @@ PPS.init.push(()=>$$('.arrplayer').forEach(arrayPlayer));
 /* ---- matrix lab ---- */
 PPS.init.push(function(){
   const el=$('#matrixlab'),M=[[7,2,9,4],[3,8,1,6],[5,0,2,9]];let si=1,sj=2;
-  el.innerHTML='<div class="label">int a[3][4]: click a cell to find it in memory</div><div class="mx-wrap"><div class="mx" role="grid" aria-label="Matrix a, 3 rows by 4 columns"></div><div class="mx-mem"></div></div><p class="stepnote" aria-live="polite"></p>';
+  el.innerHTML='<div class="label">int a[3][4]: click a cell to find it in memory</div><div class="mx-wrap"><div class="mx" role="group" aria-label="Matrix a, 3 rows by 4 columns"></div><div class="mx-mem"></div></div><p class="stepnote" aria-live="polite"></p>';
   function draw(){
     $('.mx',el).innerHTML='<div class="mx-h"></div>'+[0,1,2,3].map(j=>'<div class="mx-h">col '+j+'</div>').join('')+M.map((r,i)=>'<div class="mx-h">row '+i+'</div>'+r.map((v,j)=>'<button type="button" class="mx-c'+(i===si&&j===sj?' on':(i===si?' row':''))+'" data-i="'+i+'" data-j="'+j+'" aria-label="a['+i+']['+j+'] = '+v+'">'+v+'</button>').join('')).join('');
     const off=si*4+sj;

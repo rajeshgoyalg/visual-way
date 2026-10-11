@@ -104,4 +104,14 @@ PPS.SO.u4cbr={title:'Value or reference? Classify each situation',cats:['Call by
  {c:'float area(float r) called as area(radius)',a:0,w:'Only the value of radius is needed; it is not modified.'},
  {c:'A function must give back both the minimum and the maximum of an array.',a:1,w:'return gives one value; pointer parameters can carry the second.'},
  {c:'scanf("%d", &n);',a:1,w:'scanf needs n\u2019s address to store the number it reads.'}]};
+
+PPS.Q.u4l3.push(
+ {q:'int a = 3, b = 8; int *p = &a; p = &b; *p = 1; What are a and b?',o:['a = 1, b = 8','a = 3, b = 1','a = 1, b = 1','a = 3, b = 8'],a:1,w:'p is moved to b before the write, so *p = 1 changes b. a is untouched.'},
+ {q:'Which line crashes or corrupts memory?',o:['int *p = NULL; if (p != NULL) *p = 5;','int x; int *p = &x; *p = 5;','int *p; *p = 5;','int x = 5; int *p = &x; printf("%d", *p);'],a:2,w:'An uninitialised pointer holds a random address, so *p = 5 writes somewhere unknown.'});
+PPS.Q.u4l6.push(
+ {q:'void down(int n) { if (n == 0) return; printf("%d ", n); down(n - 1); } What does down(3) print?',o:['1 2 3','3 2 1','3 2 1 0','3'],a:1,w:'The print comes before the recursive call, so it happens on the way in: 3, then 2, then 1.'},
+ {q:'void f(int n) { if (n > 0) { f(n - 1); printf("%d", n); f(n - 1); } } What does f(2) print?',o:['212','121','12','1221'],a:1,w:'f(2) is f(1), then 2, then f(1). Each f(1) prints just 1, so the output is 1 2 1.'});
+PPS.TB.u4updown={title:'Before or after the call?',tabs:[
+ {label:'Print before the call',code:'void down(int n) {\n    if (n == 0) return;\n    printf("%d ", n);   // before\n    down(n - 1);\n}\n// down(3) prints 3 2 1',note:'Work done before the recursive call happens on the way in, largest first.'},
+ {label:'Print after the call',code:'void up(int n) {\n    if (n == 0) return;\n    up(n - 1);\n    printf("%d ", n);   // after\n}\n// up(3) prints 1 2 3',note:'Work done after the call waits until the calls unwind, so the smallest prints first.'}]};
 })();
