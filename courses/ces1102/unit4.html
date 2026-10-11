@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Unit 4: Functions and pointers | PPS, the visual way</title>
+<meta name="description" content="CES 1102 Unit 4: Functions and pointers.">
+<meta name="theme-color" content="#2350B8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Visual Way">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="../../assets/icons/icon-192.png">
+<link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body data-page="unit" data-course="ces1102" data-unit="4" data-root="../../">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><marker id="mk" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="currentColor" stroke-width="1.6"/></marker></defs></svg>
+<header class="topbar"><div class="topbar-in"><a class="brand" href="../../index.html">The Visual Way</a><nav class="unitnav" aria-label="Course"><a href="index.html">Course home</a><a href="unit1.html">Unit 1</a><a href="unit2.html">Unit 2</a><a href="unit3.html">Unit 3</a><a href="unit4.html" aria-current="page">Unit 4</a><a href="unit5.html">Unit 5</a><a href="progress.html">My progress</a></nav><button class="learner-chip" type="button">Choose learner</button></div></header>
+<div class="wrap layout" style="margin-top:28px">
+<nav class="rail" aria-label="Lessons in this unit"><h4>Unit 4 lessons</h4><ol id="railList"></ol><div class="bar" aria-hidden="true"><i id="barFill"></i></div><small id="progText"></small></nav>
+<main>
+<section class="unit" id="unit-4">
+  <div class="intro">
+    <h2>Unit 4: Functions and pointers</h2>
+    <p>Big programs are built from small, named pieces. This unit shows how to split work into functions, how values travel between them, what a memory address is, and how a function can call itself.</p>
+    <div class="mindmap" data-center="Unit 4|Functions and pointers"></div>
+  </div>
+
+  <!-- 4.1 -->
+  <section class="lesson" id="u4l1" data-title="4.1 Functions: declare, define, call" aria-labelledby="u4l1h">
+    <div class="lesson-head"><span class="num">4.1</span><h2 id="u4l1h">Functions: declare, define, call</h2><span class="lec">Lecture L22</span></div>
+    <p class="hook">A function is a vending machine. Put inputs in (coins and a choice), it does its work inside, and one result comes out.</p>
+    <figure class="fig-r">
+      <svg viewBox="0 0 330 260" role="img" aria-labelledby="u4fnT">
+        <title id="u4fnT">The three parts of a function: prototype, call with actual arguments, definition with formal parameters</title>
+        <rect class="sv-box" x="10" y="10" width="310" height="50" rx="8"/><text class="sv-t" x="22" y="32">Prototype (before main)</text><text class="sv-s" x="22" y="50">int add(int, int);</text>
+        <rect class="sv-box" x="10" y="90" width="310" height="50" rx="8"/><text class="sv-t" x="22" y="112">Call (inside main)</text><text class="sv-s" x="22" y="130">s = add(a, b);   a, b = actual</text>
+        <rect class="sv-box" x="10" y="170" width="310" height="70" rx="8"/><text class="sv-t" x="22" y="192">Definition</text><text class="sv-s" x="22" y="210">int add(int x, int y)   x, y = formal</text><text class="sv-s" x="22" y="228">{ return x + y; }</text>
+        <g style="color:var(--soft)"><path class="sv-line" d="M165 140 V168" marker-end="url(#mk)"/></g>
+      </svg>
+      <figcaption>The call copies the actual arguments into the formal parameters.</figcaption>
+    </figure>
+    <div class="prose">
+      <p>Functions let you write a piece of logic once and use it many times, test it on its own, and read <code>main</code> like a summary. You already use library functions such as <code>printf</code> and <code>sqrt</code>; now you write your own.</p>
+      <p>A function has three parts. The <mark>prototype</mark> (declaration) tells the compiler its name, return type and parameter types: <code>int add(int, int);</code>. The <mark>definition</mark> is the actual body. The <mark>call</mark> runs it: <code>add(3, 4)</code>.</p>
+      <p>The values in the call are the <mark>actual arguments</mark>. The names in the definition's brackets are the <mark>formal parameters</mark>. At the call, each actual value is copied into its formal parameter, in order. The tracer shows a call happening, with a fresh box of memory (a stack frame) for the function.</p>
+    </div>
+    <div class="clear"></div>
+    <div class="widget tracer" data-t="u4fn"></div>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li>Calling a function before it is declared gives a warning or error. Put the prototype above <code>main</code>.</li>
+        <li>The number, order and types of actual arguments must match the formal parameters.</li>
+        <li>The prototype ends with a semicolon; the definition header does not.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u4l1"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u4l1"></button></div>
+  </section>
+
+  <!-- 4.2 -->
+  <section class="lesson" id="u4l2" data-title="4.2 Return values and scope" aria-labelledby="u4l2h">
+    <div class="lesson-head"><span class="num">4.2</span><h2 id="u4l2h">Return values and scope</h2><span class="lec">Lecture L23 with tutorial T8</span></div>
+    <p class="hook">What happens in a function stays in the function, unless it is returned.</p>
+    <div class="prose">
+      <p>A function either returns one value with <code>return</code> (its type is the return type) or returns nothing, in which case its type is <code>void</code>. Combining "takes arguments or not" with "returns or not" gives the four categories exam questions love:</p>
+    </div>
+    <div class="tbl"><table>
+      <thead><tr><th>Category</th><th>Example prototype</th><th>Typical use</th></tr></thead>
+      <tbody>
+        <tr><td>No arguments, no return</td><td><code>void line(void);</code></td><td>Print a fixed banner</td></tr>
+        <tr><td>Arguments, no return</td><td><code>void printTable(int n);</code></td><td>Display results inside the function</td></tr>
+        <tr><td>No arguments, returns</td><td><code>int readMarks(void);</code></td><td>Read and validate input, hand back the value</td></tr>
+        <tr><td>Arguments and returns</td><td><code>float area(float r);</code></td><td>Pure calculation; the most reusable</td></tr>
+      </tbody>
+    </table></div>
+    <figure class="fig-r">
+      <svg viewBox="0 0 320 240" role="img" aria-labelledby="u4scT">
+        <title id="u4scT">Scope boxes: global variable visible everywhere, local variables visible only inside their own function or block</title>
+        <rect class="sv-cont" x="5" y="5" width="310" height="228" rx="12"/><text class="sv-t" x="18" y="28">File: int count = 0;  (global)</text>
+        <rect class="sv-box" x="20" y="44" width="135" height="170" rx="8"/><text class="sv-t" x="32" y="66">main()</text><text class="sv-s" x="32" y="86">int a, b;  local</text>
+        <rect class="sv-box" x="32" y="110" width="110" height="80" rx="6"/><text class="sv-s" x="42" y="132">for block</text><text class="sv-s" x="42" y="152">int i;  only here</text>
+        <rect class="sv-box" x="168" y="44" width="135" height="170" rx="8"/><text class="sv-t" x="180" y="66">area()</text><text class="sv-s" x="180" y="86">float r;  local</text><text class="sv-s" x="180" y="106">can see count</text><text class="sv-s" x="180" y="126">cannot see a, b</text>
+      </svg>
+      <figcaption>A name is visible inside the braces where it was declared.</figcaption>
+    </figure>
+    <div class="prose">
+      <p><mark>Scope</mark> is where a name can be used. A <b>local</b> variable is declared inside a function or block and exists only while that block runs; another function can have its own variable with the same name without any clash. A <b>global</b> variable is declared outside all functions and is visible to every function below it. If a local and a global share a name, the local one hides the global inside that block.</p>
+      <p>Prefer locals and pass values through parameters. Globals make it hard to tell which function changed what.</p>
+    </div>
+    <div class="clear"></div>
+<pre class="c" data-hl>
+#include &lt;stdio.h&gt;
+int isPrime(int n);              // prototype: argument and return
+int main(void)
+{
+    for (int k = 2; k &lt;= 20; k++)
+        if (isPrime(k)) printf("%d ", k);
+    return 0;
+}
+int isPrime(int n)
+{
+    if (n &lt; 2) return 0;
+    for (int d = 2; d * d &lt;= n; d++)
+        if (n % d == 0) return 0;    // return ends the function immediately
+    return 1;
+}</pre>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li>A function can return only one value. To send back two, use pointers (lesson 4.4).</li>
+        <li>Code after <code>return</code> in the same path never runs.</li>
+        <li>A non-void function that reaches its end without <code>return</code> gives the caller garbage.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u4l2"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u4l2"></button></div>
+  </section>
+
+  <!-- 4.3 -->
+  <section class="lesson" id="u4l3" data-title="4.3 Pointers" aria-labelledby="u4l3h">
+    <div class="lesson-head"><span class="num">4.3</span><h2 id="u4l3h">Pointers</h2><span class="lec">Lecture L25</span></div>
+    <p class="hook">A variable is a house. Its value is the person living there. A pointer is a slip of paper with the house's address written on it.</p>
+    <div class="prose">
+      <p>Every variable lives at a memory <mark>address</mark>. The operator <code>&amp;</code> ("address of") gives it: <code>&amp;x</code>. A <mark>pointer</mark> is a variable that stores an address. Declare it with a star: <code>int *p;</code> means "p holds the address of an int".</p>
+      <p>Once <code>p = &amp;x;</code>, the expression <code>*p</code> means "the value at the address in p", which is x itself. This is <mark>dereferencing</mark>. Reading <code>*p</code> reads x; writing <code>*p = 20;</code> changes x. The star does two jobs: in a declaration it says "this is a pointer"; in an expression it says "go to that address".</p>
+    </div>
+    <div class="widget tracer" data-t="u4ptr"></div>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li><code>int *p;</code> followed by <code>*p = 5;</code> writes to a random address. Initialise pointers: <code>int *p = NULL;</code> or <code>= &amp;x</code>.</li>
+        <li>In <code>int *p, q;</code> only p is a pointer. q is a plain int.</li>
+        <li>Print an address with <code>%p</code>, not <code>%d</code>.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u4l3"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u4l3"></button></div>
+  </section>
+
+  <!-- 4.4 -->
+  <section class="lesson" id="u4l4" data-title="4.4 Call by value and call by reference" aria-labelledby="u4l4h">
+    <div class="lesson-head"><span class="num">4.4</span><h2 id="u4l4h">Call by value and call by reference</h2><span class="lec">Lecture L26</span></div>
+    <p class="hook">Giving a friend a photocopy of your notes versus giving them your notebook. Scribbles on the photocopy never reach you.</p>
+    <div class="prose">
+      <p>By default C passes arguments <mark>by value</mark>: the function gets copies, so changing a parameter cannot change the caller's variable. That is why a simple swap function fails.</p>
+      <p>To let a function change the caller's variables, pass their <b>addresses</b> and let the function use pointers. This is <mark>call by reference</mark> (strictly, C passes the address by value, which has the same effect). You already used it: <code>scanf("%d", &amp;n)</code> passes the address of n so scanf can write into it. Switch between the two versions below and watch main's a and b.</p>
+    </div>
+    <div class="widget tabset">
+      <div class="tabs" role="group" aria-label="Choose version"><button type="button">Call by value</button><button type="button">Call by reference</button></div>
+      <div data-panel class="tracer" data-t="u4swapv"></div>
+      <div data-panel class="tracer" data-t="u4swapr"></div>
+    </div>
+    <div class="widget sorterw" data-s="u4cbr"></div>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li>Calling <code>swap(a, b)</code> when the function expects <code>int *</code>. Pass <code>&amp;a, &amp;b</code>.</li>
+        <li>Inside the function, <code>x = y;</code> swaps the pointers, not the values. You need <code>*x</code> and <code>*y</code>.</li>
+        <li>Use pointer parameters to "return" more than one result, for example the minimum and maximum of an array.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u4l4"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u4l4"></button></div>
+  </section>
+
+  <!-- 4.5 -->
+  <section class="lesson" id="u4l5" data-title="4.5 Nesting functions and passing arrays" aria-labelledby="u4l5h">
+    <div class="lesson-head"><span class="num">4.5</span><h2 id="u4l5h">Nesting functions and passing arrays</h2><span class="lec">Lecture L27 with tutorial T9</span></div>
+    <p class="hook">You hand a whole cupboard to someone by giving them the cupboard's location, not by carrying out every shelf.</p>
+    <div class="prose">
+      <p><mark>Nesting</mark> means one function calls another, which may call another. <code>main</code> calls <code>average</code>, which calls <code>total</code>. Each call gets its own frame on the stack; when a function returns, its frame disappears and control goes back to exactly where it was called. (C does not allow defining a function inside another function, only calling one from another.)</p>
+      <p>When you pass an array, C passes the <mark>address of its first element</mark>, not a copy. So the function works on the original array, and changes it makes are visible to the caller. Because the function cannot know the length, pass the size as a separate parameter. For a 2-D array, the column count must be written in the parameter: <code>void show(int m[][3], int rows)</code>, because C needs it to compute where each row starts.</p>
+    </div>
+    <div class="widget tracer" data-t="u4arr"></div>
+<pre class="c" data-hl>
+void show(int m[][3], int rows)       // column size is required
+{
+    for (int i = 0; i &lt; rows; i++) {
+        for (int j = 0; j &lt; 3; j++)
+            printf("%4d", m[i][j]);
+        printf("\n");
+    }
+}
+float average(int a[], int n) { return (float)total(a, n) / n; }  // nesting: calls total</pre>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li>Inside the function, <code>sizeof(a)</code> gives the size of a pointer, not of the array. Always pass n.</li>
+        <li>Pass the array name alone: <code>total(marks, 4)</code>, not <code>total(marks[], 4)</code> or <code>total(marks[4], 4)</code>.</li>
+        <li><code>void f(int m[][])</code> is invalid. The second dimension must be given.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u4l5"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u4l5"></button></div>
+  </section>
+
+  <!-- 4.6 -->
+  <section class="lesson" id="u4l6" data-title="4.6 Recursion" aria-labelledby="u4l6h">
+    <div class="lesson-head"><span class="num">4.6</span><h2 id="u4l6h">Recursion</h2><span class="lec">Lectures L28 and L29</span></div>
+    <p class="hook">Russian dolls. To reach the smallest doll you open a doll that contains a smaller doll, until one does not open. Then you close them back up in reverse.</p>
+    <div class="prose">
+      <p>A <mark>recursive</mark> function calls itself on a smaller version of the same problem. Every recursive function needs two parts. The <mark>base case</mark> answers the smallest problem directly and stops the chain. The <mark>recursive case</mark> breaks the problem down and calls itself. For factorial: <code>fact(1) = 1</code> is the base case, and <code>fact(n) = n × fact(n − 1)</code> is the recursive case.</p>
+      <p>Each call waits for the one it made. The calls pile up on the <mark>call stack</mark> (winding), and when the base case returns, the answers flow back down (unwinding). Pick n below and watch the stack grow and shrink.</p>
+    </div>
+    <div class="widget tracer" data-t="u4fact"></div>
+    <div class="widget tabsw" data-k="u4rec"></div>
+    <div class="prose"><p>Recursion is a different way of thinking, not a faster one. A loop usually uses less memory. Recursion shines when the problem is naturally self-similar: factorials, Fibonacci, GCD, reversing, and later trees and divide-and-conquer sorts.</p></div>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li>No base case, or a base case that is never reached, means calls pile up until the program crashes with a stack overflow.</li>
+        <li>The recursive call must move toward the base case: <code>fact(n - 1)</code>, not <code>fact(n)</code>.</li>
+        <li>Plain recursive Fibonacci recomputes the same values many times, so fib(40) is very slow.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u4l6"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u4l6"></button></div>
+  </section>
+
+  <section class="lesson" id="u4lab" data-title="Practice lab" data-kind="lab" aria-labelledby="u4labh">
+<div class="lesson-head"><h2 id="u4labh">Unit 4 practice lab</h2><span class="lec">Tutorials T8, T9 and lectures L24, L27, L29</span></div>
+<p class="prose">Try each problem on paper or in gcc before opening the solution. Easy problems apply one idea, medium ones combine ideas, and exam-level ones are the complete programs asked in end-semester papers. Solutions skip input prompts to stay short; add a printf prompt before each scanf in your lab record. Every C solution here compiles cleanly with gcc -Wall and was run on the sample input shown.</p>
+<div class="row"><div class="tabs labfilter" role="group" aria-label="Filter problems by level"><button type="button" aria-pressed="true" data-f="all">All</button><button type="button" aria-pressed="false" data-f="easy">Easy</button><button type="button" aria-pressed="false" data-f="medium">Medium</button><button type="button" aria-pressed="false" data-f="exam">Exam level</button></div><p class="labcount" aria-live="polite"></p></div>
+<article class="prob" data-level="easy"><div class="prob-h"><span class="lvl easy">Easy</span><h3>4A. A power function</h3><span class="lec">Practises lesson 4.1, 4.2</span></div><p>Write long power(int x, int n) using a loop, and call it from main to print x to the power n.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">2 10
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">2^10 = 1024
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>Prototype above main, definition below. Start the result at 1.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+long power(int x, int n);              /* prototype */
+int main(void)
+{
+    int x, n;
+    scanf("%d %d", &amp;x, &amp;n);
+    printf("%d^%d = %ld\n", x, n, power(x, n));
+    return 0;
+}
+long power(int x, int n)
+{
+    long r = 1;
+    for (int i = 1; i &lt;= n; i++)
+        r *= x;
+    return r;
+}</pre><p>The function takes arguments and returns a value, the most reusable category. %ld prints a long.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u4labA">Mark as solved</button></div></article>
+<article class="prob" data-level="easy"><div class="prob-h"><span class="lvl easy">Easy</span><h3>4B. Largest of three with a function</h3><span class="lec">Practises lesson 4.1, 4.2</span></div><p>Write int largest(int a, int b, int c) and use it to print the largest of three numbers.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">7 19 4
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">Largest = 19
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>Find the larger of a and b first, then compare with c.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+int largest(int a, int b, int c)
+{
+    int m = (a &gt; b) ? a : b;
+    return (m &gt; c) ? m : c;
+}
+int main(void)
+{
+    int x, y, z;
+    scanf("%d %d %d", &amp;x, &amp;y, &amp;z);
+    printf("Largest = %d\n", largest(x, y, z));
+    return 0;
+}</pre><p>Defining the function above main means no separate prototype is needed. The actual arguments x, y, z are copied into a, b, c.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u4labB">Mark as solved</button></div></article>
+<article class="prob" data-level="medium"><div class="prob-h"><span class="lvl medium">Medium</span><h3>4C. Minimum and maximum through pointers</h3><span class="lec">Practises lesson 4.4, 4.5</span></div><p>Write void minMax(int a[], int n, int *mn, int *mx) that sends back both the smallest and largest element.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">6
+8 3 15 -2 9 4
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">Min = -2, Max = 15
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>A function can return only one value, so write the answers through the pointer parameters with *mn = ... .</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+void minMax(int a[], int n, int *mn, int *mx)
+{
+    *mn = *mx = a[0];
+    for (int i = 1; i &lt; n; i++) {
+        if (a[i] &lt; *mn) *mn = a[i];
+        if (a[i] &gt; *mx) *mx = a[i];
+    }
+}
+int main(void)
+{
+    int n, a[100], lo, hi;
+    scanf("%d", &amp;n);
+    for (int i = 0; i &lt; n; i++) scanf("%d", &amp;a[i]);
+    minMax(a, n, &amp;lo, &amp;hi);
+    printf("Min = %d, Max = %d\n", lo, hi);
+    return 0;
+}</pre><p>main passes the addresses &amp;lo and &amp;hi, so the function writes straight into main’s variables: call by reference.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u4labC">Mark as solved</button></div></article>
+<article class="prob" data-level="medium"><div class="prob-h"><span class="lvl medium">Medium</span><h3>4D. Sort and print with functions</h3><span class="lec">Practises lesson 4.5</span></div><p>Write sortArray(int a[], int n) (any sort from Unit 3) and printArray(int a[], int n), and use both from main.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">5
+29 10 14 37 13
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">10 13 14 29 37 
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>The array is passed by address, so sorting inside the function sorts main’s array.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+void sortArray(int a[], int n)
+{
+    for (int i = 0; i &lt; n - 1; i++)
+        for (int j = 0; j &lt; n - 1 - i; j++)
+            if (a[j] &gt; a[j + 1]) {
+                int t = a[j]; a[j] = a[j + 1]; a[j + 1] = t;
+            }
+}
+void printArray(int a[], int n)
+{
+    for (int i = 0; i &lt; n; i++) printf("%d ", a[i]);
+    printf("\n");
+}
+int main(void)
+{
+    int n, a[100];
+    scanf("%d", &amp;n);
+    for (int i = 0; i &lt; n; i++) scanf("%d", &amp;a[i]);
+    sortArray(a, n);
+    printArray(a, n);
+    return 0;
+}</pre><p>Neither function returns anything (void); sortArray changes the caller’s array directly, and main stays a short summary.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u4labD">Mark as solved</button></div></article>
+<article class="prob" data-level="medium"><div class="prob-h"><span class="lvl medium">Medium</span><h3>4E. Trace of a matrix: passing a 2-D array</h3><span class="lec">Practises lesson 4.5</span></div><p>Write int trace(int m[][10], int n) that returns the sum of the main diagonal of an n × n matrix.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">3
+1 2 3
+4 5 6
+7 8 9
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">Trace = 15
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>The diagonal elements are m[i][i]. The column size must appear in the parameter.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+int trace(int m[][10], int n)
+{
+    int s = 0;
+    for (int i = 0; i &lt; n; i++)
+        s += m[i][i];
+    return s;
+}
+int main(void)
+{
+    int n, a[10][10];
+    scanf("%d", &amp;n);
+    for (int i = 0; i &lt; n; i++)
+        for (int j = 0; j &lt; n; j++)
+            scanf("%d", &amp;a[i][j]);
+    printf("Trace = %d\n", trace(a, n));
+    return 0;
+}</pre><p>int m[][10] tells the compiler each row is 10 ints long, so it can find m[i][i]. The declared column size must match the array in main.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u4labE">Mark as solved</button></div></article>
+<article class="prob" data-level="exam"><div class="prob-h"><span class="lvl exam">Exam level</span><h3>4F. Decimal to binary with recursion</h3><span class="lec">Practises lesson 4.6</span></div><p>Write a recursive function that prints the binary form of a non-negative integer.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">13
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">1101
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>Print the binary of n / 2 first, then the last bit n % 2. The base case is n &lt; 2.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+void toBinary(int n)
+{
+    if (n &lt; 2) {               /* base case: 0 or 1 */
+        printf("%d", n);
+        return;
+    }
+    toBinary(n / 2);           /* higher bits first */
+    printf("%d", n % 2);       /* then this bit */
+}
+int main(void)
+{
+    int n;
+    scanf("%d", &amp;n);
+    toBinary(n);
+    printf("\n");
+    return 0;
+}</pre><p>The printf after the recursive call runs during unwinding, which is why the bits come out in the right order without storing them.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u4labF">Mark as solved</button></div></article>
+<article class="prob" data-level="exam"><div class="prob-h"><span class="lvl exam">Exam level</span><h3>4G. Recursive binary search</h3><span class="lec">Practises lesson 3.2, 4.6</span></div><p>Write int bsearch_r(int a[], int low, int high, int key) that returns the index of key, or -1.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">7
+2 5 8 12 16 23 38
+23
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">Found at index 5
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>The base case is low &gt; high (not found). Each call searches one half.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+int bsearch_r(int a[], int low, int high, int key)
+{
+    if (low &gt; high) return -1;              /* base case: empty range */
+    int mid = (low + high) / 2;
+    if (a[mid] == key) return mid;
+    if (key &lt; a[mid]) return bsearch_r(a, low, mid - 1, key);
+    return bsearch_r(a, mid + 1, high, key);
+}
+int main(void)
+{
+    int n, a[100], key;
+    scanf("%d", &amp;n);
+    for (int i = 0; i &lt; n; i++) scanf("%d", &amp;a[i]);
+    scanf("%d", &amp;key);
+    int pos = bsearch_r(a, 0, n - 1, key);
+    if (pos == -1) printf("Not found\n");
+    else printf("Found at index %d\n", pos);
+    return 0;
+}</pre><p>The while loop from lesson 3.2 becomes recursion: low and high travel as parameters instead of being updated in place.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u4labG">Mark as solved</button></div></article>
+<article class="prob" data-level="exam"><div class="prob-h"><span class="lvl exam">Exam level</span><h3>4H. GCD and LCM</h3><span class="lec">Practises lesson 4.6</span></div><p>Write a recursive gcd function using Euclid’s rule, then print both the GCD and the LCM of two numbers.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">12 18
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">GCD = 6, LCM = 36
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>gcd(a, b) = gcd(b, a % b), and gcd(a, 0) = a. LCM = a × b / GCD.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+int gcd(int a, int b)
+{
+    if (b == 0) return a;
+    return gcd(b, a % b);
+}
+int main(void)
+{
+    int a, b;
+    scanf("%d %d", &amp;a, &amp;b);
+    int g = gcd(a, b);
+    printf("GCD = %d, LCM = %d\n", g, a / g * b);
+    return 0;
+}</pre><p>Writing a / g * b instead of a * b / g divides first, which keeps the intermediate value smaller and avoids overflow.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u4labH">Mark as solved</button></div></article>
+</section>
+<section class="lesson" id="u4quiz" data-title="Unit quiz" data-kind="quiz" aria-labelledby="u4qh">
+    <div class="lesson-head"><h2 id="u4qh">Unit 4 quiz</h2><span class="lec">10 questions, from remembering to analysing</span></div>
+    <p>One question at a time, with an explanation after every answer. Your best score is saved on this device.</p>
+    <div class="uq" data-set="u4"></div>
+  </section>
+  <section class="lesson" id="u4cheat" data-title="Exam cheat sheet" data-kind="cheat" aria-labelledby="u4ch">
+    <div class="lesson-head"><h2 id="u4ch">Unit 4 cheat sheet</h2><span class="lec">One screen, the night before</span></div>
+    <div class="cheat">
+      <div><h3>Function parts</h3>Prototype: int f(int); (semicolon). Definition: header plus body. Call: f(x). Actual arguments are copied into formal parameters.</div>
+      <div><h3>Return and scope</h3>One return value, or void. Locals live inside their braces; globals are visible everywhere below. A local hides a global of the same name.</div>
+      <div><h3>Pointers</h3>&amp;x is the address of x. int *p = &amp;x; *p is x. Initialise pointers, use NULL if no target yet. %p prints addresses.</div>
+      <div><h3>Value vs reference</h3>Value: function gets a copy, caller unchanged. Reference: pass &amp;a, receive int *x, change *x, and the caller sees it.</div>
+      <div><h3>Arrays to functions</h3>The address of element 0 is passed, so changes affect the original. Pass the size too. 2-D: int m[][COLS].</div>
+      <div><h3>Recursion</h3>Base case plus recursive case moving toward it. Calls wind onto the stack, then unwind. No base case means stack overflow.</div>
+    </div>
+  </section>
+</section>
+
+<nav class="pagenav" aria-label="Units"><a class="btn ghost" href="unit3.html">Back to Unit 3: Arrays and strings</a><a class="btn" href="unit5.html">Continue to Unit 5: Structures and files</a></nav>
+</main>
+</div>
+<footer>Progress is saved only in this browser. Use Export on the My progress page to keep a backup.</footer>
+<script src="../../assets/engine.js"></script>
+<script src="data/unit4.js"></script>
+<script>initPage();</script>
+</body>
+</html>

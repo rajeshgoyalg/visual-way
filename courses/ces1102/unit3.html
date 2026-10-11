@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Unit 3: Arrays and strings | PPS, the visual way</title>
+<meta name="description" content="CES 1102 Unit 3: Arrays and strings.">
+<meta name="theme-color" content="#2350B8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Visual Way">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="../../assets/icons/icon-192.png">
+<link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body data-page="unit" data-course="ces1102" data-unit="3" data-root="../../">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><marker id="mk" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="currentColor" stroke-width="1.6"/></marker></defs></svg>
+<header class="topbar"><div class="topbar-in"><a class="brand" href="../../index.html">The Visual Way</a><nav class="unitnav" aria-label="Course"><a href="index.html">Course home</a><a href="unit1.html">Unit 1</a><a href="unit2.html">Unit 2</a><a href="unit3.html" aria-current="page">Unit 3</a><a href="unit4.html">Unit 4</a><a href="unit5.html">Unit 5</a><a href="progress.html">My progress</a></nav><button class="learner-chip" type="button">Choose learner</button></div></header>
+<div class="wrap layout" style="margin-top:28px">
+<nav class="rail" aria-label="Lessons in this unit"><h4>Unit 3 lessons</h4><ol id="railList"></ol><div class="bar" aria-hidden="true"><i id="barFill"></i></div><small id="progText"></small></nav>
+<main>
+<section class="unit" id="unit-3">
+  <div class="intro">
+    <h2>Unit 3: Arrays and strings</h2>
+    <p>So far each variable held one value. Real problems involve 60 students' marks, a 3 × 3 matrix or a name. Arrays let one name hold many values, and this unit shows how to search, sort and process them.</p>
+    <div class="mindmap" data-center="Unit 3|Arrays and strings"></div>
+  </div>
+
+  <!-- 3.1 -->
+  <section class="lesson" id="u3l1" data-title="3.1 One-dimensional arrays" aria-labelledby="u3l1h">
+    <div class="lesson-head"><span class="num">3.1</span><h2 id="u3l1h">One-dimensional arrays</h2><span class="lec">Lecture L14 with tutorial T5</span></div>
+    <p class="hook">A row of numbered lockers in a hostel corridor. One corridor name, many lockers, and the numbering starts at 0.</p>
+    <figure class="fig-r">
+      <svg viewBox="0 0 330 150" role="img" aria-labelledby="u3arrT">
+        <title id="u3arrT">int marks[5] stored in five consecutive 4-byte slots starting at address 1000</title>
+        <text class="sv-t" x="0" y="20">int marks[5]</text>
+        <g><rect class="sv-box" x="10" y="40" width="60" height="40"/><rect class="sv-box" x="70" y="40" width="60" height="40"/><rect class="sv-box" x="130" y="40" width="60" height="40"/><rect class="sv-box" x="190" y="40" width="60" height="40"/><rect class="sv-box" x="250" y="40" width="60" height="40"/></g>
+        <text class="sv-t" x="40" y="65" text-anchor="middle">72</text><text class="sv-t" x="100" y="65" text-anchor="middle">85</text><text class="sv-t" x="160" y="65" text-anchor="middle">64</text><text class="sv-t" x="220" y="65" text-anchor="middle">90</text><text class="sv-t" x="280" y="65" text-anchor="middle">58</text>
+        <text class="sv-s" x="40" y="98" text-anchor="middle">[0]</text><text class="sv-s" x="100" y="98" text-anchor="middle">[1]</text><text class="sv-s" x="160" y="98" text-anchor="middle">[2]</text><text class="sv-s" x="220" y="98" text-anchor="middle">[3]</text><text class="sv-s" x="280" y="98" text-anchor="middle">[4]</text>
+        <text class="sv-s" x="40" y="118" text-anchor="middle">1000</text><text class="sv-s" x="100" y="118" text-anchor="middle">1004</text><text class="sv-s" x="160" y="118" text-anchor="middle">1008</text><text class="sv-s" x="220" y="118" text-anchor="middle">1012</text><text class="sv-s" x="280" y="118" text-anchor="middle">1016</text>
+        <text class="sv-s" x="10" y="142">Index on top, address below: each step is sizeof(int) = 4 bytes.</text>
+      </svg>
+      <figcaption>Elements sit side by side, so address of marks[i] = base + i × size.</figcaption>
+    </figure>
+    <div class="prose">
+      <p>An <mark>array</mark> is a fixed-size collection of elements of the same type, stored next to each other in memory. <code>int marks[5];</code> creates five ints called <code>marks[0]</code> to <code>marks[4]</code>. The number in brackets at declaration is the size; the number in brackets later is the <mark>index</mark>, which runs from 0 to size − 1.</p>
+      <p>You can initialise at declaration: <code>int a[5] = {1, 2, 3};</code> fills the rest with 0, and <code>int a[] = {4, 5, 6};</code> lets the compiler count the size (3). Arrays and for loops are natural partners, because the loop counter becomes the index.</p>
+      <p>C does <mark>no bounds checking</mark>. Writing to <code>marks[5]</code> compiles, then quietly overwrites some other memory. That bug is behind many crashes and security holes, so check your loop limits.</p>
+    </div>
+    <div class="clear"></div>
+<pre class="c" data-hl>
+int marks[5], sum = 0;
+for (int i = 0; i &lt; 5; i++) {       // read
+    scanf("%d", &amp;marks[i]);
+    sum += marks[i];
+}
+printf("Average = %.2f\n", (float)sum / 5);</pre>
+    <div class="widget tracer" data-t="u3max"></div>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li>The last valid index of <code>int a[10]</code> is 9. A loop with <code>i &lt;= 10</code> goes one past the end.</li>
+        <li>Arrays cannot be copied with <code>=</code>. <code>b = a;</code> is an error; copy element by element in a loop.</li>
+        <li>The size must be a constant in the traditional C taught here. Read n first and declare a large enough array, such as <code>int a[100];</code>.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u3l1"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u3l1"></button></div>
+  </section>
+
+  <!-- 3.2 -->
+  <section class="lesson" id="u3l2" data-title="3.2 Searching: linear and binary" aria-labelledby="u3l2h">
+    <div class="lesson-head"><span class="num">3.2</span><h2 id="u3l2h">Searching: linear and binary</h2><span class="lec">Lecture L16</span></div>
+    <p class="hook">Finding a word in a dictionary: you never read from page 1. You open the middle and throw away half the book. That is binary search.</p>
+    <div class="prose">
+      <p><mark>Linear search</mark> checks elements one by one from the start until it finds the key or runs out. It works on any array, sorted or not. In the worst case it makes n comparisons.</p>
+      <p><mark>Binary search</mark> works only on a <b>sorted</b> array. It compares the key with the middle element. If they match, it is done; if the key is smaller, it keeps the left half; if bigger, the right half. Each comparison halves the search space, so 1,000 elements need at most about 10 comparisons, and a million need about 20.</p>
+    </div>
+    <div class="widget arrplayer" data-mode="search"></div>
+<pre class="c" data-hl>
+int low = 0, high = n - 1, mid, pos = -1;
+while (low &lt;= high) {
+    mid = (low + high) / 2;
+    if (a[mid] == key) { pos = mid; break; }
+    else if (key &lt; a[mid]) high = mid - 1;   // keep left half
+    else low = mid + 1;                       // keep right half
+}
+if (pos == -1) printf("Not found");
+else printf("Found at index %d", pos);</pre>
+    <div class="tbl"><table>
+      <thead><tr><th></th><th>Linear search</th><th>Binary search</th></tr></thead>
+      <tbody>
+        <tr><td>Needs sorted data?</td><td>No</td><td>Yes</td></tr>
+        <tr><td>Worst-case comparisons</td><td>n</td><td>about log₂ n</td></tr>
+        <tr><td>1,000 elements</td><td>up to 1,000</td><td>up to 10</td></tr>
+        <tr><td>Best for</td><td>Small or unsorted lists</td><td>Large sorted lists</td></tr>
+      </tbody>
+    </table></div>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li>Running binary search on unsorted data gives wrong answers without any error.</li>
+        <li>The loop condition is <code>low &lt;= high</code>. Using <code>&lt;</code> misses the case where the key is the last remaining element.</li>
+        <li>Update with <code>mid - 1</code> and <code>mid + 1</code>. Using <code>high = mid</code> can loop forever.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u3l2"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u3l2"></button></div>
+  </section>
+
+  <!-- 3.3 -->
+  <section class="lesson" id="u3l3" data-title="3.3 Sorting: selection and bubble" aria-labelledby="u3l3h">
+    <div class="lesson-head"><span class="num">3.3</span><h2 id="u3l3h">Sorting: selection and bubble</h2><span class="lec">Lecture L17</span></div>
+    <p class="hook">Arranging students by height for a class photo. Either keep swapping neighbours who are out of order (bubble), or pick the shortest and send them to the front each time (selection).</p>
+    <div class="prose">
+      <p><mark>Bubble sort</mark> compares each pair of neighbours and swaps them if they are in the wrong order. After pass 1 the largest value has bubbled to the end; after pass 2 the second largest is in place, and so on. If a pass makes no swaps, the array is already sorted and you can stop early.</p>
+      <p><mark>Selection sort</mark> finds the smallest element in the unsorted part and swaps it into the first unsorted position. It makes the same number of comparisons as bubble sort, n(n − 1)/2, but at most n − 1 swaps, which is useful when moving data is expensive.</p>
+      <p>Run both on the same array below and compare the counters.</p>
+    </div>
+    <div class="widget arrplayer" data-mode="sort"></div>
+    <div class="widget tabsw" data-k="u3sorts"></div>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li>The inner loop of bubble sort runs to <code>n - 1 - i</code>, because <code>a[j + 1]</code> must stay inside the array.</li>
+        <li>A swap needs a temporary variable. <code>a[j] = a[j+1]; a[j+1] = a[j];</code> loses a value.</li>
+        <li>For descending order, flip only the comparison: <code>&gt;</code> becomes <code>&lt;</code>.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u3l3"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u3l3"></button></div>
+  </section>
+
+  <!-- 3.4 -->
+  <section class="lesson" id="u3l4" data-title="3.4 Two-dimensional arrays and matrices" aria-labelledby="u3l4h">
+    <div class="lesson-head"><span class="num">3.4</span><h2 id="u3l4h">Two-dimensional arrays and matrices</h2><span class="lec">Lectures L18, L19 and tutorial T6</span></div>
+    <p class="hook">A cinema seat is "row C, seat 7". A 2-D array element is a[row][column]. Same idea.</p>
+    <div class="prose">
+      <p><code>int a[3][4];</code> is a table of 3 rows and 4 columns: 12 ints. Element <code>a[i][j]</code> is row i, column j, both counted from 0. Memory is a single line, so C stores the table <mark>row by row</mark> (row-major order): all of row 0, then all of row 1, and so on. Click any cell below to see where it lives.</p>
+      <p>Initialise row by row: <code>int m[2][3] = {{1, 2, 3}, {4, 5, 6}};</code>. Processing a matrix uses <mark>nested loops</mark>: the outer loop picks the row, the inner loop walks the columns.</p>
+    </div>
+    <div class="widget" id="matrixlab"></div>
+    <div class="widget tabsw" data-k="u3mat"></div>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li>Write <code>a[i][j]</code>, not <code>a[i, j]</code>. The comma version compiles but means something else entirely.</li>
+        <li>Matrix multiplication needs columns of A to equal rows of B. Check this and print an error first.</li>
+        <li>Reset the sum to 0 for every cell in multiplication, inside the j loop, not outside it.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u3l4"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u3l4"></button></div>
+  </section>
+
+  <!-- 3.5 -->
+  <section class="lesson" id="u3l5" data-title="3.5 Strings" aria-labelledby="u3l5h">
+    <div class="lesson-head"><span class="num">3.5</span><h2 id="u3l5h">Strings</h2><span class="lec">Lecture L20</span></div>
+    <p class="hook">A string is a train of characters, and '\0' is the guard's van at the end. Without it, nobody knows where the train stops.</p>
+    <div class="prose">
+      <p>C has no separate string type. A <mark>string</mark> is a char array that ends with the <mark>null character</mark> <code>'\0'</code> (value 0). <code>char name[10] = "Ravi";</code> stores R, a, v, i, then <code>'\0'</code>, and the remaining slots are also 0. Always size the array one larger than the longest text you expect.</p>
+      <p>Reading strings: <code>scanf("%s", name);</code> needs no <code>&amp;</code> (the array name is already an address) but stops at the first space, so "Ravi Kumar" becomes "Ravi". To read a whole line, use <code>fgets(name, sizeof name, stdin);</code>, which also keeps the newline. Avoid <code>gets</code>: it was removed from C because it cannot stop at the array size.</p>
+      <p>Every string program walks characters until it meets <code>'\0'</code>. The tracer below shows the classic one: counting the length.</p>
+    </div>
+    <div class="widget tracer" data-t="u3len"></div>
+<pre class="c" data-hl>
+char s[50];
+int vowels = 0;
+fgets(s, sizeof s, stdin);
+for (int i = 0; s[i] != '\0'; i++) {
+    char c = s[i];
+    if (c=='a'||c=='e'||c=='i'||c=='o'||c=='u'||
+        c=='A'||c=='E'||c=='I'||c=='O'||c=='U')
+        vowels++;
+}
+printf("Vowels = %d\n", vowels);</pre>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li><code>char name[4] = "Ravi";</code> leaves no room for '\0'. Printing it can show garbage.</li>
+        <li><code>name = "Ravi";</code> after declaration is an error. Use <code>strcpy</code> (next lesson).</li>
+        <li><code>'0'</code> (the digit, value 48) is not <code>'\0'</code> (the terminator, value 0).</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u3l5"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u3l5"></button></div>
+  </section>
+
+  <!-- 3.6 -->
+  <section class="lesson" id="u3l6" data-title="3.6 String functions and sorting names" aria-labelledby="u3l6h">
+    <div class="lesson-head"><span class="num">3.6</span><h2 id="u3l6h">String functions and sorting names</h2><span class="lec">Lecture L21 with tutorial T7</span></div>
+    <p class="hook">Why write the same length-counting loop every time? string.h is a toolbox of ready-made string functions.</p>
+    <div class="prose">
+      <p>Include <code>&lt;string.h&gt;</code> to use them. <code>strlen(s)</code> counts characters before '\0'. <code>strcpy(dest, src)</code> copies src into dest. <code>strcat(dest, src)</code> joins src onto the end of dest. <code>strcmp(a, b)</code> compares alphabetically: 0 if equal, negative if a comes first, positive if b comes first. Some compilers also offer <code>strrev</code>, <code>strupr</code> and <code>strlwr</code>, but they are not standard C, so gcc does not have them.</p>
+      <p>The destination must be big enough. C trusts you, so <code>strcat</code> into a small array overflows memory. Try it in the lab below: s1 has room for 16 characters.</p>
+    </div>
+    <div class="widget" id="strlab"></div>
+    <div class="prose"><p>Sorting names is bubble sort with two changes: compare with <code>strcmp</code>, and swap with <code>strcpy</code> through a temporary string.</p></div>
+<pre class="c" data-hl>
+char names[5][20], temp[20];
+for (int i = 0; i &lt; n - 1; i++)
+    for (int j = 0; j &lt; n - 1 - i; j++)
+        if (strcmp(names[j], names[j + 1]) &gt; 0) {
+            strcpy(temp, names[j]);
+            strcpy(names[j], names[j + 1]);
+            strcpy(names[j + 1], temp);
+        }</pre>
+    <div class="widget sorterw" data-s="u3safe"></div>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li><code>if (s1 == s2)</code> compares addresses, not text. Use <code>strcmp(s1, s2) == 0</code>.</li>
+        <li><code>strcmp</code> is case-sensitive, and uppercase letters come before lowercase in ASCII: "Zoya" sorts before "anu".</li>
+        <li><code>strlen</code> does not count '\0', but the array needs space for it: size = strlen + 1.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u3l6"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u3l6"></button></div>
+  </section>
+
+  <section class="lesson" id="u3lab" data-title="Practice lab" data-kind="lab" aria-labelledby="u3labh">
+<div class="lesson-head"><h2 id="u3labh">Unit 3 practice lab</h2><span class="lec">Tutorials T5, T6, T7 and lectures L19, L20</span></div>
+<p class="prose">Try each problem on paper or in gcc before opening the solution. Easy problems apply one idea, medium ones combine ideas, and exam-level ones are the complete programs asked in end-semester papers. Solutions skip input prompts to stay short; add a printf prompt before each scanf in your lab record. Every C solution here compiles cleanly with gcc -Wall and was run on the sample input shown.</p>
+<div class="row"><div class="tabs labfilter" role="group" aria-label="Filter problems by level"><button type="button" aria-pressed="true" data-f="all">All</button><button type="button" aria-pressed="false" data-f="easy">Easy</button><button type="button" aria-pressed="false" data-f="medium">Medium</button><button type="button" aria-pressed="false" data-f="exam">Exam level</button></div><p class="labcount" aria-live="polite"></p></div>
+<article class="prob" data-level="easy"><div class="prob-h"><span class="lvl easy">Easy</span><h3>3A. Reverse an array in place</h3><span class="lec">Practises lesson 3.1</span></div><p>Read n and n integers, reverse the array without using a second array, and print it.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">5
+1 2 3 4 5
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">5 4 3 2 1 
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>Swap a[i] with a[n - 1 - i], but only for the first half.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+int main(void)
+{
+    int n, a[100];
+    scanf("%d", &amp;n);
+    for (int i = 0; i &lt; n; i++) scanf("%d", &amp;a[i]);
+    for (int i = 0; i &lt; n / 2; i++) {
+        int t = a[i];
+        a[i] = a[n - 1 - i];
+        a[n - 1 - i] = t;
+    }
+    for (int i = 0; i &lt; n; i++) printf("%d ", a[i]);
+    printf("\n");
+    return 0;
+}</pre><p>Looping all the way to n would swap every pair twice and put the array back as it was.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u3labA">Mark as solved</button></div></article>
+<article class="prob" data-level="easy"><div class="prob-h"><span class="lvl easy">Easy</span><h3>3B. Count positive, negative, even and odd</h3><span class="lec">Practises lesson 3.1</span></div><p>Read n integers into an array and count how many are positive, negative and zero, and how many are even and odd.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">6
+4 -3 0 7 -8 5
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">Positive 3, Negative 2, Zero 1
+Even 3, Odd 3
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>One loop, two independent tests per element.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+int main(void)
+{
+    int n, a[100], pos = 0, neg = 0, zero = 0, even = 0, odd = 0;
+    scanf("%d", &amp;n);
+    for (int i = 0; i &lt; n; i++) {
+        scanf("%d", &amp;a[i]);
+        if (a[i] &gt; 0) pos++;
+        else if (a[i] &lt; 0) neg++;
+        else zero++;
+        if (a[i] % 2 == 0) even++;
+        else odd++;
+    }
+    printf("Positive %d, Negative %d, Zero %d\n", pos, neg, zero);
+    printf("Even %d, Odd %d\n", even, odd);
+    return 0;
+}</pre><p>Sign and parity are separate questions, so they are two separate if statements. -8 % 2 is 0 in C, so negatives are classified correctly.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u3labB">Mark as solved</button></div></article>
+<article class="prob" data-level="medium"><div class="prob-h"><span class="lvl medium">Medium</span><h3>3C. Second largest element in one pass</h3><span class="lec">Practises lesson 3.1</span></div><p>Find the second largest distinct value in an array using a single loop.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">6
+12 45 7 45 30 9
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">Second largest = 30
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>Track first and second. A new maximum pushes the old first down to second.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+#include &lt;limits.h&gt;
+int main(void)
+{
+    int n, a[100], first = INT_MIN, second = INT_MIN;
+    scanf("%d", &amp;n);
+    for (int i = 0; i &lt; n; i++) scanf("%d", &amp;a[i]);
+    for (int i = 0; i &lt; n; i++) {
+        if (a[i] &gt; first) {
+            second = first;
+            first = a[i];
+        } else if (a[i] &gt; second &amp;&amp; a[i] != first) {
+            second = a[i];
+        }
+    }
+    if (second == INT_MIN) printf("No second largest\n");
+    else printf("Second largest = %d\n", second);
+    return 0;
+}</pre><p>The a[i] != first test stops a repeated maximum (45 twice) from being reported as the second largest. INT_MIN from limits.h is the smallest int.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u3labC">Mark as solved</button></div></article>
+<article class="prob" data-level="medium"><div class="prob-h"><span class="lvl medium">Medium</span><h3>3D. Insert an element at a position</h3><span class="lec">Practises lesson 3.1</span></div><p>Read an array, then a value and an index. Insert the value at that index, shifting later elements right.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">5
+10 20 30 40 50
+25 2
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">10 20 25 30 40 50 
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>Shift from the end backwards, otherwise you overwrite values before moving them.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+int main(void)
+{
+    int n, a[101], val, pos;
+    scanf("%d", &amp;n);
+    for (int i = 0; i &lt; n; i++) scanf("%d", &amp;a[i]);
+    scanf("%d %d", &amp;val, &amp;pos);
+    if (pos &lt; 0 || pos &gt; n) { printf("Invalid position\n"); return 0; }
+    for (int i = n; i &gt; pos; i--)
+        a[i] = a[i - 1];
+    a[pos] = val;
+    n++;
+    for (int i = 0; i &lt; n; i++) printf("%d ", a[i]);
+    printf("\n");
+    return 0;
+}</pre><p>The array is declared one larger than the maximum input so there is room to grow. Valid positions run from 0 to n, inclusive.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u3labD">Mark as solved</button></div></article>
+<article class="prob" data-level="medium"><div class="prob-h"><span class="lvl medium">Medium</span><h3>3E. Is the matrix symmetric?</h3><span class="lec">Practises lesson 3.4</span></div><p>Read an n × n matrix and print whether it is symmetric, that is, equal to its transpose.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">3
+1 2 3
+2 5 6
+3 6 9
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">Symmetric
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>Check a[i][j] == a[j][i] for every pair. Stop at the first mismatch.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+int main(void)
+{
+    int n, a[10][10], sym = 1;
+    scanf("%d", &amp;n);
+    for (int i = 0; i &lt; n; i++)
+        for (int j = 0; j &lt; n; j++)
+            scanf("%d", &amp;a[i][j]);
+    for (int i = 0; i &lt; n &amp;&amp; sym; i++)
+        for (int j = 0; j &lt; i; j++)
+            if (a[i][j] != a[j][i]) { sym = 0; break; }
+    printf(sym ? "Symmetric\n" : "Not symmetric\n");
+    return 0;
+}</pre><p>Checking only j &lt; i compares each pair once and skips the diagonal. The flag in the outer condition ends both loops after a mismatch.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u3labE">Mark as solved</button></div></article>
+<article class="prob" data-level="medium"><div class="prob-h"><span class="lvl medium">Medium</span><h3>3F. Palindrome string without a library reverse</h3><span class="lec">Practises lesson 3.5</span></div><p>Read a word and check whether it is a palindrome, without using strrev.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">madam
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">madam is a palindrome
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>Compare from both ends moving inwards: s[i] with s[len - 1 - i].</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+int main(void)
+{
+    char s[50];
+    int ok = 1;
+    scanf("%49s", s);
+    int len = strlen(s);
+    for (int i = 0; i &lt; len / 2; i++)
+        if (s[i] != s[len - 1 - i]) { ok = 0; break; }
+    printf("%s is %sa palindrome\n", s, ok ? "" : "not ");
+    return 0;
+}</pre><p>%49s stops scanf from writing past the 50-byte array. Only half the word needs checking.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u3labF">Mark as solved</button></div></article>
+<article class="prob" data-level="exam"><div class="prob-h"><span class="lvl exam">Exam level</span><h3>3G. Count words, vowels and digits in a line</h3><span class="lec">Practises lesson 3.5, 3.6</span></div><p>Read a full line (with spaces) and count its words, vowels, digits and spaces.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">C lab 2026 is fun
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">Words 5, Vowels 3, Digits 4, Spaces 4
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>A new word starts where a non-space character follows a space (or the start of the line).</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+int main(void)
+{
+    char s[200];
+    int words = 0, vowels = 0, digits = 0, spaces = 0, inWord = 0;
+    fgets(s, sizeof s, stdin);
+    for (int i = 0; s[i] != '\0' &amp;&amp; s[i] != '\n'; i++) {
+        char c = tolower((unsigned char)s[i]);
+        if (c == ' ') { spaces++; inWord = 0; }
+        else if (!inWord) { words++; inWord = 1; }
+        if (c=='a' || c=='e' || c=='i' || c=='o' || c=='u') vowels++;
+        if (isdigit((unsigned char)c)) digits++;
+    }
+    printf("Words %d, Vowels %d, Digits %d, Spaces %d\n", words, vowels, digits, spaces);
+    return 0;
+}</pre><p>The inWord flag counts words correctly even with several spaces between them. fgets keeps the newline, so the loop also stops at \n.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u3labG">Mark as solved</button></div></article>
+<article class="prob" data-level="exam"><div class="prob-h"><span class="lvl exam">Exam level</span><h3>3H. Row and column sums of a matrix</h3><span class="lec">Practises lesson 3.4</span></div><p>Read an r × c matrix and print it with the sum of each row at the end of the row and the sum of each column underneath.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">2 3
+1 2 3
+4 5 6
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">   1   2   3  | 6
+   4   5   6  | 15
+   5   7   9
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>Row sums can be printed while printing the row. Column sums need a separate pair of loops with the order swapped.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+int main(void)
+{
+    int r, c, a[10][10];
+    scanf("%d %d", &amp;r, &amp;c);
+    for (int i = 0; i &lt; r; i++)
+        for (int j = 0; j &lt; c; j++)
+            scanf("%d", &amp;a[i][j]);
+    for (int i = 0; i &lt; r; i++) {
+        int rs = 0;
+        for (int j = 0; j &lt; c; j++) {
+            printf("%4d", a[i][j]);
+            rs += a[i][j];
+        }
+        printf("  | %d\n", rs);
+    }
+    for (int j = 0; j &lt; c; j++) {
+        int cs = 0;
+        for (int i = 0; i &lt; r; i++) cs += a[i][j];
+        printf("%4d", cs);
+    }
+    printf("\n");
+    return 0;
+}</pre><p>For column sums the outer loop runs over columns and the inner loop over rows. %4d keeps the columns aligned.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u3labH">Mark as solved</button></div></article>
+</section>
+<section class="lesson" id="u3quiz" data-title="Unit quiz" data-kind="quiz" aria-labelledby="u3qh">
+    <div class="lesson-head"><h2 id="u3qh">Unit 3 quiz</h2><span class="lec">10 questions, from remembering to analysing</span></div>
+    <p>One question at a time, with an explanation after every answer. Your best score is saved on this device.</p>
+    <div class="uq" data-set="u3"></div>
+  </section>
+  <section class="lesson" id="u3cheat" data-title="Exam cheat sheet" data-kind="cheat" aria-labelledby="u3ch">
+    <div class="lesson-head"><h2 id="u3ch">Unit 3 cheat sheet</h2><span class="lec">One screen, the night before</span></div>
+    <div class="cheat">
+      <div><h3>1-D arrays</h3>int a[n]: indices 0 to n−1, contiguous, address = base + i × size. No bounds checking. Copy with a loop.</div>
+      <div><h3>Searching</h3>Linear: any order, up to n comparisons. Binary: sorted only, mid = (low + high) / 2, about log₂ n comparisons.</div>
+      <div><h3>Sorting</h3>Bubble: swap neighbours, largest sinks to end each pass. Selection: pick minimum, swap to front, at most n−1 swaps. Both n(n−1)/2 comparisons.</div>
+      <div><h3>2-D arrays</h3>a[r][c], row-major. Offset of a[i][j] = i × cols + j. Multiply: cols of A = rows of B; c[i][j] = Σ a[i][k] × b[k][j].</div>
+      <div><h3>Strings</h3>char array ending in '\0'. Size = text length + 1. scanf %s stops at space; fgets reads a line. Never gets.</div>
+      <div><h3>string.h</h3>strlen, strcpy(dest, src), strcat(dest, src), strcmp (0 equal, &lt;0 first smaller, &gt;0 first bigger). Compare strings with strcmp, never ==.</div>
+    </div>
+  </section>
+</section>
+
+<nav class="pagenav" aria-label="Units"><a class="btn ghost" href="unit2.html">Back to Unit 2: Speaking C</a><a class="btn" href="unit4.html">Continue to Unit 4: Functions and pointers</a></nav>
+</main>
+</div>
+<footer>Progress is saved only in this browser. Use Export on the My progress page to keep a backup.</footer>
+<script src="../../assets/engine.js"></script>
+<script src="data/unit3.js"></script>
+<script>initPage();</script>
+</body>
+</html>

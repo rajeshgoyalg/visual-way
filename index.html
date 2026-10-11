@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Visual Way</title>
+<meta name="description" content="Visual, interactive course notes.">
+<meta name="theme-color" content="#2350B8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Visual Way">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="./assets/icons/icon-192.png">
+<link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/style.css">
+</head>
+<body data-page="home" data-root="./">
+<header class="topbar"><div class="topbar-in"><a class="brand" href="./index.html">The Visual Way</a><button class="learner-chip" type="button">Choose learner</button></div></header>
+<header class="hero wrap">
+  <h1>The Visual Way</h1>
+  <p class="lede">Interactive course notes. Look at the picture, read the idea, try it yourself, then check what stuck.</p>
+</header>
+<main class="wrap">
+  <a class="course-card" href="courses/ces1102/index.html" data-course-card="ces1102">
+    <h2>PPS, the visual way</h2>
+    <span class="small">CES 1102, B.Tech CSE Semester 1. Five units: computers and algorithms, C basics, arrays and strings, functions and pointers, structures and files.</span>
+    <span class="prog"></span><span class="meter" aria-hidden="true"><i style="width:0"></i></span>
+  </a>
+  <div class="panelgrid">
+    <div class="panel"><h3>Use it like an app</h3>
+      <p class="small"><b>iPad or iPhone:</b> open this site in Safari, tap the Share button, then Add to Home Screen.<br><b>Android:</b> open it in Chrome, tap the menu, then Add to Home screen or Install app.</p>
+      <p class="small">It then opens full screen, works offline after the first visit, and keeps progress more reliably than a normal browser tab.</p></div>
+    <div class="panel"><h3>Your data</h3>
+      <p class="small">Answers and progress are saved in this browser only. Export a backup now and then, especially before clearing browser data or switching devices.</p>
+      <div class="row"><button class="btn" type="button" data-action="export">Export progress</button><button class="btn ghost" type="button" data-action="import">Load from a file</button></div></div>
+  </div>
+</main>
+<footer>Progress is saved only in this browser. Use Export on the My progress page to keep a backup.</footer>
+<script src="./assets/engine.js"></script>
+<script src="courses/ces1102/course.js"></script>
+<script>initPage();</script>
+</body>
+</html>

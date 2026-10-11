@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Unit 5: Structures and files | PPS, the visual way</title>
+<meta name="description" content="CES 1102 Unit 5: Structures and files.">
+<meta name="theme-color" content="#2350B8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Visual Way">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="../../assets/icons/icon-192.png">
+<link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body data-page="unit" data-course="ces1102" data-unit="5" data-root="../../">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><marker id="mk" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="currentColor" stroke-width="1.6"/></marker></defs></svg>
+<header class="topbar"><div class="topbar-in"><a class="brand" href="../../index.html">The Visual Way</a><nav class="unitnav" aria-label="Course"><a href="index.html">Course home</a><a href="unit1.html">Unit 1</a><a href="unit2.html">Unit 2</a><a href="unit3.html">Unit 3</a><a href="unit4.html">Unit 4</a><a href="unit5.html" aria-current="page">Unit 5</a><a href="progress.html">My progress</a></nav><button class="learner-chip" type="button">Choose learner</button></div></header>
+<div class="wrap layout" style="margin-top:28px">
+<nav class="rail" aria-label="Lessons in this unit"><h4>Unit 5 lessons</h4><ol id="railList"></ol><div class="bar" aria-hidden="true"><i id="barFill"></i></div><small id="progText"></small></nav>
+<main>
+<section class="unit" id="unit-5">
+  <div class="intro">
+    <h2>Unit 5: Structures and files</h2>
+    <p>Real data comes in records: a student has a roll number, a name and marks. This unit groups related data into structures, uses pointers to move through memory efficiently, and saves data in files so it survives after the program ends.</p>
+    <div class="mindmap" data-center="Unit 5|Structures and files"></div>
+  </div>
+
+  <!-- 5.1 -->
+  <section class="lesson" id="u5l1" data-title="5.1 Structures and arrays of structures" aria-labelledby="u5l1h">
+    <div class="lesson-head"><span class="num">5.1</span><h2 id="u5l1h">Structures and arrays of structures</h2><span class="lec">Lecture L30 with tutorial T10</span></div>
+    <p class="hook">An ID card holds different kinds of information about one person on one card. A structure does the same for one record.</p>
+    <figure class="fig-r">
+      <svg viewBox="0 0 320 210" role="img" aria-labelledby="u5stT">
+        <title id="u5stT">struct student s1 drawn as one box containing three members: roll, name and marks</title>
+        <rect class="sv-cont" x="10" y="10" width="300" height="150" rx="12"/><text class="sv-t" x="24" y="34">struct student s1</text>
+        <rect class="sv-box" x="24" y="50" width="70" height="56" rx="6"/><text class="sv-t" x="59" y="76" text-anchor="middle">101</text><text class="sv-s" x="59" y="96" text-anchor="middle">int roll</text>
+        <rect class="sv-box" x="104" y="50" width="110" height="56" rx="6"/><text class="sv-t" x="159" y="76" text-anchor="middle">"Asha"</text><text class="sv-s" x="159" y="96" text-anchor="middle">char name[20]</text>
+        <rect class="sv-box" x="224" y="50" width="74" height="56" rx="6"/><text class="sv-t" x="261" y="76" text-anchor="middle">88.5</text><text class="sv-s" x="261" y="96" text-anchor="middle">float marks</text>
+        <text class="sv-s" x="24" y="134">Access: s1.roll   s1.name   s1.marks</text>
+        <text class="sv-s" x="10" y="190">Different types, one variable, one name.</text>
+      </svg>
+      <figcaption>An array holds many values of one type; a structure holds related values of different types.</figcaption>
+    </figure>
+    <div class="prose">
+      <p>A <mark>structure</mark> is a user-defined type that groups related variables, called <mark>members</mark>, under one name. Defining <code>struct student { ... };</code> creates a new type, a template; it does not use memory. Declaring <code>struct student s1;</code> creates an actual variable.</p>
+      <p>Use the <mark>dot operator</mark> to reach a member: <code>s1.marks = 88.5;</code>. Structures of the same type can be copied in one go with <code>s2 = s1;</code> (unlike arrays), but they cannot be compared with <code>==</code>; compare member by member.</p>
+      <p>An <mark>array of structures</mark> stores a whole class: <code>struct student cls[60];</code>. Then <code>cls[i].marks</code> is the marks of the i-th student, which is how you build a mark list, find the topper or sort by marks.</p>
+    </div>
+    <div class="clear"></div>
+<pre class="c" data-hl>
+struct student {
+    int roll;
+    char name[20];
+    float marks;
+};                                      // semicolon required
+
+int main(void)
+{
+    struct student cls[3];
+    int top = 0;
+    for (int i = 0; i &lt; 3; i++) {
+        scanf("%d %19s %f", &amp;cls[i].roll, cls[i].name, &amp;cls[i].marks);
+        if (cls[i].marks &gt; cls[top].marks) top = i;
+    }
+    printf("Topper: %s (%.1f)\n", cls[top].name, cls[top].marks);
+    return 0;
+}</pre>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li>The semicolon after the closing brace of a structure definition is mandatory.</li>
+        <li><code>s1.name = "Asha";</code> is an error, because name is an array. Use <code>strcpy(s1.name, "Asha");</code>.</li>
+        <li>sizeof a structure can be larger than the sum of its members, because the compiler may add padding for alignment.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u5l1"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u5l1"></button></div>
+  </section>
+
+  <!-- 5.2 -->
+  <section class="lesson" id="u5l2" data-title="5.2 Nested structures and pointers to structures" aria-labelledby="u5l2h">
+    <div class="lesson-head"><span class="num">5.2</span><h2 id="u5l2h">Nested structures and pointers to structures</h2><span class="lec">Lectures L31 and L32</span></div>
+    <p class="hook">A box inside a box. An employee record contains a date of birth, and a date is itself a small record of day, month and year.</p>
+    <div class="prose">
+      <p>A <mark>nested structure</mark> has a structure as one of its members. Reach inner members by chaining dots: <code>e.dob.year</code>.</p>
+      <p>A <mark>pointer to a structure</mark> stores the structure's address: <code>struct student *p = &amp;s1;</code>. To reach a member through it, write <code>(*p).marks</code>, with the brackets because the dot outranks the star. That is clumsy, so C gives the <mark>arrow operator</mark>: <code>p-&gt;marks</code> means exactly the same thing. The rule: use a dot with a structure variable, an arrow with a pointer to a structure.</p>
+      <p>Why bother? Passing a pointer to a large structure into a function copies just one address instead of the whole record, and it lets the function update the original.</p>
+    </div>
+<pre class="c" data-hl>
+struct date { int day, month, year; };
+struct employee {
+    char name[20];
+    struct date dob;               // nested structure
+};
+struct employee e = {"Kiran", {15, 8, 2004}};
+printf("%s was born in %d\n", e.name, e.dob.year);
+
+void raise(struct student *p) { p-&gt;marks += 5; }   // updates the caller's record</pre>
+    <div class="widget tracer" data-t="u5struct"></div>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li><code>*p.marks</code> means <code>*(p.marks)</code>, which is an error. Write <code>(*p).marks</code> or <code>p-&gt;marks</code>.</li>
+        <li><code>s1-&gt;marks</code> is wrong when s1 is a structure variable, not a pointer.</li>
+        <li>An inner structure type must be defined before the outer one uses it.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u5l2"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u5l2"></button></div>
+  </section>
+
+  <!-- 5.3 -->
+  <section class="lesson" id="u5l3" data-title="5.3 Pointer arithmetic, arrays and strings" aria-labelledby="u5l3h">
+    <div class="lesson-head"><span class="num">5.3</span><h2 id="u5l3h">Pointer arithmetic, arrays and strings</h2><span class="lec">Lecture L33 with tutorial T11</span></div>
+    <p class="hook">Houses on a street are numbered by plot, not by brick. p + 1 means "next plot", however wide the plots are.</p>
+    <div class="prose">
+      <p>Adding 1 to a pointer moves it to the <mark>next element</mark>, not the next byte. If p is an <code>int *</code> holding 1000, then <code>p + 1</code> is 1004, because an int is 4 bytes. For a <code>double *</code> it would be 1008. The compiler scales by <code>sizeof</code> the type for you. You can add or subtract an integer, use <code>++</code> and <code>--</code>, and subtract two pointers into the same array to get the number of elements between them. Adding two pointers makes no sense and is not allowed.</p>
+      <p>Arrays and pointers are closely tied. An array name used in an expression is the <mark>address of its first element</mark>, so <code>int *p = a;</code> is the same as <code>p = &amp;a[0];</code>. And <code>a[i]</code> is defined as <code>*(a + i)</code>. The difference: <code>p</code> is a variable you can move, while <code>a</code> is fixed, so <code>a++</code> is an error.</p>
+    </div>
+    <div class="widget" id="ptrjump"></div>
+    <div class="widget tracer" data-t="u5parr"></div>
+    <div class="prose"><p>Strings work the same way, because a string is a char array. Walking a <code>char *</code> until it hits '\0' is the pointer version of strlen:</p></div>
+<pre class="c" data-hl>
+int myStrlen(const char *s)
+{
+    const char *start = s;
+    while (*s != '\0')
+        s++;                 // move to the next character
+    return s - start;        // pointer difference = number of characters
+}
+char a[] = "Hello";          // a copy you may change
+const char *b = "World";     // points at a literal: do not modify it</pre>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li><code>*p + 1</code> adds 1 to the value; <code>*(p + 1)</code> reads the next element. Brackets matter.</li>
+        <li><code>*p++</code> reads the current element, then moves p. It does not increment the value.</li>
+        <li>Modifying a string literal through <code>char *b = "World";</code> is undefined behaviour and often crashes.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u5l3"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u5l3"></button></div>
+  </section>
+
+  <!-- 5.4 -->
+  <section class="lesson" id="u5l4" data-title="5.4 Pointers with 2-D arrays and arrays of pointers" aria-labelledby="u5l4h">
+    <div class="lesson-head"><span class="num">5.4</span><h2 id="u5l4h">Pointers with 2-D arrays and arrays of pointers</h2><span class="lec">Lecture L34</span></div>
+    <p class="hook">A bookshelf where every shelf must be the width of the widest book, versus a row of hooks where each bag hangs at its own length.</p>
+    <figure class="fig-r">
+      <svg viewBox="0 0 330 280" role="img" aria-labelledby="u5apT">
+        <title id="u5apT">2-D char array wastes space with fixed rows; an array of pointers points to strings of different lengths</title>
+        <text class="sv-t" x="0" y="18">char names[3][8]</text>
+        <g>
+          <rect class="sv-box" x="0" y="28" width="320" height="24"/><text class="sv-s" x="8" y="45">A s h a \0 · · ·</text>
+          <rect class="sv-box" x="0" y="52" width="320" height="24"/><text class="sv-s" x="8" y="69">R a v i \0 · · ·</text>
+          <rect class="sv-box" x="0" y="76" width="320" height="24"/><text class="sv-s" x="8" y="93">S h a l i n i \0</text>
+        </g>
+        <text class="sv-s" x="0" y="118">24 bytes, rows padded to the longest name</text>
+        <text class="sv-t" x="0" y="150">char *names[3]</text>
+        <rect class="sv-box" x="0" y="162" width="70" height="28"/><text class="sv-s" x="10" y="181">[0]</text>
+        <rect class="sv-box" x="0" y="190" width="70" height="28"/><text class="sv-s" x="10" y="209">[1]</text>
+        <rect class="sv-box" x="0" y="218" width="70" height="28"/><text class="sv-s" x="10" y="237">[2]</text>
+        <g style="color:var(--soft)"><path class="sv-line" d="M70 176 H138" marker-end="url(#mk)"/><path class="sv-line" d="M70 204 H138" marker-end="url(#mk)"/><path class="sv-line" d="M70 232 H138" marker-end="url(#mk)"/></g>
+        <rect class="sv-box" x="140" y="164" width="80" height="24"/><text class="sv-s" x="148" y="181">Asha\0</text>
+        <rect class="sv-box" x="140" y="192" width="80" height="24"/><text class="sv-s" x="148" y="209">Ravi\0</text>
+        <rect class="sv-box" x="140" y="220" width="130" height="24"/><text class="sv-s" x="148" y="237">Shalini\0</text>
+        <text class="sv-s" x="0" y="270">Each pointer leads to a string of its own length</text>
+      </svg>
+      <figcaption>Arrays of pointers save space and make sorting cheap: swap pointers, not text.</figcaption>
+    </figure>
+    <div class="prose">
+      <p>A 2-D array is an array of rows. For <code>int a[3][4]</code>, <code>a[i]</code> is row i (itself an array of 4 ints), so <code>a + i</code> jumps a whole row of 16 bytes. Combining both levels gives the pointer form of every element: <code>a[i][j]</code> is <code>*(*(a + i) + j)</code>. Read it inside out: move to row i, then to column j within it, then read.</p>
+      <p>An <mark>array of pointers</mark> is an array whose elements are addresses: <code>int *ptr[3];</code> holds three int addresses. Its most common use is a list of strings: <code>const char *names[] = {"Asha", "Ravi", "Shalini"};</code>. Each string takes only the space it needs, unlike a 2-D char array where every row is as long as the longest name. Sorting names then means swapping pointers, which is far cheaper than copying text with strcpy.</p>
+    </div>
+    <div class="clear"></div>
+<pre class="c" data-hl>
+int a[2][3] = {{1, 2, 3}, {4, 5, 6}};
+printf("%d %d\n", a[1][2], *(*(a + 1) + 2));     // both print 6
+
+const char *days[] = {"Mon", "Tue", "Wed", "Thu", "Fri"};
+for (int i = 0; i &lt; 5; i++)
+    printf("%s ", days[i]);
+
+const char *t = days[0]; days[0] = days[4]; days[4] = t;   // swap two names: only addresses move</pre>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li><code>int *p[3]</code> is an array of 3 pointers. <code>int (*p)[3]</code> is one pointer to an array of 3 ints. The brackets change everything.</li>
+        <li>For <code>int a[3][4]</code>, <code>a + 1</code> moves 16 bytes (one row) but <code>a[0] + 1</code> moves 4 bytes (one int).</li>
+        <li>Strings in an array of pointers to literals cannot be edited with strcpy. Use a 2-D char array if you need to change them.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u5l4"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u5l4"></button></div>
+  </section>
+
+  <!-- 5.5 -->
+  <section class="lesson" id="u5l5" data-title="5.5 Files" aria-labelledby="u5l5h">
+    <div class="lesson-head"><span class="num">5.5</span><h2 id="u5l5h">Files</h2><span class="lec">Lectures L35, L36 and tutorial T12</span></div>
+    <p class="hook">RAM is a whiteboard, wiped when the class ends. A file is a notebook you take home.</p>
+    <div class="prose">
+      <p>Everything a program stores in variables disappears when it ends. A <mark>file</mark> keeps data on disk permanently, so it can be read again later or by another program. C handles files through a <code>FILE *</code> pointer, and every file program follows the same three-step rhythm: <mark>open, use, close</mark>.</p>
+      <p><code>fopen("name", "mode")</code> opens a file and returns a <code>FILE *</code>, or <code>NULL</code> if it fails, for example when reading a file that does not exist. Always check for NULL. Then read or write with the file versions of familiar functions: <code>fprintf</code> and <code>fscanf</code> (formatted), <code>fputc</code> and <code>fgetc</code> (one character), <code>fputs</code> and <code>fgets</code> (one line). Finally <code>fclose(fp)</code> saves any buffered data and releases the file. Reading functions signal the end of the file with <code>EOF</code> (for fgetc and fscanf) or NULL (for fgets).</p>
+    </div>
+    <div class="tbl"><table>
+      <thead><tr><th>Mode</th><th>Meaning</th><th>If the file exists</th><th>If it does not</th></tr></thead>
+      <tbody>
+        <tr><td><code>"r"</code></td><td>Read</td><td>Opens from the start</td><td>fopen returns NULL</td></tr>
+        <tr><td><code>"w"</code></td><td>Write</td><td>Erases its contents</td><td>Creates it</td></tr>
+        <tr><td><code>"a"</code></td><td>Append</td><td>Writes are added at the end</td><td>Creates it</td></tr>
+        <tr><td><code>"r+" "w+" "a+"</code></td><td>Read and write</td><td colspan="2">Same create and erase rules as r, w and a. Add b (such as "rb") for binary files.</td></tr>
+      </tbody>
+    </table></div>
+    <div class="widget stepper" data-s="u5file"></div>
+<pre class="c" data-hl>
+#include &lt;stdio.h&gt;
+int main(void)
+{
+    FILE *fp = fopen("marks.txt", "w");
+    if (fp == NULL) { printf("Cannot open file\n"); return 1; }
+    fprintf(fp, "%d %d\n", 101, 88);
+    fprintf(fp, "%d %d\n", 102, 74);
+    fclose(fp);
+
+    int roll, m;
+    fp = fopen("marks.txt", "r");
+    if (fp == NULL) { printf("Cannot open file\n"); return 1; }
+    while (fscanf(fp, "%d %d", &amp;roll, &amp;m) == 2)   // stops at end of file
+        printf("Roll %d scored %d\n", roll, m);
+    fclose(fp);
+    return 0;
+}</pre>
+    <div class="widget sorterw" data-s="u5modes"></div>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li>Opening an existing file with "w" erases it instantly. Use "a" to add to it.</li>
+        <li>Skipping the NULL check means the program crashes on the first read if the file is missing.</li>
+        <li>Store the result of fgetc in an <code>int</code>, not a <code>char</code>, so EOF (usually -1) can be told apart from real characters.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u5l5"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u5l5"></button></div>
+  </section>
+
+  <section class="lesson" id="u5lab" data-title="Practice lab" data-kind="lab" aria-labelledby="u5labh">
+<div class="lesson-head"><h2 id="u5labh">Unit 5 practice lab</h2><span class="lec">Tutorials T10, T11, T12 and lectures L32, L34, L36</span></div>
+<p class="prose">Try each problem on paper or in gcc before opening the solution. Easy problems apply one idea, medium ones combine ideas, and exam-level ones are the complete programs asked in end-semester papers. Solutions skip input prompts to stay short; add a printf prompt before each scanf in your lab record. Every C solution here compiles cleanly with gcc -Wall and was run on the sample input shown.</p>
+<div class="row"><div class="tabs labfilter" role="group" aria-label="Filter problems by level"><button type="button" aria-pressed="true" data-f="all">All</button><button type="button" aria-pressed="false" data-f="easy">Easy</button><button type="button" aria-pressed="false" data-f="medium">Medium</button><button type="button" aria-pressed="false" data-f="exam">Exam level</button></div><p class="labcount" aria-live="polite"></p></div>
+<article class="prob" data-level="easy"><div class="prob-h"><span class="lvl easy">Easy</span><h3>5A. Students scoring above 75</h3><span class="lec">Practises lesson 5.1</span></div><p>Read n student records (roll, name, marks) into an array of structures and print the students with marks above 75.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">3
+101 Asha 88.5
+102 Ravi 64
+103 Meena 79
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">101 Asha 88.5
+103 Meena 79.0
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>struct student cls[50]; then read cls[i].roll, cls[i].name and cls[i].marks in a loop.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+struct student {
+    int roll;
+    char name[20];
+    float marks;
+};
+int main(void)
+{
+    struct student cls[50];
+    int n;
+    scanf("%d", &amp;n);
+    for (int i = 0; i &lt; n; i++)
+        scanf("%d %19s %f", &amp;cls[i].roll, cls[i].name, &amp;cls[i].marks);
+    for (int i = 0; i &lt; n; i++)
+        if (cls[i].marks &gt; 75)
+            printf("%d %s %.1f\n", cls[i].roll, cls[i].name, cls[i].marks);
+    return 0;
+}</pre><p>name is already an array, so it takes no &amp; in scanf; roll and marks do. %19s leaves room for the \0.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u5labA">Mark as solved</button></div></article>
+<article class="prob" data-level="medium"><div class="prob-h"><span class="lvl medium">Medium</span><h3>5B. Rank list: sort structures by marks</h3><span class="lec">Practises lesson 5.1, 3.3</span></div><p>Read n student records and print a rank list, highest marks first.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">4
+101 Asha 88.5
+102 Ravi 64
+103 Meena 79
+104 Kiran 91
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">Rank 1: Kiran (104) 91.0
+Rank 2: Asha (101) 88.5
+Rank 3: Meena (103) 79.0
+Rank 4: Ravi (102) 64.0
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>Bubble sort on cls[j].marks, but swap whole structures. Structures can be copied with =.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+struct student { int roll; char name[20]; float marks; };
+int main(void)
+{
+    struct student cls[50], t;
+    int n;
+    scanf("%d", &amp;n);
+    for (int i = 0; i &lt; n; i++)
+        scanf("%d %19s %f", &amp;cls[i].roll, cls[i].name, &amp;cls[i].marks);
+    for (int i = 0; i &lt; n - 1; i++)
+        for (int j = 0; j &lt; n - 1 - i; j++)
+            if (cls[j].marks &lt; cls[j + 1].marks) {    /* &lt; for descending */
+                t = cls[j]; cls[j] = cls[j + 1]; cls[j + 1] = t;
+            }
+    for (int i = 0; i &lt; n; i++)
+        printf("Rank %d: %s (%d) %.1f\n", i + 1, cls[i].name, cls[i].roll, cls[i].marks);
+    return 0;
+}</pre><p>Swapping whole records keeps each name with its own marks. Swapping only the marks would scramble the list.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u5labB">Mark as solved</button></div></article>
+<article class="prob" data-level="medium"><div class="prob-h"><span class="lvl medium">Medium</span><h3>5C. Earliest joiner: nested structures</h3><span class="lec">Practises lesson 5.2</span></div><p>Each employee has a name and a joining date (day, month, year) stored as a nested structure. Find who joined first.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">3
+Kiran 15 8 2019
+Divya 2 3 2018
+Arjun 20 11 2018
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">Earliest joiner: Divya (02/03/2018)
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>Compare years, then months if the years are equal, then days.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+struct date { int d, m, y; };
+struct employee { char name[20]; struct date join; };
+int earlier(struct date a, struct date b)      /* 1 if a is before b */
+{
+    if (a.y != b.y) return a.y &lt; b.y;
+    if (a.m != b.m) return a.m &lt; b.m;
+    return a.d &lt; b.d;
+}
+int main(void)
+{
+    struct employee e[20];
+    int n, first = 0;
+    scanf("%d", &amp;n);
+    for (int i = 0; i &lt; n; i++)
+        scanf("%19s %d %d %d", e[i].name, &amp;e[i].join.d, &amp;e[i].join.m, &amp;e[i].join.y);
+    for (int i = 1; i &lt; n; i++)
+        if (earlier(e[i].join, e[first].join)) first = i;
+    printf("Earliest joiner: %s (%02d/%02d/%d)\n", e[first].name,
+           e[first].join.d, e[first].join.m, e[first].join.y);
+    return 0;
+}</pre><p>e[i].join.y chains two dots: array element, then the nested structure, then its member. Passing struct date to a function copies it, which is fine for a small record.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u5labC">Mark as solved</button></div></article>
+<article class="prob" data-level="medium"><div class="prob-h"><span class="lvl medium">Medium</span><h3>5D. Update a record through a pointer</h3><span class="lec">Practises lesson 5.2</span></div><p>Write void addBonus(struct student *p, float bonus) that adds a bonus to a student’s marks without letting them exceed 100.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">101 Asha 96
+5
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">101 Asha 100.0
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>Use the arrow operator: p-&gt;marks. Pass &amp;s from main.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+struct student { int roll; char name[20]; float marks; };
+void addBonus(struct student *p, float bonus)
+{
+    p-&gt;marks += bonus;
+    if (p-&gt;marks &gt; 100) p-&gt;marks = 100;
+}
+int main(void)
+{
+    struct student s;
+    float b;
+    scanf("%d %19s %f", &amp;s.roll, s.name, &amp;s.marks);
+    scanf("%f", &amp;b);
+    addBonus(&amp;s, b);
+    printf("%d %s %.1f\n", s.roll, s.name, s.marks);
+    return 0;
+}</pre><p>Only an address is passed, so the function edits main’s record directly instead of a copy.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u5labD">Mark as solved</button></div></article>
+<article class="prob" data-level="medium"><div class="prob-h"><span class="lvl medium">Medium</span><h3>5E. Reverse an array with two pointers</h3><span class="lec">Practises lesson 5.3</span></div><p>Reverse an array using two pointers, one starting at each end, without using any index inside the loop.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">6
+1 2 3 4 5 6
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">6 5 4 3 2 1 
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>int *p = a; int *q = a + n - 1; swap *p and *q, then p++ and q-- while p &lt; q.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+int main(void)
+{
+    int n, a[100];
+    scanf("%d", &amp;n);
+    for (int i = 0; i &lt; n; i++) scanf("%d", a + i);   /* a + i is &amp;a[i] */
+    int *p = a, *q = a + n - 1;
+    while (p &lt; q) {
+        int t = *p; *p = *q; *q = t;
+        p++;
+        q--;
+    }
+    for (int *r = a; r &lt; a + n; r++) printf("%d ", *r);
+    printf("\n");
+    return 0;
+}</pre><p>Pointers into the same array can be compared with &lt;. Each p++ moves one int forward, 4 bytes, automatically.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u5labE">Mark as solved</button></div></article>
+<article class="prob" data-level="medium"><div class="prob-h"><span class="lvl medium">Medium</span><h3>5F. Sort names using an array of pointers</h3><span class="lec">Practises lesson 5.4, 3.6</span></div><p>Store five names in an array of pointers and print them in alphabetical order by swapping pointers, not text.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">(none)</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">Asha Divya Kiran Meena Ravi 
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>const char *names[] = {...}; compare with strcmp(names[j], names[j + 1]) and swap the two pointers.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+int main(void)
+{
+    const char *names[] = {"Ravi", "Asha", "Meena", "Kiran", "Divya"};
+    int n = 5;
+    for (int i = 0; i &lt; n - 1; i++)
+        for (int j = 0; j &lt; n - 1 - i; j++)
+            if (strcmp(names[j], names[j + 1]) &gt; 0) {
+                const char *t = names[j];
+                names[j] = names[j + 1];
+                names[j + 1] = t;
+            }
+    for (int i = 0; i &lt; n; i++) printf("%s ", names[i]);
+    printf("\n");
+    return 0;
+}</pre><p>Only addresses move; the strings stay where they are. With a 2-D char array you would need three strcpy calls per swap.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u5labF">Mark as solved</button></div></article>
+<article class="prob" data-level="exam"><div class="prob-h"><span class="lvl exam">Exam level</span><h3>5G. Copy a file character by character</h3><span class="lec">Practises lesson 5.5</span></div><p>Copy input.txt into copy.txt using fgetc and fputc, then print how many characters were copied.</p>
+<div class="io"><div><div class="tr-l">File input.txt</div><pre class="tr-out">Hello file
+Second line
+</pre><div class="tr-l">Sample input</div><pre class="tr-out">(none)</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">Copied 23 characters
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>Open one file with "r" and the other with "w". Loop until fgetc returns EOF. Store its result in an int.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+int main(void)
+{
+    FILE *src = fopen("input.txt", "r");
+    if (src == NULL) { printf("Cannot open input.txt\n"); return 1; }
+    FILE *dst = fopen("copy.txt", "w");
+    if (dst == NULL) { printf("Cannot create copy.txt\n"); fclose(src); return 1; }
+    int ch, count = 0;                  /* int, so EOF fits */
+    while ((ch = fgetc(src)) != EOF) {
+        fputc(ch, dst);
+        count++;
+    }
+    fclose(src);
+    fclose(dst);
+    printf("Copied %d characters\n", count);
+    return 0;
+}</pre><p>The assignment inside the while condition reads a character and tests it in one step. Newlines are characters too, so they are counted.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u5labG">Mark as solved</button></div></article>
+<article class="prob" data-level="exam"><div class="prob-h"><span class="lvl exam">Exam level</span><h3>5H. Count characters, words and lines in a file</h3><span class="lec">Practises lesson 5.5, 3.5</span></div><p>Read notes.txt and print the number of characters, words and lines it contains.</p>
+<div class="io"><div><div class="tr-l">File notes.txt</div><pre class="tr-out">C is fast
+Files keep data
+</pre><div class="tr-l">Sample input</div><pre class="tr-out">(none)</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">Characters 26, Words 6, Lines 2
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>Same in-word flag as the string lab, but reading with fgetc. Count a line at every \n.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+int main(void)
+{
+    FILE *fp = fopen("notes.txt", "r");
+    if (fp == NULL) { printf("Cannot open notes.txt\n"); return 1; }
+    int ch, chars = 0, words = 0, lines = 0, inWord = 0;
+    while ((ch = fgetc(fp)) != EOF) {
+        chars++;
+        if (ch == '\n') lines++;
+        if (ch == ' ' || ch == '\n' || ch == '\t') inWord = 0;
+        else if (!inWord) { words++; inWord = 1; }
+    }
+    fclose(fp);
+    printf("Characters %d, Words %d, Lines %d\n", chars, words, lines);
+    return 0;
+}</pre><p>This is the logic of the Unix wc command. Spaces, tabs and newlines all end a word.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u5labH">Mark as solved</button></div></article>
+<article class="prob" data-level="exam"><div class="prob-h"><span class="lvl exam">Exam level</span><h3>5I. Save records, then read back those above average</h3><span class="lec">Practises lesson 5.1, 5.5</span></div><p>Read n (roll, marks) pairs and write them to marks.txt with fprintf. Close it, reopen it for reading, compute the average with fscanf, and print the students above average.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">3
+101 88
+102 64
+103 79
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">Average = 77.0
+101 88
+103 79
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>Read the file twice: once to compute the average, then rewind(fp) and read again to print.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+int main(void)
+{
+    int n, roll, m, count = 0;
+    float sum = 0;
+    FILE *fp = fopen("marks.txt", "w");
+    if (fp == NULL) { printf("Cannot create marks.txt\n"); return 1; }
+    scanf("%d", &amp;n);
+    for (int i = 0; i &lt; n; i++) {
+        scanf("%d %d", &amp;roll, &amp;m);
+        fprintf(fp, "%d %d\n", roll, m);
+    }
+    fclose(fp);
+
+    fp = fopen("marks.txt", "r");
+    if (fp == NULL) { printf("Cannot open marks.txt\n"); return 1; }
+    while (fscanf(fp, "%d %d", &amp;roll, &amp;m) == 2) { sum += m; count++; }
+    float avg = sum / count;
+    printf("Average = %.1f\n", avg);
+    rewind(fp);                                  /* back to the start */
+    while (fscanf(fp, "%d %d", &amp;roll, &amp;m) == 2)
+        if (m &gt; avg) printf("%d %d\n", roll, m);
+    fclose(fp);
+    return 0;
+}</pre><p>The data survives in marks.txt after the program ends. rewind moves the file position back to the beginning so the file can be read a second time.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u5labI">Mark as solved</button></div></article>
+</section>
+<section class="lesson" id="u5quiz" data-title="Unit quiz" data-kind="quiz" aria-labelledby="u5qh">
+    <div class="lesson-head"><h2 id="u5qh">Unit 5 quiz</h2><span class="lec">10 questions, from remembering to analysing</span></div>
+    <p>One question at a time, with an explanation after every answer. Your best score is saved on this device.</p>
+    <div class="uq" data-set="u5"></div>
+  </section>
+  <section class="lesson" id="u5cheat" data-title="Exam cheat sheet" data-kind="cheat" aria-labelledby="u5ch">
+    <div class="lesson-head"><h2 id="u5ch">Unit 5 cheat sheet</h2><span class="lec">One screen, the night before</span></div>
+    <div class="cheat">
+      <div><h3>Structures</h3>struct tag { members };  (semicolon). Variable: struct tag s; Member: s.m. Copy with =, compare member by member. Arrays of structs: cls[i].marks.</div>
+      <div><h3>Nested and pointers</h3>e.dob.year for nested. p = &amp;s; then p-&gt;m equals (*p).m. Dot for variables, arrow for pointers.</div>
+      <div><h3>Pointer arithmetic</h3>p + 1 moves sizeof(type) bytes. a[i] = *(a + i). Array name = &amp;a[0], fixed. p2 − p1 = elements between.</div>
+      <div><h3>2-D and arrays of pointers</h3>a[i][j] = *(*(a + i) + j). char *names[] holds strings of different lengths; sort by swapping pointers.</div>
+      <div><h3>File steps</h3>FILE *fp = fopen(name, mode); check NULL; fprintf/fscanf, fputc/fgetc, fputs/fgets; fclose(fp).</div>
+      <div><h3>Modes</h3>r: read, must exist. w: write, erases or creates. a: append, creates if needed. Add + for read and write, b for binary.</div>
+    </div>
+  </section>
+</section>
+
+<nav class="pagenav" aria-label="Units"><a class="btn ghost" href="unit4.html">Back to Unit 4: Functions and pointers</a><a class="btn" href="progress.html">See my progress</a></nav>
+</main>
+</div>
+<footer>Progress is saved only in this browser. Use Export on the My progress page to keep a backup.</footer>
+<script src="../../assets/engine.js"></script>
+<script src="data/unit5.js"></script>
+<script>initPage();</script>
+</body>
+</html>

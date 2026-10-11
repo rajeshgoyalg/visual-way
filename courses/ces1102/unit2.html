@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Unit 2: Speaking C | PPS, the visual way</title>
+<meta name="description" content="CES 1102 Unit 2: Speaking C.">
+<meta name="theme-color" content="#2350B8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Visual Way">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="../../assets/icons/icon-192.png">
+<link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body data-page="unit" data-course="ces1102" data-unit="2" data-root="../../">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><marker id="mk" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="currentColor" stroke-width="1.6"/></marker></defs></svg>
+<header class="topbar"><div class="topbar-in"><a class="brand" href="../../index.html">The Visual Way</a><nav class="unitnav" aria-label="Course"><a href="index.html">Course home</a><a href="unit1.html">Unit 1</a><a href="unit2.html" aria-current="page">Unit 2</a><a href="unit3.html">Unit 3</a><a href="unit4.html">Unit 4</a><a href="unit5.html">Unit 5</a><a href="progress.html">My progress</a></nav><button class="learner-chip" type="button">Choose learner</button></div></header>
+<div class="wrap layout" style="margin-top:28px">
+<nav class="rail" aria-label="Lessons in this unit"><h4>Unit 2 lessons</h4><ol id="railList"></ol><div class="bar" aria-hidden="true"><i id="barFill"></i></div><small id="progText"></small></nav>
+<main>
+<section class="unit" id="unit-2">
+  <div class="intro">
+    <h2>Unit 2: Speaking C</h2>
+    <p>Unit 1 taught you to think in steps. This unit teaches you to say those steps in C: store values, calculate with them, make decisions and repeat work. By the end you can write any program that reads input, takes decisions and loops.</p>
+    <div class="mindmap" data-center="Unit 2|Speaking C"></div>
+  </div>
+
+  <!-- 2.1 -->
+  <section class="lesson" id="u2l1" data-title="2.1 Variables and data types" aria-labelledby="u2l1h">
+    <div class="lesson-head"><span class="num">2.1</span><h2 id="u2l1h">Variables and data types</h2><span class="lec">Lecture L6 with tutorial T2</span></div>
+    <p class="hook">A variable is a labelled box in memory. The data type decides how big the box is and what may go inside it.</p>
+    <figure class="fig-r">
+      <svg viewBox="0 0 330 250" role="img" aria-labelledby="u2memT">
+        <title id="u2memT">Memory boxes: char uses 1 byte, int 4 bytes, float 4 bytes, double 8 bytes</title>
+        <text class="sv-t" x="0" y="30">char grade</text><rect class="sv-box" x="120" y="14" width="22" height="24"/><text class="sv-s" x="160" y="31">'A'  (1 byte)</text>
+        <text class="sv-t" x="0" y="80">int age</text><g><rect class="sv-box" x="120" y="64" width="22" height="24"/><rect class="sv-box" x="142" y="64" width="22" height="24"/><rect class="sv-box" x="164" y="64" width="22" height="24"/><rect class="sv-box" x="186" y="64" width="22" height="24"/></g><text class="sv-s" x="218" y="81">19  (4 bytes)</text>
+        <text class="sv-t" x="0" y="130">float cgpa</text><g><rect class="sv-box" x="120" y="114" width="22" height="24"/><rect class="sv-box" x="142" y="114" width="22" height="24"/><rect class="sv-box" x="164" y="114" width="22" height="24"/><rect class="sv-box" x="186" y="114" width="22" height="24"/></g><text class="sv-s" x="218" y="131">8.7  (4 bytes)</text>
+        <text class="sv-t" x="0" y="180">double pi</text><g><rect class="sv-box" x="120" y="164" width="22" height="24"/><rect class="sv-box" x="142" y="164" width="22" height="24"/><rect class="sv-box" x="164" y="164" width="22" height="24"/><rect class="sv-box" x="186" y="164" width="22" height="24"/><rect class="sv-box" x="208" y="164" width="22" height="24"/><rect class="sv-box" x="230" y="164" width="22" height="24"/><rect class="sv-box" x="252" y="164" width="22" height="24"/><rect class="sv-box" x="274" y="164" width="22" height="24"/></g>
+        <text class="sv-s" x="120" y="210">3.14159265  (8 bytes)</text>
+        <text class="sv-s" x="0" y="240">Each small square is one byte.</text>
+      </svg>
+      <figcaption>Sizes shown are typical for gcc on a 64-bit machine. Check yours with sizeof.</figcaption>
+    </figure>
+    <div class="prose">
+      <p>You must <mark>declare</mark> a variable before you use it: <code>int age;</code> reserves a box called <code>age</code> that holds whole numbers. You can declare and initialise together: <code>int age = 19;</code>. An uninitialised local variable holds garbage, whatever was left in that memory.</p>
+      <p>Variable names (identifiers) follow four rules. They use letters, digits and underscore only. They cannot start with a digit. They are case-sensitive, so <code>Total</code> and <code>total</code> are different. And they cannot be a keyword such as <code>int</code> or <code>while</code>. Choose names that explain themselves: <code>marks</code> beats <code>m</code>.</p>
+      <p>A <mark>constant</mark> is a value that never changes. You meet literal constants such as <code>25</code>, <code>3.14</code>, <code>'A'</code> and <code>"Hello"</code>. You can also name them, with <code>#define PI 3.14159</code> (replaced by the preprocessor) or <code>const float g = 9.8;</code> (the compiler stops you changing it).</p>
+    </div>
+    <div class="clear"></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Type</th><th>Stores</th><th>Typical size</th><th>printf / scanf code</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td><code>char</code></td><td>One character (a small integer)</td><td>1 byte</td><td><code>%c</code></td><td><code>'A'</code></td></tr>
+        <tr><td><code>int</code></td><td>Whole numbers, about ±2.1 billion</td><td>4 bytes</td><td><code>%d</code></td><td><code>-42</code></td></tr>
+        <tr><td><code>float</code></td><td>Decimals, about 6 to 7 digits accurate</td><td>4 bytes</td><td><code>%f</code></td><td><code>8.75</code></td></tr>
+        <tr><td><code>double</code></td><td>Decimals, about 15 digits accurate</td><td>8 bytes</td><td><code>%lf</code> in scanf, <code>%f</code> in printf</td><td><code>3.14159265</code></td></tr>
+      </tbody>
+    </table></div>
+<pre class="c" data-hl>
+#include &lt;stdio.h&gt;
+#define PI 3.14159
+int main(void)
+{
+    float r, area;
+    printf("Radius: ");
+    scanf("%f", &amp;r);
+    area = PI * r * r;
+    printf("Area = %.2f\n", area);   // %.2f prints 2 decimal places
+    printf("int uses %zu bytes\n", sizeof(int));
+    return 0;
+}</pre>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li><code>2nd_year</code> and <code>float</code> are invalid names. <code>_count</code> and <code>year2</code> are valid.</li>
+        <li><code>'A'</code> (single quotes) is a char. <code>"A"</code> (double quotes) is a string of two bytes, 'A' and '\0'.</li>
+        <li>Reading a double needs <code>%lf</code> in scanf. Using <code>%f</code> gives a wrong value.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u2l1"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u2l1"></button></div>
+  </section>
+
+  <!-- 2.2 -->
+  <section class="lesson" id="u2l2" data-title="2.2 Operators" aria-labelledby="u2l2h">
+    <div class="lesson-head"><span class="num">2.2</span><h2 id="u2l2h">Operators</h2><span class="lec">Lecture L7</span></div>
+    <p class="hook">Operators are the verbs of C. Variables are the nouns; operators make them do something.</p>
+    <div class="prose">
+      <p><b>Arithmetic</b> operators are <code>+ - * / %</code>. The surprise is division between two integers: <code>7 / 2</code> is <mark>3</mark>, because the fraction is thrown away. The modulus <code>%</code> gives the remainder, so <code>7 % 2</code> is 1. It works on integers only, and it is how you test even or odd, or pull digits out of a number.</p>
+      <p><b>Relational</b> operators <code>&lt; &lt;= &gt; &gt;= == !=</code> compare two values and give 1 (true) or 0 (false). <b>Logical</b> operators combine conditions: <code>&amp;&amp;</code> (and), <code>||</code> (or), <code>!</code> (not). C uses <mark>short-circuit</mark> evaluation: in <code>a &amp;&amp; b</code>, if <code>a</code> is false, <code>b</code> is never checked.</p>
+      <p><b>Increment and decrement</b> <code>++</code> and <code>--</code> add or subtract 1. Where you put them matters. In <code>b = a++</code> (postfix) b gets the old value, then a grows. In <code>c = ++a</code> (prefix) a grows first, then c gets the new value.</p>
+      <p><b>Bitwise</b> operators work on the individual bits: <code>&amp;</code> (and), <code>|</code> (or), <code>^</code> (exclusive or), <code>~</code> (flip every bit), <code>&lt;&lt;</code> and <code>&gt;&gt;</code> (shift left or right). Shifting left by 1 doubles a number; shifting right by 1 halves it.</p>
+    </div>
+    <div class="widget tracer" data-t="u2inc"></div>
+    <div class="widget" id="bitlab"></div>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li><code>=</code> assigns, <code>==</code> compares. <code>if (x = 5)</code> is always true and silently changes x.</li>
+        <li><code>&amp;</code> is bitwise and, <code>&amp;&amp;</code> is logical and. They give different results for 2 and 4: <code>2 &amp; 4</code> is 0 but <code>2 &amp;&amp; 4</code> is 1.</li>
+        <li><code>5 / 2 * 2</code> is 4, not 5. Integer division happens first.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u2l2"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u2l2"></button></div>
+  </section>
+
+  <!-- 2.3 -->
+  <section class="lesson" id="u2l3" data-title="2.3 Type conversion and expressions" aria-labelledby="u2l3h">
+    <div class="lesson-head"><span class="num">2.3</span><h2 id="u2l3h">Type conversion and expressions</h2><span class="lec">Lecture L8</span></div>
+    <p class="hook">Pour a glass of water into a cup and some may spill. Converting a bigger type into a smaller one can spill data too.</p>
+    <figure class="fig-r">
+      <svg viewBox="0 0 300 250" role="img" aria-labelledby="u2promT">
+        <title id="u2promT">Implicit promotion ladder: char to int to float to double</title>
+        <rect class="sv-box" x="90" y="10" width="120" height="36" rx="6"/><text class="sv-t" x="150" y="33" text-anchor="middle">double</text>
+        <rect class="sv-box" x="90" y="70" width="120" height="36" rx="6"/><text class="sv-t" x="150" y="93" text-anchor="middle">float</text>
+        <rect class="sv-box" x="90" y="130" width="120" height="36" rx="6"/><text class="sv-t" x="150" y="153" text-anchor="middle">int</text>
+        <rect class="sv-box" x="90" y="190" width="120" height="36" rx="6"/><text class="sv-t" x="150" y="213" text-anchor="middle">char</text>
+        <g style="color:var(--soft)"><path class="sv-line" d="M150 188 V170" marker-end="url(#mk)"/><path class="sv-line" d="M150 128 V110" marker-end="url(#mk)"/><path class="sv-line" d="M150 68 V50" marker-end="url(#mk)"/></g>
+        <text class="sv-s" x="220" y="120">safe: widen</text><text class="sv-s" x="10" y="120">risky: narrow</text>
+        <text class="sv-s" x="150" y="246" text-anchor="middle">Mixed expressions climb to the wider type.</text>
+      </svg>
+      <figcaption>An int mixed with a float becomes a float before the calculation.</figcaption>
+    </figure>
+    <div class="prose">
+      <p><mark>Implicit conversion</mark> happens automatically. In <code>5 + 2.5</code> the 5 is promoted to 5.0, so the result is 7.5. When you store into a smaller type, C narrows it: <code>int n = 3.9;</code> stores 3, because the fraction is cut off (not rounded).</p>
+      <p><mark>Explicit conversion</mark>, or casting, is you telling C to convert: <code>(float)total / count</code>. Placement matters. <code>(float)7 / 2</code> is 3.5, because 7 becomes 7.0 before dividing. <code>(float)(7 / 2)</code> is 3.0, because the integer division already threw the half away.</p>
+      <p>Assignment operators shorten common updates: <code>x += 5</code> means <code>x = x + 5</code>, and likewise <code>-= *= /= %=</code>. The <mark>conditional operator</mark> <code>?:</code> is a one-line if-else that produces a value: <code>max = (a &gt; b) ? a : b;</code></p>
+    </div>
+    <div class="clear"></div>
+    <div class="widget tabsw" data-k="u2cast"></div>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li>Average of integers: <code>avg = sum / n;</code> loses decimals even if avg is a float. Write <code>avg = (float)sum / n;</code>.</li>
+        <li>Conversion to int truncates. <code>(int)-2.7</code> is -2, not -3.</li>
+        <li><code>x =+ 5</code> is not <code>x += 5</code>. It assigns +5 to x.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u2l3"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u2l3"></button></div>
+  </section>
+
+  <!-- 2.4 -->
+  <section class="lesson" id="u2l4" data-title="2.4 Precedence and order of evaluation" aria-labelledby="u2l4h">
+    <div class="lesson-head"><span class="num">2.4</span><h2 id="u2l4h">Precedence and order of evaluation</h2><span class="lec">Lecture L9 with tutorial T3</span></div>
+    <p class="hook">BODMAS for C. When an expression has several operators, precedence decides who goes first and associativity breaks ties.</p>
+    <div class="prose">
+      <p><mark>Precedence</mark> is the rank of an operator: higher ranks are applied first, so <code>*</code> beats <code>+</code>. <mark>Associativity</mark> decides the order between operators of the same rank. Most go left to right, so <code>20 / 4 * 2</code> is <code>(20 / 4) * 2 = 10</code>. Unary operators, the conditional operator and assignments go right to left, which is why <code>a = b = 0</code> works.</p>
+      <p>When in doubt, add brackets. They cost nothing and make the meaning obvious to the reader and the examiner.</p>
+    </div>
+    <div class="tbl"><table>
+      <thead><tr><th>Rank</th><th>Operators</th><th>Associativity</th></tr></thead>
+      <tbody>
+        <tr><td>1 (highest)</td><td><code>() [] -&gt; .</code> and postfix <code>++ --</code></td><td>Left to right</td></tr>
+        <tr><td>2</td><td>Unary <code>! ~ - ++ --</code>, cast, <code>sizeof</code>, <code>* &amp;</code></td><td>Right to left</td></tr>
+        <tr><td>3</td><td><code>* / %</code></td><td>Left to right</td></tr>
+        <tr><td>4</td><td><code>+ -</code></td><td>Left to right</td></tr>
+        <tr><td>5</td><td><code>&lt;&lt; &gt;&gt;</code></td><td>Left to right</td></tr>
+        <tr><td>6</td><td><code>&lt; &lt;= &gt; &gt;=</code></td><td>Left to right</td></tr>
+        <tr><td>7</td><td><code>== !=</code></td><td>Left to right</td></tr>
+        <tr><td>8 to 10</td><td><code>&amp;</code>, then <code>^</code>, then <code>|</code></td><td>Left to right</td></tr>
+        <tr><td>11, 12</td><td><code>&amp;&amp;</code>, then <code>||</code></td><td>Left to right</td></tr>
+        <tr><td>13</td><td><code>?:</code></td><td>Right to left</td></tr>
+        <tr><td>14 (lowest)</td><td><code>= += -= *= /= %=</code></td><td>Right to left</td></tr>
+      </tbody>
+    </table></div>
+    <div class="widget stepper" data-s="u2prec"></div>
+    <div class="widget stepper" data-s="u2prec2"></div>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li><code>a &amp; b == c</code> means <code>a &amp; (b == c)</code>, because <code>==</code> outranks <code>&amp;</code>.</li>
+        <li>Never use a variable twice with <code>++</code> in one expression, such as <code>i++ + ++i</code>. The result is undefined, and different compilers print different answers.</li>
+        <li><code>*</code>, <code>/</code> and <code>%</code> share one rank, so they go left to right. They do not go in BODMAS order.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u2l4"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u2l4"></button></div>
+  </section>
+
+  <!-- 2.5 -->
+  <section class="lesson" id="u2l5" data-title="2.5 Making decisions: if and switch" aria-labelledby="u2l5h">
+    <div class="lesson-head"><span class="num">2.5</span><h2 id="u2l5h">Making decisions: if and switch</h2><span class="lec">Lecture L10</span></div>
+    <p class="hook">A railway junction sends a train down one track or another. An if statement does the same with your program.</p>
+    <div class="prose">
+      <p>A <mark>statement</mark> ends with a semicolon. A <mark>block</mark> is several statements grouped in braces <code>{ }</code>, and it counts as one statement. The family of decision statements builds on that:</p>
+      <p><code>if (condition) statement;</code> runs the statement only when the condition is true (non-zero). <code>if ... else</code> picks one of two paths. An <mark>else-if ladder</mark> tests conditions one by one from the top and runs the first one that is true; the rest are skipped. <code>switch</code> compares one integer or char expression against fixed <code>case</code> values. It is tidy for menus, but each case needs a <code>break</code>, or execution falls through into the next case.</p>
+    </div>
+    <div class="widget tracer" data-t="u2if"></div>
+<pre class="c" data-hl>
+char op; float a, b;
+scanf("%f %c %f", &amp;a, &amp;op, &amp;b);
+switch (op) {
+    case '+': printf("%.2f", a + b); break;
+    case '-': printf("%.2f", a - b); break;
+    case '*': printf("%.2f", a * b); break;
+    case '/': if (b != 0) printf("%.2f", a / b);
+              else printf("Cannot divide by zero");
+              break;
+    default:  printf("Unknown operator");
+}</pre>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li><code>if (x &gt; 0);</code> with a stray semicolon makes an empty if. The next line then always runs.</li>
+        <li>Without braces, only the first statement belongs to the if. Indentation does not count in C.</li>
+        <li>switch cannot test ranges or floats. <code>case marks &gt;= 90:</code> is invalid; use an else-if ladder.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u2l5"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u2l5"></button></div>
+  </section>
+
+  <!-- 2.6 -->
+  <section class="lesson" id="u2l6" data-title="2.6 Loops: while, do-while, for" aria-labelledby="u2l6h">
+    <div class="lesson-head"><span class="num">2.6</span><h2 id="u2l6h">Loops: while, do-while, for</h2><span class="lec">Lectures L11 and tutorial T4</span></div>
+    <p class="hook">Laps around a track. The runner keeps going until the condition, "laps less than 10", becomes false.</p>
+    <div class="prose">
+      <p>Every loop has the same four parts: <mark>initialise</mark> a counter, <mark>test</mark> a condition, run the <mark>body</mark>, and <mark>update</mark> the counter. Forget the update and the loop runs forever.</p>
+      <p><code>while</code> tests before the body, so it is <b>entry-controlled</b> and may run zero times. <code>do ... while</code> tests after the body, so it is <b>exit-controlled</b> and always runs at least once, which makes it the natural choice for menus ("show the menu, then ask whether to repeat"). <code>for</code> puts initialise, test and update in one line, so use it when you know how many times to repeat.</p>
+    </div>
+    <div class="widget tabsw" data-k="u2loops"></div>
+    <div class="widget tracer" data-t="u2digits"></div>
+    <div class="widget orderw" data-o="u2for"></div>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li><code>for (i = 0; i &lt; 5; i++);</code> with a semicolon has an empty body. The block below runs once, after the loop.</li>
+        <li>do-while needs a semicolon after the condition: <code>} while (n &gt; 0);</code></li>
+        <li>Off by one: <code>i &lt;= 10</code> runs 10 times starting at 1, but 11 times starting at 0.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u2l6"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u2l6"></button></div>
+  </section>
+
+  <!-- 2.7 -->
+  <section class="lesson" id="u2l7" data-title="2.7 break and continue" aria-labelledby="u2l7h">
+    <div class="lesson-head"><span class="num">2.7</span><h2 id="u2l7h">break and continue</h2><span class="lec">Lecture L13</span></div>
+    <p class="hook">break is the emergency exit: you leave the building. continue is skipping a song: you stay in the playlist and move to the next track.</p>
+    <div class="prose">
+      <p><code>break</code> jumps out of the nearest loop (or switch) immediately; the program carries on after the loop. <code>continue</code> skips the rest of the current iteration and goes straight to the next one. In a <code>for</code> loop the update <code>i++</code> still runs; in a <code>while</code> loop control jumps to the test, so make sure the counter was already updated or the loop never ends.</p>
+      <p>Typical uses: break when you have found what you were searching for, or when the user types a stop value; continue to skip invalid data, such as negative marks.</p>
+    </div>
+    <div class="widget tracer" data-t="u2brk"></div>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li>break leaves only the innermost loop. In nested loops the outer loop keeps going.</li>
+        <li>continue inside a switch that is inside a loop continues the loop. break inside that switch only leaves the switch.</li>
+        <li>A while loop with continue placed before the update becomes an infinite loop.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u2l7"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u2l7"></button></div>
+  </section>
+
+  <section class="lesson" id="u2lab" data-title="Practice lab" data-kind="lab" aria-labelledby="u2labh">
+<div class="lesson-head"><h2 id="u2labh">Unit 2 practice lab</h2><span class="lec">Tutorials T2, T3, T4 and lecture L12</span></div>
+<p class="prose">Try each problem on paper or in gcc before opening the solution. Easy problems apply one idea, medium ones combine ideas, and exam-level ones are the complete programs asked in end-semester papers. Solutions skip input prompts to stay short; add a printf prompt before each scanf in your lab record. Every C solution here compiles cleanly with gcc -Wall and was run on the sample input shown.</p>
+<div class="row"><div class="tabs labfilter" role="group" aria-label="Filter problems by level"><button type="button" aria-pressed="true" data-f="all">All</button><button type="button" aria-pressed="false" data-f="easy">Easy</button><button type="button" aria-pressed="false" data-f="medium">Medium</button><button type="button" aria-pressed="false" data-f="exam">Exam level</button></div><p class="labcount" aria-live="polite"></p></div>
+<article class="prob" data-level="easy"><div class="prob-h"><span class="lvl easy">Easy</span><h3>2A. Leap year</h3><span class="lec">Practises lesson 2.2, 2.5</span></div><p>Read a year and print whether it is a leap year. A year is a leap year if it is divisible by 4 but not by 100, or if it is divisible by 400.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">2024
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">2024 is a leap year
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>One if condition with &amp;&amp; and || does it. Test 2024, 1900 and 2000.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+int main(void)
+{
+    int y;
+    scanf("%d", &amp;y);
+    if ((y % 4 == 0 &amp;&amp; y % 100 != 0) || y % 400 == 0)
+        printf("%d is a leap year\n", y);
+    else
+        printf("%d is not a leap year\n", y);
+    return 0;
+}</pre><p>1900 is divisible by 100 but not 400, so it is not a leap year; 2000 is. The brackets make the intended grouping obvious.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u2labA">Mark as solved</button></div></article>
+<article class="prob" data-level="easy"><div class="prob-h"><span class="lvl easy">Easy</span><h3>2B. Vowel or consonant with switch</h3><span class="lec">Practises lesson 2.5</span></div><p>Read one letter and use a switch statement to print whether it is a vowel or a consonant. Handle both upper and lower case.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">e
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">e is a vowel
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>Several case labels can share one block: case 'a': case 'A': ...</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+int main(void)
+{
+    char ch;
+    scanf(" %c", &amp;ch);
+    switch (ch) {
+        case 'a': case 'e': case 'i': case 'o': case 'u':
+        case 'A': case 'E': case 'I': case 'O': case 'U':
+            printf("%c is a vowel\n", ch);
+            break;
+        default:
+            printf("%c is a consonant\n", ch);
+    }
+    return 0;
+}</pre><p>Stacked case labels deliberately fall through to one shared block. The space in " %c" skips any leftover newline.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u2labB">Mark as solved</button></div></article>
+<article class="prob" data-level="medium"><div class="prob-h"><span class="lvl medium">Medium</span><h3>2C. Factorial with a for loop</h3><span class="lec">Practises lesson 2.6</span></div><p>Read n (0 to 20) and print n!. Reject negative input.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">10
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">10! = 3628800
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>Start the product at 1, not 0. Use unsigned long long because 13! is already too big for int.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+int main(void)
+{
+    int n;
+    unsigned long long f = 1;
+    scanf("%d", &amp;n);
+    if (n &lt; 0 || n &gt; 20) {
+        printf("Enter n from 0 to 20\n");
+        return 0;
+    }
+    for (int i = 2; i &lt;= n; i++)
+        f *= i;
+    printf("%d! = %llu\n", n, f);
+    return 0;
+}</pre><p>0! and 1! skip the loop and correctly print 1. %llu is the format code for unsigned long long.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u2labC">Mark as solved</button></div></article>
+<article class="prob" data-level="medium"><div class="prob-h"><span class="lvl medium">Medium</span><h3>2D. Reverse a number and test for palindrome</h3><span class="lec">Practises lesson 2.2, 2.6</span></div><p>Read a positive integer, print its reverse, and say whether it is a palindrome (reads the same both ways).</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">12321
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">Reverse = 12321
+12321 is a palindrome
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>Same digit-peeling loop as sum of digits, but build rev = rev * 10 + digit. Keep a copy of the original.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+int main(void)
+{
+    int n, temp, rev = 0;
+    scanf("%d", &amp;n);
+    temp = n;
+    while (temp &gt; 0) {
+        rev = rev * 10 + temp % 10;
+        temp /= 10;
+    }
+    printf("Reverse = %d\n", rev);
+    if (rev == n) printf("%d is a palindrome\n", n);
+    else printf("%d is not a palindrome\n", n);
+    return 0;
+}</pre><p>The loop destroys temp, which is why n is copied first. Each pass shifts rev left one digit and appends the last digit of temp.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u2labD">Mark as solved</button></div></article>
+<article class="prob" data-level="medium"><div class="prob-h"><span class="lvl medium">Medium</span><h3>2E. Prime check using break</h3><span class="lec">Practises lesson 2.6, 2.7</span></div><p>Read n and print whether it is prime. If it is not, print its smallest divisor.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">91
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">91 is not prime (divisible by 7)
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>Try divisors from 2 while d * d &lt;= n. Break at the first one that divides n.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+int main(void)
+{
+    int n, d, found = 0;
+    scanf("%d", &amp;n);
+    for (d = 2; d * d &lt;= n; d++) {
+        if (n % d == 0) {
+            found = 1;
+            break;                       /* no need to test further */
+        }
+    }
+    if (n &lt; 2) printf("%d is not prime\n", n);
+    else if (found) printf("%d is not prime (divisible by %d)\n", n, d);
+    else printf("%d is prime\n", n);
+    return 0;
+}</pre><p>If n has a divisor, one of its divisors is at most the square root of n, so testing up to d * d &lt;= n is enough. break keeps d at the divisor found.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u2labE">Mark as solved</button></div></article>
+<article class="prob" data-level="medium"><div class="prob-h"><span class="lvl medium">Medium</span><h3>2F. Fibonacci series</h3><span class="lec">Practises lesson 2.6</span></div><p>Read n and print the first n Fibonacci numbers, starting 0 1.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">10
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">0 1 1 2 3 5 8 13 21 34 
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>Keep two variables a and b; each step prints a, then moves both forward.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+int main(void)
+{
+    int n, a = 0, b = 1, next;
+    scanf("%d", &amp;n);
+    for (int i = 1; i &lt;= n; i++) {
+        printf("%d ", a);
+        next = a + b;
+        a = b;
+        b = next;
+    }
+    printf("\n");
+    return 0;
+}</pre><p>a always holds the current term and b the next one. The order of the three assignments matters: compute next before overwriting a.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u2labF">Mark as solved</button></div></article>
+<article class="prob" data-level="exam"><div class="prob-h"><span class="lvl exam">Exam level</span><h3>2G. Armstrong numbers from 100 to 999</h3><span class="lec">Practises lesson 2.2, 2.6</span></div><p>Print every three-digit Armstrong number: a number equal to the sum of the cubes of its digits (for example 153 = 1³ + 5³ + 3³).</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">(none)</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">153 370 371 407 
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>An outer for loop over 100 to 999 and an inner while loop that peels digits.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+int main(void)
+{
+    for (int n = 100; n &lt;= 999; n++) {
+        int t = n, sum = 0;
+        while (t &gt; 0) {
+            int d = t % 10;
+            sum += d * d * d;
+            t /= 10;
+        }
+        if (sum == n)
+            printf("%d ", n);
+    }
+    printf("\n");
+    return 0;
+}</pre><p>sum must be reset to 0 for every n, which is why it is declared inside the outer loop.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u2labG">Mark as solved</button></div></article>
+<article class="prob" data-level="exam"><div class="prob-h"><span class="lvl exam">Exam level</span><h3>2H. Patterns with nested loops</h3><span class="lec">Practises lesson 2.6</span></div><p>Read the number of rows and print a right-angled star triangle, then Floyd’s triangle (consecutive numbers row by row).</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">4
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">* 
+* * 
+* * * 
+* * * * 
+
+1 
+2 3 
+4 5 6 
+7 8 9 10 
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>The outer loop picks the row i; the inner loop runs i times. For Floyd’s triangle keep one counter that never resets.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+int main(void)
+{
+    int rows, k = 1;
+    scanf("%d", &amp;rows);
+    for (int i = 1; i &lt;= rows; i++) {
+        for (int j = 1; j &lt;= i; j++)
+            printf("* ");
+        printf("\n");
+    }
+    printf("\n");
+    for (int i = 1; i &lt;= rows; i++) {
+        for (int j = 1; j &lt;= i; j++)
+            printf("%d ", k++);
+        printf("\n");
+    }
+    return 0;
+}</pre><p>Row i has i items, so the inner limit depends on the outer variable. The newline goes after the inner loop, once per row.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u2labH">Mark as solved</button></div></article>
+</section>
+<section class="lesson" id="u2quiz" data-title="Unit quiz" data-kind="quiz" aria-labelledby="u2qh">
+    <div class="lesson-head"><h2 id="u2qh">Unit 2 quiz</h2><span class="lec">10 questions, from remembering to analysing</span></div>
+    <p>One question at a time, with an explanation after every answer. Your best score is saved on this device.</p>
+    <div class="uq" data-set="u2"></div>
+  </section>
+  <section class="lesson" id="u2cheat" data-title="Exam cheat sheet" data-kind="cheat" aria-labelledby="u2ch">
+    <div class="lesson-head"><h2 id="u2ch">Unit 2 cheat sheet</h2><span class="lec">One screen, the night before</span></div>
+    <div class="cheat">
+      <div><h3>Types and codes</h3>char %c (1 byte), int %d (4), float %f (4), double %lf to read, %f to print (8). Names: letters, digits, _; no leading digit; not a keyword.</div>
+      <div><h3>Arithmetic</h3>7 / 2 = 3, 7 % 2 = 1, 7.0 / 2 = 3.5. % works on integers only. (float)a / b keeps decimals.</div>
+      <div><h3>++ and --</h3>b = a++ gives b the old a. c = ++a gives c the new a. Never use ++ twice on one variable in one expression.</div>
+      <div><h3>Precedence</h3>Unary, then * / %, then + -, then shifts, relational, ==, bitwise, &amp;&amp;, ||, ?:, assignment. Use brackets when unsure.</div>
+      <div><h3>Decisions</h3>Else-if ladder: first true branch wins. switch: int or char constants only, needs break, default for the rest.</div>
+      <div><h3>Loops</h3>while: test first, maybe zero runs. do-while: runs at least once, ends with ;. for: init; test; update. break exits, continue skips.</div>
+    </div>
+  </section>
+</section>
+
+<nav class="pagenav" aria-label="Units"><a class="btn ghost" href="unit1.html">Back to Unit 1: How computers think</a><a class="btn" href="unit3.html">Continue to Unit 3: Arrays and strings</a></nav>
+</main>
+</div>
+<footer>Progress is saved only in this browser. Use Export on the My progress page to keep a backup.</footer>
+<script src="../../assets/engine.js"></script>
+<script src="data/unit2.js"></script>
+<script>initPage();</script>
+</body>
+</html>

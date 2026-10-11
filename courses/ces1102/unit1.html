@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Unit 1: How computers think | PPS, the visual way</title>
+<meta name="description" content="CES 1102 Unit 1: How computers think.">
+<meta name="theme-color" content="#2350B8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Visual Way">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="../../assets/icons/icon-192.png">
+<link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body data-page="unit" data-course="ces1102" data-unit="1" data-root="../../">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><marker id="mk" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="currentColor" stroke-width="1.6"/></marker></defs></svg>
+<header class="topbar"><div class="topbar-in"><a class="brand" href="../../index.html">The Visual Way</a><nav class="unitnav" aria-label="Course"><a href="index.html">Course home</a><a href="unit1.html" aria-current="page">Unit 1</a><a href="unit2.html">Unit 2</a><a href="unit3.html">Unit 3</a><a href="unit4.html">Unit 4</a><a href="unit5.html">Unit 5</a><a href="progress.html">My progress</a></nav><button class="learner-chip" type="button">Choose learner</button></div></header>
+<div class="wrap layout" style="margin-top:28px">
+<nav class="rail" aria-label="Lessons in this unit"><h4>Unit 1 lessons</h4><ol id="railList"></ol><div class="bar" aria-hidden="true"><i id="barFill"></i></div><small id="progText"></small></nav>
+<main>
+<section class="unit" id="unit-1"><div class="intro"><h2>Unit 1: How computers think</h2><p>Before writing C you need a picture of the machine you are talking to and a habit of thinking in clear steps. This unit covers what is inside a computer, how languages evolved, algorithms, flowcharts and your first C program.</p><div class="mindmap" data-center="Unit 1|How computers think"></div></div>  <section class="lesson" id="u1start" data-title="Start here: how this course works" data-kind="orient" aria-labelledby="u1starth">
+    <div class="lesson-head"><span class="num">0</span><h2 id="u1starth">Start here: how this course works</h2><span class="lec">Lecture L0</span></div>
+    <p class="hook">Before the first line of code: what you will be able to do by the end of this course, and how that will be checked.</p>
+    <figure class="fig-r">
+      <svg viewBox="0 0 320 230" role="img" aria-labelledby="obeT">
+        <title id="obeT">The outcome-based education cycle: define outcomes, teach and practise, assess, review and improve, then repeat</title>
+        <rect class="sv-box" x="10" y="20" width="130" height="56" rx="8" style="stroke:var(--blue);stroke-width:2"/><text class="sv-t" x="75" y="44" text-anchor="middle">1. Define</text><text class="sv-s" x="75" y="62" text-anchor="middle">course outcomes</text>
+        <rect class="sv-box" x="180" y="20" width="130" height="56" rx="8"/><text class="sv-t" x="245" y="44" text-anchor="middle">2. Teach</text><text class="sv-s" x="245" y="62" text-anchor="middle">and practise</text>
+        <rect class="sv-box" x="180" y="140" width="130" height="56" rx="8"/><text class="sv-t" x="245" y="164" text-anchor="middle">3. Assess</text><text class="sv-s" x="245" y="182" text-anchor="middle">quizzes, labs, exams</text>
+        <rect class="sv-box" x="10" y="140" width="130" height="56" rx="8"/><text class="sv-t" x="75" y="164" text-anchor="middle">4. Review</text><text class="sv-s" x="75" y="182" text-anchor="middle">and improve</text>
+        <g style="color:var(--soft)">
+          <path class="sv-line" d="M142 48 H176" marker-end="url(#mk)"/>
+          <path class="sv-line" d="M245 78 V136" marker-end="url(#mk)"/>
+          <path class="sv-line" d="M178 168 H144" marker-end="url(#mk)"/>
+          <path class="sv-line" d="M75 138 V80" marker-end="url(#mk)"/>
+        </g>
+        <text class="sv-s" x="160" y="222" text-anchor="middle">Results feed back into the next round.</text>
+      </svg>
+      <figcaption>Outcome-based education starts from the end: what a student should be able to do.</figcaption>
+    </figure>
+    <div class="prose">
+      <p>This course follows <mark>outcome-based education</mark> (OBE). Instead of starting from a list of topics and asking "what will we teach?", OBE starts from the end and asks "what should a student be able to do?" Those statements are the <mark>course outcomes</mark> (COs). Lectures, tutorials, labs and exams are then designed to build and measure them, and the results are used to improve the course the next time it runs.</p>
+      <p>Accreditation bodies check that this loop really works. In India, the <b>National Board of Accreditation (NBA)</b> accredits engineering programmes. The <b>Institution of Engineering and Technology (IET)</b>, a UK professional engineering body, also accredits degree programmes. Both look for clearly stated outcomes, evidence that students achieve them, and continuous improvement. Your quiz, lab and exam performance is part of that evidence.</p>
+    </div>
+    <div class="clear"></div>
+
+    <h3>What each course outcome covers</h3>
+    <p class="prose">Your official course plan states each CO in its own words. The summaries below describe what each one covers in this material, and where.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Outcome</th><th>You will be able to</th><th>Lectures</th><th>Unit</th></tr></thead>
+      <tbody>
+        <tr><td>CO1</td><td>Explain how a computer is organised and how programs are translated, and express solutions as algorithms and flowcharts</td><td>L1 to L5</td><td>Unit 1</td></tr>
+        <tr><td>CO2</td><td>Write C programs using data types, operators, expressions, decisions and loops</td><td>L6 to L13</td><td>Unit 2</td></tr>
+        <tr><td>CO3</td><td>Store and process collections of data with arrays and strings, including searching and sorting</td><td>L14 to L21</td><td>Unit 3</td></tr>
+        <tr><td>CO4</td><td>Break programs into functions, share data through pointers, and solve problems recursively</td><td>L22 to L29</td><td>Unit 4</td></tr>
+        <tr><td>CO5</td><td>Model records with structures, work with memory through pointers, and keep data in files</td><td>L30 to L36</td><td>Unit 5</td></tr>
+      </tbody>
+    </table></div>
+    <div class="prose">
+      <p><b>CO-PO mapping.</b> The B.Tech programme as a whole has <mark>programme outcomes</mark> (POs): abilities every graduate should have, such as applying engineering knowledge, analysing problems, designing solutions and using modern tools. Each course outcome contributes to some of them. The <mark>CO-PO mapping</mark> is a table showing how strongly each CO supports each PO, usually on a scale of 1 (low), 2 (medium) and 3 (high). For example, writing and testing your own programs (CO2 to CO5) builds problem analysis and solution design, and working in gcc and RAPTOR builds modern tool use. The exact mapping for this course is in your department's course plan.</p>
+    </div>
+
+    <h3>Bloom's taxonomy: the levels of a question</h3>
+    <div class="fig">
+      <svg viewBox="0 0 680 290" role="img" aria-labelledby="bloomT">
+        <title id="bloomT">Bloom's revised taxonomy as a pyramid, from remember at the base to create at the top, with a C programming example for each level</title>
+        <polygon class="sv-box" points="135,10 185,10 205,50 115,50" style="stroke:var(--blue);stroke-width:2"/><text class="sv-t" x="160" y="36" text-anchor="middle">Create</text>
+        <polygon class="sv-box" points="113,54 207,54 227,94 93,94"/><text class="sv-t" x="160" y="80" text-anchor="middle">Evaluate</text>
+        <polygon class="sv-box" points="91,98 229,98 249,138 71,138"/><text class="sv-t" x="160" y="124" text-anchor="middle">Analyse</text>
+        <polygon class="sv-box" points="69,142 251,142 271,182 49,182"/><text class="sv-t" x="160" y="168" text-anchor="middle">Apply</text>
+        <polygon class="sv-box" points="47,186 273,186 293,226 27,226"/><text class="sv-t" x="160" y="212" text-anchor="middle">Understand</text>
+        <polygon class="sv-box" points="25,230 295,230 315,270 5,270"/><text class="sv-t" x="160" y="256" text-anchor="middle">Remember</text>
+        <g style="color:var(--line)"><path class="sv-line" d="M210 30 H330"/><path class="sv-line" d="M232 74 H330"/><path class="sv-line" d="M254 118 H330"/><path class="sv-line" d="M276 162 H330"/><path class="sv-line" d="M298 206 H330"/><path class="sv-line" d="M320 250 H330"/></g>
+        <text class="sv-s" x="338" y="34">Write a whole program for a new problem</text>
+        <text class="sv-s" x="338" y="78">Pick linear or binary search and justify it</text>
+        <text class="sv-s" x="338" y="122">Trace code, predict output, find the bug</text>
+        <text class="sv-s" x="338" y="166">Use nested loops to print a pattern</text>
+        <text class="sv-s" x="338" y="210">Explain why call by value cannot swap</text>
+        <text class="sv-s" x="338" y="254">Name the flowchart symbols</text>
+      </svg>
+    </div>
+    <div class="prose">
+      <p>Questions are written at different levels of <mark>Bloom's revised taxonomy</mark>. The lower levels check that you know and understand an idea; the higher levels check that you can use it, take it apart and build something new with it. Exam papers spread marks across these levels, and the verb in a question tells you which one is being tested: "list" and "define" sit at the bottom, "write a program" sits at the top. This material climbs the same ladder: quick checks are mostly remember and understand, tracers and quizzes reach apply and analyse, and the practice labs end with exam-level programs you create yourself.</p>
+      <p><b>Prerequisites.</b> None beyond school mathematics and basic computer use; no previous programming is assumed. You will need a C compiler (gcc, as used in the labs) and, for Unit 1, the free RAPTOR flowchart tool.</p>
+      <p><b>How to use this material.</b> Every lesson follows the same rhythm: an everyday analogy, a picture, a short explanation, code, something to try, the traps that cost marks, and a quick check. Each unit ends with a practice lab, a 10-question quiz and a one-screen cheat sheet. Mark lessons complete as you go; your progress is saved in this browser.</p>
+    </div>
+  </section>
+
+  <!-- ================= LESSON 1.1 ================= -->
+  <section class="lesson" id="u1l1" data-title="1.1 Inside a computer" aria-labelledby="l1h">
+    <div class="lesson-head"><span class="num">1.1</span><h2 id="l1h">Inside a computer</h2><span class="lec">Lecture L1</span></div>
+    <p class="hook">A computer is a very fast, very obedient kitchen. Ingredients come in, a chef follows a recipe exactly, and a dish goes out.</p>
+    <div class="prose">
+      <p>Every computer, from your phone to a supercomputer, does the same three things: it takes <mark>input</mark>, it <mark>processes</mark> it, and it gives <mark>output</mark>. This is the IPO model. Computer organization is the study of the parts that make this happen and how they are wired together.</p>
+      <p>The <b>input unit</b> (keyboard, mouse, sensor) converts what you do into binary, the 0s and 1s a machine understands. The <b>central processing unit (CPU)</b> is the chef. Inside it, the <b>control unit (CU)</b> reads each instruction and directs traffic, the <b>arithmetic logic unit (ALU)</b> does the maths and the comparisons (is A greater than B?), and <b>registers</b> are tiny, ultra-fast slots that hold the values being worked on right now.</p>
+      <p>The <b>memory unit</b> is the kitchen counter. Main memory (RAM) holds the program and its data while it runs, and it forgets everything when power goes off. That is why RAM is called <mark>volatile</mark>. Secondary storage (SSD, hard disk, pen drive) is the store room: slower, but it keeps your files permanently. The <b>output unit</b> (screen, printer, speaker) turns results back into something humans can use.</p>
+      <p>One big idea ties it together: the program's instructions and its data both live in the same memory. This is the <mark>stored-program concept</mark> (often called the von Neumann architecture), and it is why you can load a new program without rewiring the machine.</p>
+    </div>
+
+    <div class="widget" id="orgWidget">
+      <div class="label">Follow 2 + 3 through the machine</div>
+      <svg viewBox="0 0 640 300" role="img" aria-labelledby="orgT orgD">
+        <title id="orgT">Block diagram of a computer</title>
+        <desc id="orgD">Input unit feeds main memory, which exchanges data with the CPU (control unit, ALU, registers). The CPU sends results to the output unit; memory saves to secondary storage.</desc>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="currentColor" stroke-width="1.6"/></marker></defs>
+        <g style="color:var(--soft)">
+          <path class="sv-line" d="M65 180 V252 H166" marker-end="url(#mk)"/>
+          <path class="sv-line" d="M320 222 V204" marker-end="url(#mk)" marker-start="url(#mk)"/>
+          <path class="sv-line" d="M472 145 H516" marker-end="url(#mk)"/>
+          <path class="sv-line" d="M472 252 H516" marker-end="url(#mk)"/>
+        </g>
+        <rect class="sv-cont" x="170" y="20" width="300" height="182" rx="14"/>
+        <text class="sv-s" x="186" y="42">CPU</text>
+        <g data-k="in"><rect class="sv-box" x="10" y="110" width="110" height="70" rx="8"/><text class="sv-t" x="65" y="140" text-anchor="middle">Input unit</text><text class="sv-s" x="65" y="160" text-anchor="middle">keyboard, mouse</text></g>
+        <g data-k="cu"><rect class="sv-box" x="190" y="54" width="126" height="60" rx="8"/><text class="sv-t" x="253" y="80" text-anchor="middle">Control unit</text><text class="sv-s" x="253" y="99" text-anchor="middle">directs traffic</text></g>
+        <g data-k="alu"><rect class="sv-box" x="328" y="54" width="126" height="60" rx="8"/><text class="sv-t" x="391" y="80" text-anchor="middle">ALU</text><text class="sv-s" x="391" y="99" text-anchor="middle">maths, compare</text></g>
+        <g data-k="reg"><rect class="sv-box" x="190" y="128" width="264" height="56" rx="8"/><text class="sv-t" x="322" y="152" text-anchor="middle">Registers</text><text class="sv-s" x="322" y="170" text-anchor="middle">tiny fast slots</text></g>
+        <g data-k="mem"><rect class="sv-box" x="170" y="224" width="300" height="56" rx="8"/><text class="sv-t" x="320" y="248" text-anchor="middle">Main memory (RAM)</text><text class="sv-s" x="320" y="266" text-anchor="middle">program + data, volatile</text></g>
+        <g data-k="out"><rect class="sv-box" x="520" y="110" width="110" height="70" rx="8"/><text class="sv-t" x="575" y="140" text-anchor="middle">Output unit</text><text class="sv-s" x="575" y="160" text-anchor="middle">screen, printer</text></g>
+        <g data-k="sto"><rect class="sv-box" x="520" y="224" width="110" height="56" rx="8"/><text class="sv-t" x="575" y="248" text-anchor="middle">Storage</text><text class="sv-s" x="575" y="266" text-anchor="middle">SSD, permanent</text></g>
+      </svg>
+      <p class="stepnote" id="orgNote" aria-live="polite"></p>
+      <div class="row"><button class="btn ghost" id="orgPrev">Previous</button><button class="btn" id="orgNext">Next step</button><div class="dots" id="orgDots" aria-hidden="true"></div></div>
+    </div>
+
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li>RAM is volatile, ROM is not. ROM holds start-up instructions that must survive power-off.</li>
+        <li>The CPU does not store your files. Files live in secondary storage; the CPU only works on what is in registers and memory.</li>
+        <li>Comparisons such as <code>A &gt; B</code> are done by the ALU, not the control unit. The "L" in ALU stands for logic.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u1l1"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u1l1">Mark lesson 1.1 complete</button></div>
+  </section>
+
+  <!-- ================= LESSON 1.2 ================= -->
+  <section class="lesson" id="u1l2" data-title="1.2 From switches to C" aria-labelledby="l2h">
+    <div class="lesson-head"><span class="num">1.2</span><h2 id="l2h">From switches to C</h2><span class="lec">Lecture L2</span></div>
+    <p class="hook">Talking to a computer in binary is like ordering food by spelling every word in Morse code. Languages were invented so we could just say what we want.</p>
+    <div class="prose">
+      <p>The first computers of the 1940s had no <mark>operating system</mark>. Programmers booked the whole machine, set switches or plugged cables by hand, and ran one job at a time. An operating system (OS) is the manager that sits between you and the hardware: it loads programs, shares the CPU and memory, and handles files and devices. Here is how it grew up.</p>
+    </div>
+    <div class="timeline" role="list">
+      <div role="listitem"><b>1940s</b>No OS. Switches, plugboards, one person at a time.</div>
+      <div role="listitem"><b>1950s</b>Batch systems. Jobs on punched cards run one after another without a human in between.</div>
+      <div role="listitem"><b>1960s</b>Multiprogramming and time-sharing. Many programs and users share one CPU.</div>
+      <div role="listitem"><b>1969 to 73</b>UNIX is born, then rewritten in C so it can move to new machines.</div>
+      <div role="listitem"><b>Today</b>Windows, Linux, macOS, Android: all descendants of these ideas.</div>
+    </div>
+    <div class="prose">
+      <p>Languages climbed a similar ladder. <b>Machine language</b> is pure binary. The CPU runs it directly, so it is fast, but it is nearly unreadable and works only on the processor it was written for. <b>Assembly language</b> replaces binary with short words called mnemonics, such as <code>MOV</code> and <code>ADD</code>; a translator called an <mark>assembler</mark> turns it into machine code. <b>High-level languages</b> like C, Python and Java read almost like English and run on many machines. A <mark>compiler</mark> translates the whole program at once (that is what C uses), while an <mark>interpreter</mark> translates and runs it line by line (Python does this).</p>
+    </div>
+    <div class="widget">
+      <div class="label">One instruction, three languages: add a and b, store in sum</div>
+      <div class="tabs" role="group" aria-label="Choose language level">
+        <button aria-pressed="true" data-lang="hl">High-level (C)</button>
+        <button aria-pressed="false" data-lang="as">Assembly</button>
+        <button aria-pressed="false" data-lang="mc">Machine code</button>
+      </div>
+      <pre class="c" id="langCode" aria-live="polite"></pre>
+      <p class="stepnote" id="langNote"></p>
+    </div>
+    <div class="tbl"><table>
+      <thead><tr><th>Translator</th><th>Converts</th><th>How</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td>Assembler</td><td>Assembly to machine code</td><td>One mnemonic becomes one machine instruction</td><td>NASM, GNU as</td></tr>
+        <tr><td>Compiler</td><td>High-level to machine code</td><td>Whole program at once, reports all errors, makes a separate executable</td><td>gcc for C</td></tr>
+        <tr><td>Interpreter</td><td>High-level to actions</td><td>Line by line, stops at the first error, no separate file</td><td>Python</td></tr>
+      </tbody>
+    </table></div>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li>Machine language is machine-dependent. A program for one processor family will not run on another.</li>
+        <li>C is compiled, not interpreted. Saying "C is interpreted" in a short answer loses the mark.</li>
+        <li>An assembler handles assembly only. It cannot translate C.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u1l2"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u1l2">Mark lesson 1.2 complete</button></div>
+  </section>
+
+  <!-- ================= LESSON 1.3 ================= -->
+  <section class="lesson" id="u1l3" data-title="1.3 Thinking in steps" aria-labelledby="l3h">
+    <div class="lesson-head"><span class="num">1.3</span><h2 id="l3h">Thinking in steps: algorithms</h2><span class="lec">Lecture L3 with tutorial T1</span></div>
+    <p class="hook">Google Maps never says "just get there". It says turn left in 200 metres. An algorithm is directions that a machine can follow without guessing.</p>
+    <figure class="fig-r">
+      <svg viewBox="0 0 320 330" role="img" aria-labelledby="psT">
+        <title id="psT">Six steps of problem solving, from understanding the problem to testing</title>
+        <g>
+          <rect class="sv-box" x="40" y="6" width="240" height="40" rx="8"/><text class="sv-t" x="160" y="31" text-anchor="middle">1. Understand the problem</text>
+          <rect class="sv-box" x="40" y="60" width="240" height="40" rx="8"/><text class="sv-t" x="160" y="85" text-anchor="middle">2. Find inputs and outputs</text>
+          <rect class="sv-box" x="40" y="114" width="240" height="40" rx="8" style="stroke:var(--blue);stroke-width:2"/><text class="sv-t" x="160" y="139" text-anchor="middle">3. Design the algorithm</text>
+          <rect class="sv-box" x="40" y="168" width="240" height="40" rx="8"/><text class="sv-t" x="160" y="193" text-anchor="middle">4. Draw it (flowchart)</text>
+          <rect class="sv-box" x="40" y="222" width="240" height="40" rx="8"/><text class="sv-t" x="160" y="247" text-anchor="middle">5. Code it in C</text>
+          <rect class="sv-box" x="40" y="276" width="240" height="40" rx="8"/><text class="sv-t" x="160" y="301" text-anchor="middle">6. Test and debug</text>
+        </g>
+      </svg>
+      <figcaption>Most students jump to step 5. Toppers spend their time on steps 1 to 3.</figcaption>
+    </figure>
+    <div class="prose">
+      <p>Using a computer to solve a problem matters because a computer is fast, never gets bored, and does exactly what it is told, every time. That last part is also the catch: it does <em>exactly</em> what it is told, so the instructions must be perfect. Those instructions, written before any code, are the <mark>algorithm</mark>.</p>
+      <p>A good algorithm has five properties. It is <b>finite</b> (it stops after a limited number of steps), <b>definite</b> (each step has one clear meaning), it takes <b>zero or more inputs</b>, produces <b>at least one output</b>, and every step is <b>effective</b>, meaning basic enough to be done with pen and paper.</p>
+      <p>You can represent an algorithm three ways: in plain numbered English, in <mark>pseudocode</mark> (English with programming shape, like <code>IF</code> and <code>REPEAT</code>), or as a flowchart, which is the next lesson.</p>
+    </div>
+    <div class="clear"></div>
+    <div class="panel">
+      <h3>Worked example: a logical problem</h3>
+      <p>Find the largest of three numbers A, B and C.</p>
+      <pre class="c"><code>Step 1: Start
+Step 2: Read A, B, C
+Step 3: If A &gt; B and A &gt; C, then LARGEST ← A
+Step 4: Else if B &gt; C, then LARGEST ← B
+Step 5: Else LARGEST ← C
+Step 6: Print LARGEST
+Step 7: Stop</code></pre>
+      <details class="reveal"><summary>Dry run it with A = 4, B = 9, C = 2</summary>
+        <p>Step 3: is 4 &gt; 9? No, so skip. Step 4: is 9 &gt; 2? Yes, LARGEST becomes 9. Output: 9. Dry running with real numbers is how you catch mistakes before writing code.</p></details>
+    </div>
+    <div class="panel">
+      <h3>Worked example: a numerical problem</h3>
+      <p>Simple interest, where SI = P × R × T / 100.</p>
+      <pre class="c"><code>Step 1: Start
+Step 2: Read P, R, T
+Step 3: SI ← (P × R × T) / 100
+Step 4: Print SI
+Step 5: Stop</code></pre>
+    </div>
+    <div class="widget">
+      <div class="label">Your turn: put the "swap two numbers" algorithm in order</div>
+      <p style="font-size:.95rem;margin-top:0">Use the arrows to move each step. The trick is the third variable, TEMP, which holds A safely while A is overwritten.</p>
+      <ol class="order-list" id="orderList"></ol>
+      <div class="row"><button class="btn" id="orderCheck">Check my order</button><button class="btn ghost" id="orderReset">Shuffle again</button></div>
+      <p class="fb" id="orderFb" aria-live="polite"></p>
+    </div>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li>Vague steps such as "calculate the result" break the definiteness rule. Say exactly what is computed.</li>
+        <li>Forgetting Start and Stop. Examiners look for both.</li>
+        <li>Using a value before reading it. Input always comes before the step that uses it.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u1l3"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u1l3">Mark lesson 1.3 complete</button></div>
+  </section>
+
+  <!-- ================= LESSON 1.4 ================= -->
+  <section class="lesson" id="u1l4" data-title="1.4 Flowcharts and RAPTOR" aria-labelledby="l4h">
+    <div class="lesson-head"><span class="num">1.4</span><h2 id="l4h">Flowcharts and RAPTOR</h2><span class="lec">Lecture L4</span></div>
+    <p class="hook">A flowchart is an algorithm you can see. Shapes tell you what kind of step it is; arrows tell you where to go next.</p>
+    <figure class="fig-r">
+      <svg viewBox="0 0 320 300" role="img" aria-labelledby="symT">
+        <title id="symT">Standard flowchart symbols: terminal, input or output, process, decision, connector, flow line</title>
+        <rect class="sv-box" x="20" y="14" width="110" height="38" rx="19"/><text class="sv-s" x="75" y="38" text-anchor="middle">Start / Stop</text>
+        <text class="sv-t" x="150" y="38">Terminal</text>
+        <polygon class="sv-box" points="34,74 134,74 120,112 20,112"/><text class="sv-s" x="77" y="98" text-anchor="middle">Read N</text>
+        <text class="sv-t" x="150" y="98">Input / output</text>
+        <rect class="sv-box" x="20" y="134" width="110" height="38" rx="2"/><text class="sv-s" x="75" y="158" text-anchor="middle">S = A + B</text>
+        <text class="sv-t" x="150" y="158">Process</text>
+        <polygon class="sv-box" points="75,190 130,214 75,238 20,214"/><text class="sv-s" x="75" y="218" text-anchor="middle">A &gt; B?</text>
+        <text class="sv-t" x="150" y="218">Decision (yes / no)</text>
+        <circle class="sv-box" cx="50" cy="272" r="15"/><text class="sv-s" x="50" y="276" text-anchor="middle">A</text>
+        <line class="sv-line" x1="80" y1="272" x2="122" y2="272" style="color:var(--soft)" marker-end="url(#mk)"/>
+        <text class="sv-t" x="150" y="276">Connector, flow line</text>
+      </svg>
+      <figcaption>Six shapes cover almost every exam flowchart.</figcaption>
+    </figure>
+    <div class="prose">
+      <p>Each shape has one job. An <mark>oval</mark> marks Start and Stop. A <mark>parallelogram</mark> means input or output (read or print). A <mark>rectangle</mark> is a process, usually a calculation or assignment. A <mark>diamond</mark> asks a yes or no question and has exactly two exits. A small circle is a connector, used when a chart continues somewhere else on the page.</p>
+      <p>Four rules keep a flowchart readable: one Start and one Stop, arrows flow top to bottom (or left to right), every decision has both exits labelled, and lines should not cross if you can avoid it.</p>
+      <p><b>RAPTOR</b> (Rapid Algorithmic Prototyping Tool for Ordered Reasoning) is a free tool where you draw a flowchart and then <em>run</em> it. It uses six symbols: assignment, call, input, output, selection and loop. Because it executes your drawing step by step and shows the variable values, you find logic mistakes before you have written a single line of C.</p>
+    </div>
+    <div class="clear"></div>
+
+    <div class="widget" id="fcWidget">
+      <div class="label">Build it, then run it: is a number even or odd?</div>
+      <p style="font-size:.95rem;margin-top:0">Step 1: pick the correct shape for each step. Step 2: once all seven shapes are right, type a number and watch the flowchart run, just as RAPTOR would.</p>
+      <div class="fc-grid">
+        <div>
+          <div class="fc-steps" id="fcSteps"></div>
+          <p class="fb" id="fcStatus" aria-live="polite"></p>
+          <div class="fc-run row" style="margin-top:10px">
+            <label for="fcN" style="font:500 .95rem var(--head)">N =</label>
+            <input id="fcN" type="number" inputmode="numeric" style="width:110px" disabled>
+            <button class="btn" id="fcRun" disabled>Run flowchart</button>
+            <span class="err" id="fcErr" aria-live="polite"></span>
+          </div>
+          <p class="stepnote" id="fcTrace" aria-live="polite"></p>
+        </div>
+        <svg id="fcSvg" viewBox="0 0 360 470" role="img" aria-label="Even or odd flowchart, drawn from your shape choices"></svg>
+      </div>
+    </div>
+        <div class="panel">
+      <h3>Try it in the real RAPTOR</h3>
+      <p>RAPTOR is free from its official site, <a href="https://raptor.martincarlisle.com/" target="_blank" rel="noopener">raptor.martincarlisle.com</a>. The classic edition runs on Windows; the Avalonia edition also runs on macOS and Linux. Build the same even-or-odd flowchart you just assembled above:</p>
+      <ol class="steps">
+        <li>Get to know the window. The <b>symbol area</b> holds the six symbols, the <b>workspace</b> is where you draw, the <b>watch window</b> shows every variable's value while the flowchart runs, and the menus and toolbar control running and viewing.</li>
+        <li>A new flowchart already contains Start and End. Drag an <b>Input</b> symbol between them, double-click it, type a prompt such as "Enter a number" and the variable name N.</li>
+        <li>Add an <b>Assignment</b> symbol that sets R to <code>N mod 2</code>. RAPTOR writes the remainder operator as mod, where C uses %.</li>
+        <li>Add a <b>Selection</b> symbol with the condition <code>R = 0</code>, then an <b>Output</b> symbol on each branch: "Even" on the Yes side, "Odd" on the No side.</li>
+        <li>Run it with the play button. Type a number and watch the highlight move from symbol to symbol while the watch window updates. Slow it down with the speed slider if it moves too fast.</li>
+        <li>Repeat the exercise for largest of three numbers and for printing 1 to 10 with a <b>Loop</b> symbol. These are the flowcharts examiners ask for most often.</li>
+      </ol>
+      <p>The Windows edition can also generate program code from a flowchart (in languages such as C++ and Java), a useful way to compare the logic you drew with the C you write in lesson 1.5.</p>
+    </div>
+<div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li>Using a rectangle for "Read N". Reading and printing are input or output, so they need a parallelogram.</li>
+        <li>A decision diamond with an unlabelled exit. Always write Yes and No.</li>
+        <li>Two Stop symbols. Join the branches back and end with one Stop.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u1l4"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u1l4">Mark lesson 1.4 complete</button></div>
+  </section>
+
+  <!-- ================= LESSON 1.5 ================= -->
+  <section class="lesson" id="u1l5" data-title="1.5 Your first C program" aria-labelledby="l5h">
+    <div class="lesson-head"><span class="num">1.5</span><h2 id="l5h">Your first C program</h2><span class="lec">Lecture L5</span></div>
+    <p class="hook">C is the language that operating systems, phone firmware and car engines are written in. Learn it and you understand how software meets hardware.</p>
+    <div class="timeline" role="list">
+      <div role="listitem"><b>1967</b>BCPL, by Martin Richards.</div>
+      <div role="listitem"><b>1970</b>B, by Ken Thompson at Bell Labs.</div>
+      <div role="listitem"><b>1972</b>C, by Dennis Ritchie at Bell Labs.</div>
+      <div role="listitem"><b>1973</b>UNIX rewritten in C.</div>
+      <div role="listitem"><b>1989</b>ANSI standardises C (C89).</div>
+    </div>
+    <div class="prose">
+      <p>C is popular for good reasons. It is fast because it sits close to the hardware. It is portable, so the same code compiles on many machines. And it is small: a few keywords and a powerful standard library. Here is the classic first program, line by line.</p>
+    </div>
+<pre class="c"><code><span class="pp">#include &lt;stdio.h&gt;</span>          <span class="com">// preprocessor: bring in printf from the standard I/O library</span>
+
+<span class="kw">int</span> <span class="fn">main</span>(<span class="kw">void</span>)              <span class="com">// every C program starts running here</span>
+{                           <span class="com">// opening brace: body begins</span>
+    <span class="fn">printf</span>(<span class="str">"Hello, World!\n"</span>); <span class="com">// print text; \n means new line; ; ends the statement</span>
+    <span class="kw">return</span> <span class="nm">0</span>;               <span class="com">// tell the OS: finished successfully</span>
+}                           <span class="com">// closing brace: body ends</span></code></pre>
+    <div class="prose"><p>A second program reads input. <code>scanf</code> needs the <code>&amp;</code> sign before each variable so it knows <em>where in memory</em> to put the value. You will understand that fully in Unit 4, with pointers.</p></div>
+<pre class="c"><code><span class="pp">#include &lt;stdio.h&gt;</span>
+<span class="kw">int</span> <span class="fn">main</span>(<span class="kw">void</span>)
+{
+    <span class="kw">int</span> a, b, sum;
+    <span class="fn">printf</span>(<span class="str">"Enter two numbers: "</span>);
+    <span class="fn">scanf</span>(<span class="str">"%d %d"</span>, &amp;a, &amp;b);   <span class="com">// %d means "an integer goes here"</span>
+    sum = a + b;
+    <span class="fn">printf</span>(<span class="str">"Sum = %d\n"</span>, sum);
+    <span class="kw">return</span> <span class="nm">0</span>;
+}</code></pre>
+    <details class="reveal"><summary>Predict the output: printf("Hi\nThere");</summary>
+      <p>Two lines: <code>Hi</code> on the first and <code>There</code> on the second. The <code>\n</code> is one character, a newline, not two letters.</p></details>
+
+    <div class="widget">
+      <div class="label">What happens when you type gcc hello.c -o hello</div>
+      <div class="pipe" id="pipe" role="group" aria-label="Program development stages"></div>
+      <p><span class="file" id="pipeFile"></span></p>
+      <p class="stepnote" id="pipeNote" aria-live="polite"></p>
+      <pre class="c" id="pipeCode"></pre>
+      <div class="row"><button class="btn ghost" id="pipePrev">Previous stage</button><button class="btn" id="pipeNext">Next stage</button></div>
+    </div>
+    <div class="prose">
+      <p>Two file types confuse everyone. <mark>Object code</mark> (<code>hello.o</code>, or <code>hello.obj</code> on Windows) is machine code for <em>your</em> file only. It still has holes, such as "call printf, address unknown". The linker fills those holes with code from the C library and produces <mark>executable code</mark> (<code>hello</code>, <code>a.out</code> or <code>hello.exe</code>) that the OS can load and run.</p>
+      <p>When something goes wrong, ask which kind of error it is. A <mark>syntax error</mark> breaks the grammar of C, such as a missing semicolon or a misspelled keyword. The compiler catches it and refuses to build. A <mark>logical error</mark> compiles and runs happily but gives the wrong answer, because the algorithm itself is wrong. The compiler cannot catch those. Only testing with known answers can.</p>
+    </div>
+    <div class="widget">
+      <div class="label">Error detective: syntax or logical?</div>
+      <ul class="sorter" id="sorter"></ul>
+    </div>
+    <div class="traps">
+      <h3>Traps that cost marks</h3>
+      <ul>
+        <li>C is case-sensitive. <code>Printf</code>, <code>Main</code> and <code>Int</code> are all wrong.</li>
+        <li>Forgetting <code>&amp;</code> in <code>scanf("%d", &amp;a)</code>. It compiles, then crashes or reads garbage.</li>
+        <li>"No compiler errors" does not mean "correct program". Logical errors hide there.</li>
+      </ul>
+    </div>
+    <h3>Quick check</h3>
+    <div class="qc" data-set="u1l5"></div>
+    <div class="complete row"><button class="btn ghost" data-done="u1l5">Mark lesson 1.5 complete</button></div>
+  </section>
+
+  <!-- ================= UNIT QUIZ ================= -->
+  <section class="lesson" id="u1lab" data-title="Practice lab" data-kind="lab" aria-labelledby="u1labh">
+<div class="lesson-head"><h2 id="u1labh">Unit 1 practice lab</h2><span class="lec">Tutorial T1 and lectures L3 to L5</span></div>
+<p class="prose">Try each problem on paper or in gcc before opening the solution. Easy problems apply one idea, medium ones combine ideas, and exam-level ones are the complete programs asked in end-semester papers. Solutions skip input prompts to stay short; add a printf prompt before each scanf in your lab record. Every C solution here compiles cleanly with gcc -Wall and was run on the sample input shown.</p>
+<div class="row"><div class="tabs labfilter" role="group" aria-label="Filter problems by level"><button type="button" aria-pressed="true" data-f="all">All</button><button type="button" aria-pressed="false" data-f="easy">Easy</button><button type="button" aria-pressed="false" data-f="medium">Medium</button><button type="button" aria-pressed="false" data-f="exam">Exam level</button></div><p class="labcount" aria-live="polite"></p></div>
+<article class="prob" data-level="easy"><div class="prob-h"><span class="lvl easy">Easy</span><h3>1A. Algorithm and flowchart: area and perimeter of a rectangle</h3><span class="lec">Practises lesson 1.3, 1.4</span></div><p>Write an algorithm to read the length L and breadth B of a rectangle and print its area and perimeter. Then name the flowchart symbol you would use for each step.</p>
+<details class="reveal"><summary>Hint</summary><p>Two inputs, two calculations, one output step. Remember Start and Stop.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c">Step 1: Start                          (oval)
+Step 2: Read L, B                      (parallelogram)
+Step 3: AREA &lt;- L x B                  (rectangle)
+Step 4: PERI &lt;- 2 x (L + B)            (rectangle)
+Step 5: Print AREA, PERI               (parallelogram)
+Step 6: Stop                           (oval)</pre><p>Every step is definite and the algorithm is finite. Reading and printing use parallelograms; calculations use rectangles.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u1labA">Mark as solved</button></div></article>
+<article class="prob" data-level="easy"><div class="prob-h"><span class="lvl easy">Easy</span><h3>1B. Celsius to Fahrenheit</h3><span class="lec">Practises lesson 1.5, 2.1</span></div><p>Read a temperature in Celsius and print it in Fahrenheit with two decimal places, using F = C × 9 / 5 + 32.</p>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">37
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">98.60 F
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>Use float variables, and write 9.0 / 5 (or 9 / 5.0) so the division is not done with integers.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+int main(void)
+{
+    float c, f;
+    scanf("%f", &amp;c);
+    f = c * 9 / 5 + 32;          /* c is float, so no integer division */
+    printf("%.2f F\n", f);
+    return 0;
+}</pre><p>Because c is a float, c * 9 / 5 is computed in floating point. Writing 9 / 5 * c would give 1 * c, a classic logical error.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u1labB">Mark as solved</button></div></article>
+<article class="prob" data-level="medium"><div class="prob-h"><span class="lvl medium">Medium</span><h3>1C. Algorithm: largest of N numbers</h3><span class="lec">Practises lesson 1.3, 1.4</span></div><p>Write an algorithm that reads N, then reads N numbers one at a time, and prints the largest. Then build it in RAPTOR using a Loop symbol and test it with N = 5.</p>
+<details class="reveal"><summary>Hint</summary><p>Keep a running LARGEST. Initialise it with the first number, not with 0, so negative inputs still work.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c">Step 1: Start
+Step 2: Read N
+Step 3: Read X;  LARGEST &lt;- X;  COUNT &lt;- 1
+Step 4: Repeat steps 5 and 6 while COUNT &lt; N
+Step 5:     Read X;  if X &gt; LARGEST then LARGEST &lt;- X
+Step 6:     COUNT &lt;- COUNT + 1
+Step 7: Print LARGEST
+Step 8: Stop</pre><p>Starting LARGEST at the first value works for any input, including all-negative numbers. In RAPTOR, steps 5 and 6 go inside the Loop symbol and the exit test is COUNT &gt;= N.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u1labC">Mark as solved</button></div></article>
+<article class="prob" data-level="exam"><div class="prob-h"><span class="lvl exam">Exam level</span><h3>1D. Find and fix the errors</h3><span class="lec">Practises lesson 1.5</span></div><p>This program should print the average of two integers. Find every error, say whether it is a syntax or a logical error, and correct it.</p>
+<pre class="c" data-hl>#include &lt;stdio.h&gt;
+int main()
+{
+    int a, b
+    float avg;
+    scanf("%d %d", a, b);
+    avg = a + b / 2;
+    Printf("Average = %f\n", avg);
+    return 0;
+}</pre>
+<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">4 7
+</pre></div><div><div class="tr-l">Expected output</div><pre class="tr-out">Average = 5.50
+</pre></div></div>
+<details class="reveal"><summary>Hint</summary><p>There are four problems: one missing character, one missing operator in scanf, one formula, one capital letter.</p></details>
+<details class="reveal"><summary>Show solution</summary><pre class="c" data-hl>#include &lt;stdio.h&gt;
+int main(void)
+{
+    int a, b;                           /* 1. missing semicolon (syntax) */
+    float avg;
+    scanf("%d %d", &amp;a, &amp;b);             /* 2. missing &amp; (crashes or reads garbage) */
+    avg = (a + b) / 2.0;                /* 3. brackets and 2.0 (logical) */
+    printf("Average = %.2f\n", avg);    /* 4. Printf -&gt; printf (C is case-sensitive) */
+    return 0;
+}</pre><p>Error 1 stops compilation. Error 4 fails at compile or link time. Error 2 compiles with only a warning but misbehaves at run time. Error 3 compiles and runs but prints the wrong answer, the hardest kind to spot.</p></details>
+<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-solved="u1labD">Mark as solved</button></div></article>
+</section>
+<section class="lesson" id="u1quiz" data-title="Unit quiz" data-kind="quiz" aria-labelledby="qh">
+    <div class="lesson-head"><h2 id="qh">Unit 1 quiz</h2><span class="lec">10 questions, from remembering to applying</span></div>
+    <p>One question at a time. You see the explanation after every answer, so a wrong answer still teaches you something. Your best score is saved on this device.</p>
+    <div class="uq" data-set="u1"></div>
+  </section>
+
+  <!-- ================= CHEAT SHEET ================= -->
+  <section class="lesson" id="u1cheat" data-title="Exam cheat sheet" data-kind="cheat" aria-labelledby="ch">
+    <div class="lesson-head"><h2 id="ch">Exam cheat sheet</h2><span class="lec">One screen, the night before</span></div>
+    <div class="cheat">
+      <div><h3>Computer organization</h3>Input → CPU (CU, ALU, registers) → Output. Memory holds program and data. RAM is volatile; storage is permanent. ALU does maths and comparisons.</div>
+      <div><h3>Languages</h3>Machine: binary, machine-dependent. Assembly: mnemonics, needs an assembler. High-level: English-like, portable, needs a compiler (C) or interpreter (Python).</div>
+      <div><h3>Algorithm properties</h3>Finite, definite, input (zero or more), output (at least one), effective. Always include Start and Stop.</div>
+      <div><h3>Flowchart shapes</h3>Oval: start or stop. Parallelogram: input or output. Rectangle: process. Diamond: decision, two labelled exits. Circle: connector.</div>
+      <div><h3>Build pipeline</h3>Edit (.c) → preprocess (.i) → compile (.s) → assemble (.o object) → link (executable) → load and run.</div>
+      <div><h3>Errors</h3>Syntax: grammar broken, compiler catches it. Logical: runs, wrong answer, only testing catches it.</div>
+    </div>
+  </section>
+  </section>
+<nav class="pagenav" aria-label="Units"><a class="btn ghost" href="index.html">Course home</a><a class="btn" href="unit2.html">Continue to Unit 2: Speaking C</a></nav>
+</main>
+</div>
+<footer>Progress is saved only in this browser. Use Export on the My progress page to keep a backup.</footer>
+<script src="../../assets/engine.js"></script>
+<script src="data/unit1.js"></script>
+<script>initPage();</script>
+</body>
+</html>
