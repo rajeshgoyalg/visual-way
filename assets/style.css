@@ -398,3 +398,8 @@ details.hint summary{cursor:pointer;font:500 .85rem var(--head);color:var(--blue
 @media print{.exam-timer,.sdlfilter{display:none !important}}
 
 @media (min-width:961px){.unitnav{flex-wrap:wrap;overflow:visible}}
+
+.cobox{border:1px solid var(--blue);background:var(--blue-tint);border-radius:12px;padding:12px 18px;margin:8px 0 16px}
+.cobox-h{display:flex;gap:10px;align-items:center;font:600 .9rem var(--head);color:var(--blue)}
+.cobox p{margin:8px 0 0;max-width:none;font-size:1.02rem}
+.cobox p.small{margin-top:6px;font:400 .84rem/1.5 var(--head);color:var(--soft)}

@@ -227,7 +227,9 @@ PPS_MANIFEST["ces1102"]={
    "marks": 12,
    "hours": 5,
    "pos": "1, 2, 9, 11",
-   "text": "Solve simple problems using C language."
+   "text": "Solve simple problems using C language.",
+   "los": "C1, C2",
+   "bl": "3 to 6"
   },
   {
    "id": "CO2",
@@ -235,7 +237,9 @@ PPS_MANIFEST["ces1102"]={
    "marks": 28,
    "hours": 8,
    "pos": "1, 2, 9, 11",
-   "text": "Apply appropriate operators, decision-making constructs, and looping statements in C to implement logical and repeatable programs."
+   "text": "Apply appropriate operators, decision-making constructs, and looping statements in C to implement logical and repeatable programs.",
+   "los": "C2",
+   "bl": "3 to 6"
   },
   {
    "id": "CO3",
@@ -243,7 +247,9 @@ PPS_MANIFEST["ces1102"]={
    "marks": 25,
    "hours": 8,
    "pos": "1, 2, 9, 11",
-   "text": "Apply the derived data types like arrays and strings to efficiently manage and manipulate collections of data."
+   "text": "Apply the derived data types like arrays and strings to efficiently manage and manipulate collections of data.",
+   "los": "C3",
+   "bl": "3 to 6"
   },
   {
    "id": "CO4",
@@ -251,7 +257,9 @@ PPS_MANIFEST["ces1102"]={
    "marks": 20,
    "hours": 8,
    "pos": "1, 2, 9, 11",
-   "text": "Apply the concept of modular programming to decompose a problem into functions and synthesize a complete program."
+   "text": "Apply the concept of modular programming to decompose a problem into functions and synthesize a complete program.",
+   "los": "C3",
+   "bl": "3 to 6"
   },
   {
    "id": "CO5",
@@ -259,7 +267,9 @@ PPS_MANIFEST["ces1102"]={
    "marks": 15,
    "hours": 7,
    "pos": "1, 2, 4, 9, 11",
-   "text": "Solve complex programming problems using structures, pointers, and file pointers."
+   "text": "Solve complex programming problems using structures, pointers, and file pointers.",
+   "los": "C3",
+   "bl": "3 to 6"
   }
  ],
  "exam": {

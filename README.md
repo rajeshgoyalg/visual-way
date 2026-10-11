@@ -112,6 +112,8 @@ Copy an `<article class="prob" …>` block in the unit's practice lab section. G
 
 Put `<div class="tq" data-set="KEY"></div>` or `<div class="wq-list" data-set="KEY"></div>` on the page to show one. Attempts, answers and self-marks are saved per learner and appear on My progress. Add new questions at the end of a pool so saved answers stay matched.
 
+The official course outcomes live in one place: `cos` in `course.js` (statement, hours, marks, POs, learning outcomes, Bloom's levels). The Start here table, the outcome box at the top of each unit, the readiness table and the revision plan all read from it, so edit it there only.
+
 ### Projects and mock papers
 
 `data/sdl.js` holds `PPS.SDL`, one entry per project: `n`, `title`, `hours`, the course-plan text in `plan`, a `brief`, `concepts` (lesson id and label pairs), `milestones` (text and hint pairs), the reference solution `code`, its sample input `stdin` and expected output `out`, and an `extend` idea. Milestone ticks are saved as `sdl<n>m<k>`.

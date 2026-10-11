@@ -412,7 +412,7 @@ function registerSW(){
 function initPage(){
   learnerChips();wireData();
   const p=PAGE.page;
-  try{if(p==='unit')initUnitPage();else if(p==='course')initCoursePage();else if(p==='home')initHomePage();else if(p==='progress')initProgressPage();else if(p==='practice')initPracticePage();else if(p==='sdl')initSdlPage();else if(p==='exam')initExamPage();}catch(e){console.error(e);}
+  try{if(p==='unit'){initUnitPage();renderCourseOutcomes();}else if(p==='course')initCoursePage();else if(p==='home')initHomePage();else if(p==='progress')initProgressPage();else if(p==='practice')initPracticePage();else if(p==='sdl')initSdlPage();else if(p==='exam')initExamPage();}catch(e){console.error(e);}
   registerSW();
   if(!learners.current)openLearner(true);
 }
@@ -702,3 +702,21 @@ function overflowLab(el){
   draw();
 }
 PPS.init.push(()=>$$('.ovlab').forEach(overflowLab));
+
+/* ---------- official course outcomes, rendered from course.js (the single source) ---------- */
+function coForUnit(n){const m=window.PPS_MANIFEST&&window.PPS_MANIFEST[COURSE];return m&&m.cos?m.cos[n-1]:null;}
+function renderCourseOutcomes(){
+  const m=window.PPS_MANIFEST&&window.PPS_MANIFEST[COURSE];if(!m||!m.cos)return;
+  const unitN=+(document.body.dataset.unit||0);
+  if(unitN&&!$('.cobox')){const co=coForUnit(unitN),u=m.units[unitN-1];
+    if(co){const d=document.createElement('div');d.className='cobox';
+      d.innerHTML='<div class="cobox-h"><span class="lvl medium">'+esc(co.id)+'</span><b>Course outcome for this unit</b></div><p>'+esc(co.text)+'</p><p class="small">'+co.hours+' contact hours, '+co.marks+' of the 100 marks, programme outcomes '+esc(co.pos)+', learning outcomes '+esc(co.los)+', Bloom\u2019s levels '+esc(co.bl)+'. '+esc((u.sub||'').replace(/^CO\d+,\s*/,'').replace(/^./,c=>c.toUpperCase()))+'.</p>';
+      const host=$('section.unit > .intro h2');
+      if(host)host.after(d);else{const mn=$('main');if(mn)mn.prepend(d);}}}
+  const tbl=$('#coTable');
+  if(tbl&&!tbl.dataset.done){tbl.dataset.done='1';
+    const tm=m.cos.reduce((a,c)=>a+c.marks,0),th=m.cos.reduce((a,c)=>a+c.hours,0);
+    tbl.innerHTML='<div class="tbl"><table><thead><tr><th>CO</th><th>By the end you will be able to</th><th>Hours</th><th>Marks</th><th>POs</th><th>Learning outcomes</th><th>Unit</th></tr></thead><tbody>'+
+      m.cos.map((c,i)=>'<tr><td>'+esc(c.id)+'</td><td>'+esc(c.text)+'</td><td>'+c.hours+'</td><td>'+c.marks+'</td><td>'+esc(c.pos)+'</td><td>'+esc(c.los)+'</td><td><a href="'+m.units[i].href+'">Unit '+m.units[i].n+'</a></td></tr>').join('')+
+      '<tr><td></td><td><b>Total</b></td><td><b>'+th+'</b></td><td><b>'+tm+'</b></td><td></td><td></td><td></td></tr></tbody></table></div>';}
+}
