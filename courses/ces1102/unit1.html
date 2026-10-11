@@ -466,15 +466,75 @@ int main(void)
 
   <!-- ================= CHEAT SHEET ================= -->
   <section class="lesson" id="u1cheat" data-title="Exam cheat sheet" data-kind="cheat" aria-labelledby="ch">
-    <div class="lesson-head"><h2 id="ch">Exam cheat sheet</h2><span class="lec">One screen, the night before</span></div>
-    <div class="cheat">
-      <div><h3>Computer organization</h3>Input → CPU (CU, ALU, registers) → Output. Memory holds program and data. RAM is volatile; storage is permanent. ALU does maths and comparisons.</div>
-      <div><h3>Languages</h3>Machine: binary, machine-dependent. Assembly: mnemonics, needs an assembler. High-level: English-like, portable, needs a compiler (C) or interpreter (Python).</div>
-      <div><h3>Algorithm properties</h3>Finite, definite, input (zero or more), output (at least one), effective. Always include Start and Stop.</div>
-      <div><h3>Flowchart shapes</h3>Oval: start or stop. Parallelogram: input or output. Rectangle: process. Diamond: decision, two labelled exits. Circle: connector.</div>
-      <div><h3>Build pipeline</h3>Edit (.c) → preprocess (.i) → compile (.s) → assemble (.o object) → link (executable) → load and run.</div>
-      <div><h3>Errors</h3>Syntax: grammar broken, compiler catches it. Logical: runs, wrong answer, only testing catches it.</div>
+    <div class="lesson-head"><h2 id="ch">Unit 1 cheat sheet</h2><span class="lec">The night before: the ideas examiners ask for most</span></div>
+    <div class="cheat cheat-v2">
+      <div>
+        <h3>Inside a computer</h3>
+        <p>Input goes in, the CPU processes it, output comes out. Memory holds the program and its data while it runs.</p>
+<pre class="c">Input  -&gt;  CPU  -&gt;  Output
+             |
+        Main memory (RAM)
+
+CPU = control unit + ALU
+      + registers</pre>
+        <p class="watch"><b>Remember:</b> RAM is volatile: it forgets at power-off. Storage (SSD, disk) keeps files permanently. Comparisons like <code>A &gt; B</code> happen in the ALU.</p>
+      </div>
+      <div>
+        <h3>Languages and translators</h3>
+        <p>Machine code is binary, assembly uses short words, high-level languages read almost like English.</p>
+<pre class="c">Assembly -assembler-&gt;  binary
+C        -compiler-&gt;   binary
+Python   -interpreter-&gt; runs
+         line by line</pre>
+        <p class="watch"><b>Watch out:</b> Machine code only runs on the processor it was written for. C is compiled, not interpreted.</p>
+      </div>
+      <div>
+        <h3>Algorithms</h3>
+        <p>An algorithm is a finite list of exact steps that solves a problem.</p>
+<pre class="c">Step 1: Start
+Step 2: Read A, B
+Step 3: SUM &lt;- A + B
+Step 4: Print SUM
+Step 5: Stop</pre>
+        <p class="watch"><b>Five properties:</b> Finite, definite, takes zero or more inputs, gives at least one output, and every step is effective (doable by hand).</p>
+      </div>
+      <div>
+        <h3>Flowchart symbols</h3>
+        <p>Each shape tells you what kind of step it is.</p>
+<div class="cheat-fig"><svg viewBox="0 0 300 200" role="img" aria-label="Flowchart symbols: oval for start and stop, parallelogram for input and output, rectangle for process, diamond for decision, circle for connector">
+<rect class="sv-box" x="10" y="6" width="90" height="30" rx="15"/><text class="sv-t" x="120" y="26">Start / Stop</text>
+<polygon class="sv-box" points="22,46 100,46 88,76 10,76"/><text class="sv-t" x="120" y="66">Read / Print</text>
+<rect class="sv-box" x="10" y="86" width="90" height="30" rx="2"/><text class="sv-t" x="120" y="106">Calculation</text>
+<polygon class="sv-box" points="55,124 100,144 55,164 10,144"/><text class="sv-t" x="120" y="148">Yes / No question</text>
+<circle class="sv-box" cx="55" cy="184" r="12"/><text class="sv-t" x="120" y="189">Connector</text>
+</svg></div>
+        <p class="watch"><b>Rules:</b> One Start and one Stop. Every diamond has two exits, labelled Yes and No. RAPTOR runs your flowchart and shows the variables.</p>
+      </div>
+      <div>
+        <h3>Your first C program</h3>
+        <p>Every C program starts running at main.</p>
+<pre class="c" data-hl>
+#include &lt;stdio.h&gt;
+int main(void)
+{
+    printf("Hello\n");
+    return 0;
+}</pre>
+        <p class="watch"><b>Watch out:</b> C is case-sensitive: <code>printf</code>, not <code>Printf</code>. Every statement ends with a semicolon.</p>
+      </div>
+      <div>
+        <h3>From source to running program</h3>
+        <p>One command, <code>gcc hello.c -o hello</code>, runs four stages.</p>
+<pre class="c">hello.c
+ -&gt; preprocess -&gt; hello.i
+ -&gt; compile    -&gt; hello.s
+ -&gt; assemble   -&gt; hello.o
+ -&gt; link       -&gt; hello</pre>
+        <p class="watch"><b>Remember:</b> Object code (<code>.o</code>) still has gaps, such as where printf lives. The linker fills them to make the executable.</p>
+      </div>
     </div>
+    <h3 style="margin-top:22px">Which kind of error?</h3>
+    <div class="tbl"><table><thead><tr><th>Error</th><th>Example</th><th>Who catches it</th></tr></thead><tbody><tr><td>Syntax</td><td><code>int a = 5</code> (missing semicolon)</td><td>The compiler. The program will not build.</td></tr><tr><td>Logical</td><td><code>avg = a + b / 2;</code></td><td>Only you, by testing. It runs but gives the wrong answer.</td></tr><tr><td>Run-time</td><td><code>scanf("%d", n);</code> (missing &amp;)</td><td>Shows up while running: a crash or garbage values.</td></tr></tbody></table></div>
   </section>
   </section>
 <nav class="pagenav" aria-label="Units"><a class="btn ghost" href="index.html">Course home</a><a class="btn" href="unit2.html">Continue to Unit 2: Speaking C</a></nav>

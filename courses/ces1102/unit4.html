@@ -435,14 +435,79 @@ int main(void)
     <div class="uq" data-set="u4"></div>
   </section>
   <section class="lesson" id="u4cheat" data-title="Exam cheat sheet" data-kind="cheat" aria-labelledby="u4ch">
-    <div class="lesson-head"><h2 id="u4ch">Unit 4 cheat sheet</h2><span class="lec">One screen, the night before</span></div>
-    <div class="cheat">
-      <div><h3>Function parts</h3>Prototype: int f(int); (semicolon). Definition: header plus body. Call: f(x). Actual arguments are copied into formal parameters.</div>
-      <div><h3>Return and scope</h3>One return value, or void. Locals live inside their braces; globals are visible everywhere below. A local hides a global of the same name.</div>
-      <div><h3>Pointers</h3>&amp;x is the address of x. int *p = &amp;x; *p is x. Initialise pointers, use NULL if no target yet. %p prints addresses.</div>
-      <div><h3>Value vs reference</h3>Value: function gets a copy, caller unchanged. Reference: pass &amp;a, receive int *x, change *x, and the caller sees it.</div>
-      <div><h3>Arrays to functions</h3>The address of element 0 is passed, so changes affect the original. Pass the size too. 2-D: int m[][COLS].</div>
-      <div><h3>Recursion</h3>Base case plus recursive case moving toward it. Calls wind onto the stack, then unwind. No base case means stack overflow.</div>
+    <div class="lesson-head"><h2 id="u4ch">Unit 4 cheat sheet</h2><span class="lec">The night before: the syntax you must not mix up</span></div>
+    <div class="cheat cheat-v2">
+      <div>
+        <h3>The three parts of a function</h3>
+        <p>Declare it, call it, define it.</p>
+<pre class="c" data-hl>
+// prototype
+int add(int, int);
+
+// call
+s = add(a, b);
+
+// definition
+int add(int x, int y) {
+    return x + y;
+}</pre>
+        <p class="watch"><b>Remember:</b> The actual arguments (a, b) are copied into the formal parameters (x, y), in order. The prototype ends with a semicolon.</p>
+      </div>
+      <div>
+        <h3>Return values and scope</h3>
+        <p>A function returns one value, or nothing (void). A variable is visible only inside its braces.</p>
+<pre class="c" data-hl>
+void line(void);  // no value
+float area(float);  // float
+
+int count = 0;  // global
+void f(void) {
+    int t = 1;  // local
+}</pre>
+        <p class="watch"><b>Watch out:</b> return gives back only one value. A local variable hides a global one with the same name.</p>
+      </div>
+      <div>
+        <h3>Pointers</h3>
+        <p>A pointer stores the address of another variable.</p>
+<pre class="c" data-hl>
+int x = 10;
+int *p = &amp;x;  // address of x
+*p = 20;      // changes x
+printf("%d", *p);  // 20</pre>
+        <p class="watch"><b>Remember:</b> <code>&amp;x</code> means "address of x"; <code>*p</code> means "the value at p". Set unused pointers to <code>NULL</code>.</p>
+      </div>
+      <div>
+        <h3>Call by value and by reference</h3>
+        <p>A plain argument is a copy. An address lets the function change the original.</p>
+<pre class="c" data-hl>
+void f(int n)  { n = 5; }
+void g(int *n) { *n = 5; }
+
+f(a);    // a unchanged
+g(&amp;a);   // a becomes 5</pre>
+        <p class="watch"><b>Remember:</b> To change the caller’s variable, pass its address and write through <code>*</code>. That is why scanf needs <code>&amp;</code>.</p>
+      </div>
+      <div>
+        <h3>Passing arrays</h3>
+        <p>An array is passed as the address of its first element, never copied.</p>
+<pre class="c" data-hl>
+int total(int a[], int n);
+total(marks, 4);   // no []
+
+void show(int m[][3], int r);</pre>
+        <p class="watch"><b>Watch out:</b> Changes inside the function change the original array. Always pass the size, and give the column count for a 2-D array.</p>
+      </div>
+      <div>
+        <h3>Recursion</h3>
+        <p>A function that calls itself on a smaller version of the problem.</p>
+<pre class="c" data-hl>
+int fact(int n) {
+    if (n &lt;= 1)  // base case
+        return 1;
+    return n * fact(n - 1);
+}</pre>
+        <p class="watch"><b>Watch out:</b> No base case means the calls never stop and the stack overflows. Each call must move closer to the base case.</p>
+      </div>
     </div>
   </section>
 </section>

@@ -435,14 +435,76 @@ int main(void)
     <div class="uq" data-set="u3"></div>
   </section>
   <section class="lesson" id="u3cheat" data-title="Exam cheat sheet" data-kind="cheat" aria-labelledby="u3ch">
-    <div class="lesson-head"><h2 id="u3ch">Unit 3 cheat sheet</h2><span class="lec">One screen, the night before</span></div>
-    <div class="cheat">
-      <div><h3>1-D arrays</h3>int a[n]: indices 0 to n−1, contiguous, address = base + i × size. No bounds checking. Copy with a loop.</div>
-      <div><h3>Searching</h3>Linear: any order, up to n comparisons. Binary: sorted only, mid = (low + high) / 2, about log₂ n comparisons.</div>
-      <div><h3>Sorting</h3>Bubble: swap neighbours, largest sinks to end each pass. Selection: pick minimum, swap to front, at most n−1 swaps. Both n(n−1)/2 comparisons.</div>
-      <div><h3>2-D arrays</h3>a[r][c], row-major. Offset of a[i][j] = i × cols + j. Multiply: cols of A = rows of B; c[i][j] = Σ a[i][k] × b[k][j].</div>
-      <div><h3>Strings</h3>char array ending in '\0'. Size = text length + 1. scanf %s stops at space; fgets reads a line. Never gets.</div>
-      <div><h3>string.h</h3>strlen, strcpy(dest, src), strcat(dest, src), strcmp (0 equal, &lt;0 first smaller, &gt;0 first bigger). Compare strings with strcmp, never ==.</div>
+    <div class="lesson-head"><h2 id="u3ch">Unit 3 cheat sheet</h2><span class="lec">The night before: the syntax you must not mix up</span></div>
+    <div class="cheat cheat-v2">
+      <div>
+        <h3>One-dimensional arrays</h3>
+        <p>One name, many values of the same type, numbered from 0.</p>
+<pre class="c" data-hl>
+int a[5] = {1, 2, 3}; // 0s
+a[0]   // first element
+a[4]   // last: size - 1
+for (i = 0; i &lt; 5; i++)
+    sum += a[i];</pre>
+        <p class="watch"><b>Watch out:</b> C never checks the index: <code>a[5]</code> silently writes outside the array. Copy arrays with a loop, not <code>=</code>.</p>
+      </div>
+      <div>
+        <h3>Searching</h3>
+        <p>Linear search checks one by one. Binary search halves a sorted array each time.</p>
+<pre class="c" data-hl>
+mid = (low + high) / 2;
+if (a[mid] == key) found;
+else if (key &lt; a[mid])
+    high = mid - 1;
+else
+    low = mid + 1;</pre>
+        <p class="watch"><b>Compare:</b> Linear: any order, up to n comparisons. Binary: sorted data only, about log₂ n comparisons (10 for 1,000 items).</p>
+      </div>
+      <div>
+        <h3>Sorting</h3>
+        <p>Bubble sort swaps neighbours; selection sort picks the minimum and swaps it to the front.</p>
+<pre class="c" data-hl>
+// bubble: neighbours
+if (a[j] &gt; a[j + 1]) {
+    int t = a[j];
+    a[j] = a[j + 1];
+    a[j + 1] = t;
+}</pre>
+        <p class="watch"><b>Remember:</b> Both make n(n − 1)/2 comparisons. Selection makes at most n − 1 swaps. A swap always needs a temporary variable.</p>
+      </div>
+      <div>
+        <h3>Two-dimensional arrays</h3>
+        <p>A table of rows and columns, stored row after row.</p>
+<pre class="c" data-hl>
+int m[3][4];  // 3 x 4
+m[i][j]       // row i, col j
+// offset = i * 4 + j
+for (i = 0; i &lt; 3; i++)
+  for (j = 0; j &lt; 4; j++)
+    ...</pre>
+        <p class="watch"><b>Watch out:</b> Write <code>m[i][j]</code>, never <code>m[i, j]</code>. Multiply A × B only when columns of A equal rows of B.</p>
+      </div>
+      <div>
+        <h3>Strings</h3>
+        <p>A string is a char array that ends with '\0'.</p>
+<pre class="c" data-hl>
+char s[10] = "Ravi";
+// R a v i \0 \0 ...
+scanf("%s", s); // to a space
+fgets(s, sizeof s, stdin);
+// reads the whole line</pre>
+        <p class="watch"><b>Watch out:</b> Size = text length + 1 for the '\0'. scanf with %s needs no &amp;. Never use <code>gets</code>.</p>
+      </div>
+      <div>
+        <h3>string.h functions</h3>
+        <p>Ready-made tools for common string jobs.</p>
+<pre class="c" data-hl>
+strlen(s)     // no \0 counted
+strcpy(d, s)  // d = copy of s
+strcat(d, s)  // add s to d
+strcmp(a, b)  // 0 if equal</pre>
+        <p class="watch"><b>Watch out:</b> Compare text with <code>strcmp(a, b) == 0</code>, never <code>a == b</code>. The destination must be big enough.</p>
+      </div>
     </div>
   </section>
 </section>

@@ -328,3 +328,7 @@ a.btn{display:inline-flex;align-items:center;text-decoration:none}
 .cheat-v2 p{margin:0 0 8px}
 .cheat-v2 pre.c{font-size:.82rem;padding:12px 14px;margin:4px 0 10px}
 .cheat-v2 .watch{font-size:.9rem;border-top:1px dashed var(--line);padding-top:8px;margin-top:auto}
+
+.cheat-fig svg{width:100%;max-width:300px;height:auto;display:block;margin:4px 0 10px}
+
+@media (max-width:640px){.cheat-v2 pre.c{font-size:.76rem;padding:10px 12px}}

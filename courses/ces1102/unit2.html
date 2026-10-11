@@ -455,14 +455,92 @@ int main(void)
     <div class="uq" data-set="u2"></div>
   </section>
   <section class="lesson" id="u2cheat" data-title="Exam cheat sheet" data-kind="cheat" aria-labelledby="u2ch">
-    <div class="lesson-head"><h2 id="u2ch">Unit 2 cheat sheet</h2><span class="lec">One screen, the night before</span></div>
-    <div class="cheat">
-      <div><h3>Types and codes</h3>char %c (1 byte), int %d (4), float %f (4), double %lf to read, %f to print (8). Names: letters, digits, _; no leading digit; not a keyword.</div>
-      <div><h3>Arithmetic</h3>7 / 2 = 3, 7 % 2 = 1, 7.0 / 2 = 3.5. % works on integers only. (float)a / b keeps decimals.</div>
-      <div><h3>++ and --</h3>b = a++ gives b the old a. c = ++a gives c the new a. Never use ++ twice on one variable in one expression.</div>
-      <div><h3>Precedence</h3>Unary, then * / %, then + -, then shifts, relational, ==, bitwise, &amp;&amp;, ||, ?:, assignment. Use brackets when unsure.</div>
-      <div><h3>Decisions</h3>Else-if ladder: first true branch wins. switch: int or char constants only, needs break, default for the rest.</div>
-      <div><h3>Loops</h3>while: test first, maybe zero runs. do-while: runs at least once, ends with ;. for: init; test; update. break exits, continue skips.</div>
+    <div class="lesson-head"><h2 id="u2ch">Unit 2 cheat sheet</h2><span class="lec">The night before: the syntax you must not mix up</span></div>
+    <div class="cheat cheat-v2">
+      <div>
+        <h3>Data types and format codes</h3>
+        <p>The type decides what a variable can hold and how printf and scanf read it.</p>
+<pre class="c" data-hl>
+char c = 'A';    // %c  1 B
+int n = 19;      // %d  4 B
+float f = 8.7;   // %f  4 B
+double d = 3.1;  // %lf 8 B</pre>
+        <p class="watch"><b>Watch out:</b> Names use letters, digits and _, cannot start with a digit, and cannot be a keyword. <code>'A'</code> is a char; <code>"A"</code> is a string.</p>
+      </div>
+      <div>
+        <h3>Division and remainder</h3>
+        <p>Dividing two integers throws the fraction away.</p>
+<pre class="c" data-hl>
+7 / 2          // 3
+7 % 2          // 1, remainder
+7.0 / 2        // 3.5
+(float)7 / 2   // 3.5</pre>
+        <p class="watch"><b>Remember:</b> <code>%</code> works only on integers. <code>n % 2 == 0</code> tests for even. Average: <code>(float)sum / n</code>.</p>
+      </div>
+      <div>
+        <h3>++ and --</h3>
+        <p>Where you put ++ decides whether you get the old or the new value.</p>
+<pre class="c" data-hl>
+int a = 5;
+int b = a++;   // b = 5, a = 6
+int c = ++a;   // a = 7, c = 7</pre>
+        <p class="watch"><b>Watch out:</b> Never use ++ twice on the same variable in one expression, such as <code>i++ + ++i</code>. The result is undefined.</p>
+      </div>
+      <div>
+        <h3>Logical and bitwise operators</h3>
+        <p>Logical operators combine true/false tests; bitwise operators work on individual bits.</p>
+<pre class="c" data-hl>
+a &gt; 0 &amp;&amp; b &gt; 0   // both true
+a &gt; 0 || b &gt; 0   // either one
+!(a == b)        // not equal
+12 &amp; 10   // 8
+12 | 10   // 14
+12 &lt;&lt; 1   // 24</pre>
+        <p class="watch"><b>Watch out:</b> <code>=</code> assigns and <code>==</code> compares. <code>&amp;&amp;</code> is logical and; <code>&amp;</code> is bitwise and.</p>
+      </div>
+      <div>
+        <h3>Precedence, high to low</h3>
+        <p>When an expression has several operators, higher rows go first.</p>
+<pre class="c">()  []  -&gt;  .
+!  ++  --  (type)  unary -
+*  /  %
++  -
+&lt;&lt;  &gt;&gt;
+&lt;  &lt;=  &gt;  &gt;=
+==  !=
+&amp;  then  ^  then  |
+&amp;&amp;  then  ||
+?:
+=  +=  -=   (right to left)</pre>
+        <p class="watch"><b>Remember:</b> The same rank goes left to right: <code>20 / 4 * 2</code> is 10. When unsure, add brackets.</p>
+      </div>
+      <div>
+        <h3>Decisions</h3>
+        <p>An else-if ladder runs the first true branch only. switch compares one value against fixed cases.</p>
+<pre class="c" data-hl>
+if (m &gt;= 90) g = 'A';
+else if (m &gt;= 75) g = 'B';
+else g = 'C';
+
+switch (op) {
+  case '+': r = a + b; break;
+  default:  r = 0;
+}</pre>
+        <p class="watch"><b>Watch out:</b> switch accepts int or char constants only, and each case needs <code>break</code> or it falls into the next one.</p>
+      </div>
+      <div>
+        <h3>Loops</h3>
+        <p>Every loop needs a start value, a test and an update.</p>
+<pre class="c" data-hl>
+while (i &lt;= 5) { ...; i++; }
+
+do { ...; i++; }
+while (i &lt;= 5);
+
+for (i = 1; i &lt;= 5; i++)
+    { ... }</pre>
+        <p class="watch"><b>Remember:</b> do-while always runs once and ends with a semicolon. <code>break</code> leaves the loop; <code>continue</code> jumps to the next round.</p>
+      </div>
     </div>
   </section>
 </section>

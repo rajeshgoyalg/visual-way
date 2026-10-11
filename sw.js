@@ -1,6 +1,6 @@
 /* Offline support. Pages are served from the cache instantly and refreshed in the background,
    so an update you publish appears on the next visit after that. Change VERSION to force a full refresh. */
-const VERSION = 'v2';
+const VERSION = 'v3';
 const CACHE = 'visual-way-' + VERSION;
 const PRECACHE = [
   "./",
