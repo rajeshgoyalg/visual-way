@@ -44,18 +44,24 @@ function toast(msg){let t=$('#toast');if(!t){t=document.createElement('div');t.i
 const fmtDate=t=>new Date(t).toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'});
 
 /* ---------- multiple-choice question, with recording and restore ---------- */
+
+/* ---------- shuffling: options and question pools ---------- */
+const FIXED_OPT=/^(both|neither|none of|all of)/i;
+function shuffleArr(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function shuffledOrder(item){const idx=item.o.map((_,i)=>i),move=idx.filter(i=>!FIXED_OPT.test(item.o[i])),keep=idx.filter(i=>FIXED_OPT.test(item.o[i]));return shuffleArr(move).concat(keep);}
 let uid=0;
 function makeQ(item,host,opt){
   opt=opt||{};const id='q'+(uid++);
   const fs=document.createElement('fieldset');fs.className='q';
-  fs.innerHTML='<legend></legend>'+item.o.map((t,i)=>'<label class="opt"><input type="radio" name="'+id+'" value="'+i+'"><span></span></label>').join('')+
+  const order=opt.shuffle?shuffledOrder(item):item.o.map((_,i)=>i);
+  fs.innerHTML='<legend></legend>'+order.map(i=>'<label class="opt"><input type="radio" name="'+id+'" value="'+i+'"><span></span></label>').join('')+
    '<div class="row" style="margin-top:8px"><button type="button" class="btn qcheck">Check answer</button>'+(opt.retry?'<button type="button" class="btn ghost qretry" hidden>Try again</button>':'')+'<span class="err" aria-live="polite"></span></div><div class="fb" aria-live="polite"></div>';
   $('legend',fs).textContent=item.q;
   if(opt.qid&&typeof qTag==='function'){const tg=qTag(opt.qid,item);if(tg){const d=document.createElement('div');d.className='qtag';d.textContent=tg;$('legend',fs).after(d);}}
-  $$('.opt span',fs).forEach((s,i)=>s.textContent=item.o[i]);
+  $$('.opt span',fs).forEach((s,k)=>s.textContent=item.o[order.at(k)]);
   const btn=$('.qcheck',fs),retry=$('.qretry',fs),err=$('.err',fs),fb=$('.fb',fs);
   function show(v,ok,prev){
-    $$('.opt',fs).forEach((l,i)=>{l.classList.toggle('right',i===item.a);l.classList.toggle('wrong',i===v&&!ok);});
+    $$('.opt',fs).forEach(l=>{const i=+$('input',l).value;l.classList.toggle('right',i===item.a);l.classList.toggle('wrong',i===v&&!ok);});
     $$('input',fs).forEach(r=>{r.disabled=true;r.checked=+r.value===v;});btn.disabled=true;if(retry)retry.hidden=false;
     fb.className='fb '+(ok?'ok':'no');fb.innerHTML='';
     const head=document.createElement('b');head.textContent=(prev?'Your saved answer: ':'')+(ok?'Correct.':'Not quite. The answer is "'+item.o[item.a]+'".');
@@ -78,22 +84,31 @@ function makeQ(item,host,opt){
   if(opt.restore&&opt.qid&&state.answers[opt.qid]){const a=state.answers[opt.qid];if(Number.isInteger(a.c)&&a.c>=0&&a.c<item.o.length)show(a.c,a.c===item.a,true);}
   host.appendChild(fs);return fs;
 }
+function unitQuizPool(u){
+  const quiz=(PPS.UQ[u]||[]).map((it,i)=>({qid:u+'quiz.'+i,it}));
+  const checks=Object.keys(PPS.Q).filter(k=>k.startsWith(u+'l')).flatMap(k=>PPS.Q[k].map((it,i)=>({qid:k+'.'+i,it})));
+  return {quiz,checks};
+}
+function drawUnitQuiz(u){
+  const {quiz,checks}=unitQuizPool(u),fromChecks=Math.min(4,checks.length),fromQuiz=Math.min(quiz.length,10-fromChecks);
+  return shuffleArr(shuffleArr(quiz).slice(0,fromQuiz).concat(shuffleArr(checks).slice(0,10-fromQuiz)));
+}
 function unitQuiz(el,u){
-  const Q=PPS.UQ[u]||[];let qi=0,score=0;
+  let Q=drawUnitQuiz(u),qi=0,score=0;
   function show(){
     el.innerHTML='';
     if(qi>=Q.length){
       if(state.best[u]==null||score>state.best[u])state.best[u]=score;
       state.quizzes[u]=(state.quizzes[u]||[]).concat({s:score,n:Q.length,t:Date.now()}).slice(-20);save();refresh();
-      const tries=state.quizzes[u].length;
+      const tries=state.quizzes[u].length,pool=unitQuizPool(u);
       const d=document.createElement('div');d.className='panel';
       const msg=score>=9?'Excellent. You are ready for the next unit.':score>=6?'Good foundation. Revisit the lessons behind the questions you missed.':'Worth another pass. Re-read the traps boxes, then retry.';
-      d.innerHTML='<div class="score">'+score+'/'+Q.length+'</div><p style="margin-top:10px"></p><p class="small"></p><div class="row"><button class="btn" type="button">Retry the quiz</button><a class="btn ghost" href="progress.html">See my progress</a></div>';
-      const ps=$$('p',d);ps[0].textContent=msg;ps[1].textContent='Best score '+state.best[u]+'/'+Q.length+'. Attempts so far: '+tries+'.';
-      $('button',d).addEventListener('click',()=>{qi=0;score=0;show();});el.appendChild(d);return;
+      d.innerHTML='<div class="score">'+score+'/'+Q.length+'</div><p style="margin-top:10px"></p><p class="small"></p><div class="row"><button class="btn" type="button">Try a fresh set</button><a class="btn ghost" href="progress.html">See my progress</a></div>';
+      const ps=$$('p',d);ps[0].textContent=msg;ps[1].textContent='Best score '+state.best[u]+'/'+Q.length+'. Attempts so far: '+tries+'. Each attempt draws 10 of '+(pool.quiz.length+pool.checks.length)+' questions in a new order, with the options shuffled.';
+      $('button',d).addEventListener('click',()=>{Q=drawUnitQuiz(u);qi=0;score=0;show();});el.appendChild(d);return;
     }
     const head=document.createElement('div');head.className='uq-head';head.innerHTML='<span>Question '+(qi+1)+' of '+Q.length+'</span><span>Score '+score+'</span>';el.appendChild(head);
-    const fs=makeQ(Q[qi],el,{qid:u+'quiz.'+qi,onAnswer:ok=>{if(ok)score++;head.lastChild.textContent='Score '+score;
+    const fs=makeQ(Q.at(qi).it,el,{qid:Q.at(qi).qid,shuffle:true,onAnswer:ok=>{if(ok)score++;head.lastChild.textContent='Score '+score;
       const nx=document.createElement('button');nx.className='btn';nx.type='button';nx.style.marginTop='10px';nx.textContent=qi===Q.length-1?'See my score':'Next question';
       nx.addEventListener('click',()=>{qi++;show();});fs.appendChild(nx);nx.focus();}});
   }
@@ -332,6 +347,7 @@ function initCoursePage(){
   $$('.roadmap a[data-unit]').forEach(a=>{const s=sum.find(x=>String(x.u.n)===a.dataset.unit);if(!s)return;
     $('.prog',a).textContent=s.lessons+' of '+s.u.lessons.length+' lessons'+(s.best!=null?', quiz '+s.best+'/10':'');});
   initTerminal();
+  const dr=$('#daily');if(dr)dailyReview(dr);
 }
 function initHomePage(){
   $$('[data-course-card]').forEach(card=>{const sum=courseSummary(card.dataset.courseCard);if(!sum)return;
@@ -607,7 +623,7 @@ function initSdlPage(){
       $('.pstate',card).className='pstate '+s.state;
       $$('[data-ms]',card).forEach(c=>c.checked=!!state.done[c.dataset.ms]);
       const body=$('.solbody',card),open=s.state==='done'||state.done['sdl'+p.n+'show'];
-      if(open&&!body.dataset.shown){body.dataset.shown='1';body.innerHTML='<pre class="c"><code>'+hl(p.code)+'</code></pre><p class="small">Compiled with gcc -Wall -Wextra and run on the sample input above. Your version can look different and still be right: compare outputs, not lines.</p>';}
+      if(open&&!body.dataset.shown){body.dataset.shown='1';body.innerHTML='<pre class="c" data-stdin="'+esc(p.stdin||'')+'"><code>'+hl(p.code)+'</code></pre><p class="small">Compiled with gcc -Wall -Wextra and run on the sample input above. Your version can look different and still be right: compare outputs, not lines.</p>';addRunLinks(body);}
       if(!open){body.dataset.shown='';body.innerHTML='<p>Try the milestones first: the solution unlocks when all of them are ticked. Reading a solution before trying teaches far less than getting stuck for a while.</p><button type="button" class="btn ghost">Show it anyway</button>';
         $('button',body).addEventListener('click',()=>{state.done['sdl'+p.n+'show']=true;save();paint();});}
       if(s.state==='done'){doneP++;hrs+=p.hours;}});
@@ -631,7 +647,7 @@ function initExamPage(){
     p.questions.map((q,qi)=>'<article class="xq"><div class="prob-h"><span class="lvl medium">'+esc(q.co)+'</span><h3>Question '+(qi+1)+'</h3><span class="lec">10 marks</span></div>'+
       q.parts.map((pt,pi)=>{const key='Q'+(qi+1)+'abc'[pi];return '<div class="xpart"><p><b>('+'abc'[pi]+')</b> '+esc(pt.q)+' <span class="qtag">'+pt.m+' marks, '+esc(pt.bl)+'</span></p>'+
         (pt.qcode?'<pre class="c"><code>'+hl(pt.qcode)+'</code></pre>':'')+'<div class="answer-space" aria-hidden="true"></div>'+
-        '<details class="reveal wq-ans"><summary>Model answer and marking scheme</summary><pre class="c"><code>'+(pt.plain?esc(pt.a):hl(pt.a))+'</code></pre>'+
+        '<details class="reveal wq-ans"><summary>Model answer and marking scheme</summary><pre class="c"'+(!pt.plain&&pt.sample&&!/\.txt:/.test(pt.sample[0])?' data-stdin="'+esc(pt.sample[0])+'"':'')+'><code>'+(pt.plain?esc(pt.a):hl(pt.a))+'</code></pre>'+
         (pt.sample?'<div class="io"><div><div class="tr-l">Sample input</div><pre class="tr-out">'+esc(pt.sample[0]||'(none)')+'</pre></div><div><div class="tr-l">Output</div><pre class="tr-out">'+esc(pt.sample[1])+'</pre></div></div>':'')+
         '<div class="tbl"><table class="scheme"><thead><tr><th>Marks</th><th>Awarded for</th></tr></thead><tbody>'+pt.scheme.map(s=>'<tr><td>'+esc(s[0])+'</td><td>'+esc(s[1])+'</td></tr>').join('')+'</tbody></table></div></details>'+
         '<div class="row selfmark" role="group" aria-label="Marks for '+(qi+1)+'('+'abc'[pi]+')"><span class="small">My marks:</span>'+Array.from({length:pt.m+1},(_,v)=>'<button type="button" class="mk" data-p="'+p.id+'" data-k="'+key+'" data-v="'+v+'">'+v+'</button>').join('')+'<span class="small">of '+pt.m+'</span></div></div>';}).join('')+'</article>').join('')+'</section>').join('');
@@ -650,7 +666,7 @@ function initExamPage(){
     const tick=()=>{const left=Math.max(0,Math.round((end-Date.now())/1000));$('#examTimerText').textContent=Math.floor(left/3600)+':'+String(Math.floor(left%3600/60)).padStart(2,'0')+':'+String(left%60).padStart(2,'0')+' left';
       $('#examTimerText').classList.toggle('warn',left<=900);if(left<=0){clearInterval(examTimer);examTimer=null;$('#examTimerText').textContent='Time is up. Pens down.';}};
     tick();examTimer=setInterval(tick,1000);}));
-  sync();renderPlan();
+  sync();renderPlan();addRunLinks(host);
 }
 function renderPlan(){
   const el=$('#plan'),m=window.PPS_MANIFEST[COURSE];if(!el||!m)return;
@@ -720,3 +736,74 @@ function renderCourseOutcomes(){
       m.cos.map((c,i)=>'<tr><td>'+esc(c.id)+'</td><td>'+esc(c.text)+'</td><td>'+c.hours+'</td><td>'+c.marks+'</td><td>'+esc(c.pos)+'</td><td>'+esc(c.los)+'</td><td><a href="'+m.units[i].href+'">Unit '+m.units[i].n+'</a></td></tr>').join('')+
       '<tr><td></td><td><b>Total</b></td><td><b>'+th+'</b></td><td><b>'+tm+'</b></td><td></td><td></td><td></td></tr></tbody></table></div>';}
 }
+
+/* ---------- run a complete program in Compiler Explorer (opens in a new tab only when clicked) ---------- */
+function ceURL(src,stdin){
+  const state={sessions:[{id:1,language:'c',source:src,compilers:[],executors:[{arguments:'',compiler:{id:'cg132',libs:[],options:'-Wall -Wextra -std=c11'},stdin:stdin||'',stdinVisible:true,compilerOutputVisible:true,argumentsVisible:false,compilerVisible:false,wrap:true}]}]};
+  const json=JSON.stringify(state),bytes=new TextEncoder().encode(json);let bin='';bytes.forEach(b=>{bin+=String.fromCharCode(b);});
+  return 'https://godbolt.org/clientstate/'+encodeURIComponent(btoa(bin));
+}
+function addRunLinks(root){
+  $$('pre.c',root||document).forEach(pre=>{
+    if(pre.dataset.run)return;const src=pre.textContent;
+    if(!/#include/.test(src)||!/\bint\s+main\s*\(/.test(src))return;
+    pre.dataset.run='1';
+    const a=document.createElement('a');a.className='runlink';a.href=ceURL(src,pre.dataset.stdin||'');a.target='_blank';a.rel='noopener';
+    a.textContent='Run this program';a.title='Opens Compiler Explorer (godbolt.org) in a new tab with this code';
+    pre.after(a);
+  });
+}
+
+/* ---------- daily review: 5 questions a day, spaced by how well each was known ---------- */
+const GAPS=[1,2,4,8,16,32];
+const dayStr=d=>{const x=new Date(d);return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');};
+const addDays=(n)=>{const d=new Date();d.setDate(d.getDate()+n);return dayStr(d);};
+function reviewItem(qid){const [set,i]=qid.split('.');if(set.endsWith('quiz'))return (PPS.UQ[set.replace('quiz','')]||[]).at(+i);return (PPS.Q[set]||[]).at(+i);}
+function reviewState(){if(!state.review||typeof state.review!=='object')state.review={};if(!state.streak||typeof state.streak!=='object')state.streak={last:'',n:0,best:0};return state.review;}
+function streakNow(){const s=state.streak||{};return (s.last===dayStr(Date.now())||s.last===addDays(-1))?s.n:0;}
+function reviewDue(){
+  const R=reviewState(),today=dayStr(Date.now()),out=[],seen=new Set();
+  const push=q=>{if(!seen.has(q)&&reviewItem(q)){seen.add(q);out.push(q);}};
+  Object.keys(R).filter(q=>R[q].d<=today).sort((a,b)=>R[a].b-R[b].b).forEach(push);
+  Object.keys(state.answers).filter(q=>!R[q]&&state.answers[q].ok===false).forEach(push);
+  Object.keys(state.answers).filter(q=>!R[q]&&state.answers[q].ok&&Date.now()-state.answers[q].t>3*864e5).sort((a,b)=>state.answers[a].t-state.answers[b].t).forEach(push);
+  return out;
+}
+function reviewFill(have,n){
+  const pool=[],seen=new Set(have),m=window.PPS_MANIFEST[COURSE];
+  const doneLessons=m?m.units.flatMap(u=>u.lessons.map(l=>l[0])).filter(id=>state.done[id]):[];
+  const sets=doneLessons.length?doneLessons:['u1l1','u1l2'];
+  sets.forEach(s=>(PPS.Q[s]||[]).forEach((_,i)=>{const q=s+'.'+i;if(!seen.has(q)&&!state.answers[q])pool.push(q);}));
+  return shuffleArr(pool).slice(0,n);
+}
+function dailyReview(el){
+  reviewState();
+  const today=dayStr(Date.now());let list=[],qi=0,right=0,extra=false;
+  function pick(){const due=reviewDue();list=due.slice(0,5);if(list.length<5)list=list.concat(reviewFill(list,5-list.length));qi=0;right=0;}
+  function header(){const s=streakNow(),due=reviewDue().length;
+    return '<div class="dr-head"><div><h2>Daily review</h2><p class="small">5 questions, about 5 minutes. Missed questions come back sooner; known ones come back later.</p></div><div class="dr-stats"><span><b>'+s+'</b>-day streak</span><span><b>'+due+'</b> due</span></div></div>';}
+  function finishDay(){const st=state.streak;if(st.last!==today){st.n=(st.last===addDays(-1))?st.n+1:1;st.last=today;st.best=Math.max(st.best||0,st.n);}save();}
+  function show(){
+    el.innerHTML=header();
+    const doneToday=state.streak.last===today;
+    if(!list.length||qi>=list.length){
+      if(list.length&&qi>=list.length&&!extra)finishDay();
+      const p=document.createElement('div');p.className='dr-done';
+      p.innerHTML=(list.length?'<p><b>'+right+' of '+list.length+' right.</b> </p>':'')+'<p class="small"></p><div class="row"><button class="btn ghost" type="button">Do 5 more</button><a class="btn ghost" href="progress.html">See my progress</a></div>';
+      $('p.small',p).textContent=(doneToday||(list.length&&qi>=list.length))?'Today\u2019s review is done. Your streak is '+streakNow()+' day'+(streakNow()===1?'':'s')+'. Come back tomorrow for the next set.':'Nothing to review yet. Answer some quick checks in the lessons first.';
+      $('button',p).addEventListener('click',()=>{extra=true;pick();show();});
+      el.innerHTML=header();el.appendChild(p);return;
+    }
+    const prog=document.createElement('div');prog.className='uq-head';prog.innerHTML='<span>Question '+(qi+1)+' of '+list.length+'</span><span>'+(extra?'Extra practice':'Today')+'</span>';el.appendChild(prog);
+    const qid=list.at(qi),it=reviewItem(qid);
+    const fs=makeQ(it,el,{qid,shuffle:true,onAnswer:ok=>{
+      const R=reviewState(),r=R[qid]||{b:0};r.b=ok?Math.min((R[qid]?r.b+1:1),GAPS.length-1):0;r.d=addDays(ok?GAPS.at(r.b):1);R[qid]=r;if(ok)right++;save();
+      const nx=document.createElement('button');nx.className='btn';nx.type='button';nx.style.marginTop='10px';nx.textContent=qi===list.length-1?'Finish':'Next question';
+      nx.addEventListener('click',()=>{qi++;show();});fs.appendChild(nx);nx.focus();}});
+    const src=document.createElement('p');src.className='small';const set=qid.split('.')[0];
+    const unit=set.charAt(1);src.innerHTML='From <a href="unit'+unit+'.html'+(set.endsWith('quiz')?'#u'+unit+'quiz':'#'+set)+'">'+(set.endsWith('quiz')?'the Unit '+unit+' quiz':'lesson '+set.slice(1).replace('l','.'))+'</a>';fs.appendChild(src);
+  }
+  if(state.streak.last===today){list=[];}else pick();
+  show();
+}
+PPS.init.push(()=>addRunLinks());

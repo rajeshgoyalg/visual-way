@@ -403,3 +403,17 @@ details.hint summary{cursor:pointer;font:500 .85rem var(--head);color:var(--blue
 .cobox-h{display:flex;gap:10px;align-items:center;font:600 .9rem var(--head);color:var(--blue)}
 .cobox p{margin:8px 0 0;max-width:none;font-size:1.02rem}
 .cobox p.small{margin-top:6px;font:400 .84rem/1.5 var(--head);color:var(--soft)}
+
+/* ---------- run links and daily review ---------- */
+.runlink{display:inline-flex;align-items:center;gap:6px;margin:-6px 0 14px;font:500 .85rem var(--head);color:var(--blue);text-decoration:none;border:1.5px solid var(--line);border-radius:20px;padding:4px 12px}
+.runlink::before{content:"";width:0;height:0;border-left:7px solid currentColor;border-top:4.5px solid transparent;border-bottom:4.5px solid transparent}
+.runlink:hover,.runlink:focus-visible{border-color:var(--blue);background:var(--blue-tint)}
+.daily{margin:8px auto 30px}
+.daily .panel{padding:20px 24px}
+.dr-head{display:flex;gap:16px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;margin-bottom:10px}
+.dr-head h2{margin:0 0 4px}
+.dr-stats{display:flex;gap:10px}
+.dr-stats span{font:500 .85rem var(--head);color:var(--soft);border:1.5px solid var(--line);border-radius:20px;padding:4px 12px;white-space:nowrap}
+.dr-stats b{color:var(--ink)}
+.dr-done p{margin:6px 0}
+@media print{.runlink{display:none}}
