@@ -506,15 +506,79 @@ int main(void)
     <div class="uq" data-set="u5"></div>
   </section>
   <section class="lesson" id="u5cheat" data-title="Exam cheat sheet" data-kind="cheat" aria-labelledby="u5ch">
-    <div class="lesson-head"><h2 id="u5ch">Unit 5 cheat sheet</h2><span class="lec">One screen, the night before</span></div>
-    <div class="cheat">
-      <div><h3>Structures</h3>struct tag { members };  (semicolon). Variable: struct tag s; Member: s.m. Copy with =, compare member by member. Arrays of structs: cls[i].marks.</div>
-      <div><h3>Nested and pointers</h3>e.dob.year for nested. p = &amp;s; then p-&gt;m equals (*p).m. Dot for variables, arrow for pointers.</div>
-      <div><h3>Pointer arithmetic</h3>p + 1 moves sizeof(type) bytes. a[i] = *(a + i). Array name = &amp;a[0], fixed. p2 − p1 = elements between.</div>
-      <div><h3>2-D and arrays of pointers</h3>a[i][j] = *(*(a + i) + j). char *names[] holds strings of different lengths; sort by swapping pointers.</div>
-      <div><h3>File steps</h3>FILE *fp = fopen(name, mode); check NULL; fprintf/fscanf, fputc/fgetc, fputs/fgets; fclose(fp).</div>
-      <div><h3>Modes</h3>r: read, must exist. w: write, erases or creates. a: append, creates if needed. Add + for read and write, b for binary.</div>
+    <div class="lesson-head"><h2 id="u5ch">Unit 5 cheat sheet</h2><span class="lec">The night before: the syntax you must not mix up</span></div>
+    <div class="cheat cheat-v2">
+      <div>
+        <h3>Structures</h3>
+        <p>A structure groups related values of different types into one record.</p>
+<pre class="c" data-hl>
+struct student {
+    int roll;
+    float marks;
+};              // ; is required
+struct student s = {101, 88.5};
+s.marks = 90;   // dot: member</pre>
+        <p class="watch"><b>Watch out:</b> you can copy a whole record with <code>s2 = s1</code>, but you cannot compare with <code>s1 == s2</code>. Compare member by member.</p>
+      </div>
+      <div>
+        <h3>Arrays of structures</h3>
+        <p>One record per student, all in one array.</p>
+<pre class="c" data-hl>
+struct student cls[60];
+cls[0].roll = 101;  // 1st
+cls[i].marks        // student i</pre>
+        <p class="watch"><b>Watch out:</b> the index goes on the array, not the member: <code>cls[i].marks</code>, never <code>cls.marks[i]</code>.</p>
+      </div>
+      <div>
+        <h3>Nested structures and pointers to them</h3>
+        <p>A record inside a record, and a pointer that holds a record's address.</p>
+<pre class="c" data-hl>
+e.dob.year      // chain the dots
+struct student *p = &amp;s;
+p-&gt;marks = 95;  // (*p).marks</pre>
+        <p class="watch"><b>Rule:</b> dot after a variable, arrow after a pointer.</p>
+      </div>
+      <div>
+        <h3>Pointer arithmetic</h3>
+        <p>Adding 1 to a pointer moves to the next element, not the next byte.</p>
+<pre class="c" data-hl>
+int a[4] = {10, 20, 30, 40};
+int *p = a;   // = &amp;a[0]
+*(p + 2)      // 30, like a[2]
+p++;          // now at a[1]</pre>
+        <p class="watch"><b>Remember:</b> <code>p + 1</code> moves 4 bytes for an int and 8 for a double. <code>a++</code> is an error, because an array name cannot move.</p>
+      </div>
+      <div>
+        <h3>2-D arrays and arrays of pointers</h3>
+        <p>Row first, then column. An array of pointers lists strings of different lengths.</p>
+<pre class="c" data-hl>
+// a[i][j] is *(*(a + i) + j)
+const char *names[] =
+    {"Asha", "Ravi", "Shalini"};
+printf("%s", names[2]);</pre>
+        <p class="watch"><b>Why it helps:</b> each name uses only the space it needs, and sorting swaps pointers instead of copying text.</p>
+      </div>
+      <div>
+        <h3>Files: open, use, close</h3>
+        <p>Every file program follows the same three steps.</p>
+<pre class="c" data-hl>
+FILE *fp = fopen("a.txt", "r");
+if (fp == NULL) return 1;
+fscanf(fp, "%d", &amp;m);
+fclose(fp);   // saves, releases</pre>
+        <p class="watch"><b>Always</b> check for NULL before using fp. <b>Pairs to know:</b> <code>fprintf</code>/<code>fscanf</code> for formatted data, <code>fputc</code>/<code>fgetc</code> for one character, <code>fputs</code>/<code>fgets</code> for one line.</p>
+      </div>
     </div>
+    <h3 style="margin-top:22px">Which file mode?</h3>
+    <div class="tbl"><table>
+      <thead><tr><th>Mode</th><th>Use it to</th><th>File already exists</th><th>File missing</th></tr></thead>
+      <tbody>
+        <tr><td><code>"r"</code></td><td>Read</td><td>Reads from the start</td><td>fopen returns NULL</td></tr>
+        <tr><td><code>"w"</code></td><td>Write fresh</td><td><b>Erases it</b>, then writes</td><td>Creates it</td></tr>
+        <tr><td><code>"a"</code></td><td>Add to the end</td><td>Keeps it, writes after the last line</td><td>Creates it</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small">Add <code>+</code> to read and write in the same mode (<code>"r+"</code>, <code>"w+"</code>, <code>"a+"</code>), and <code>b</code> for binary files (<code>"rb"</code>).</p>
   </section>
 </section>
 

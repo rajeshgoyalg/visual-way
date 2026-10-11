@@ -321,3 +321,10 @@ a.btn{display:inline-flex;align-items:center;text-decoration:none}
 @media (pointer:coarse){.opt{padding:11px 8px}.tabs button,.pipe button{min-height:42px}.rail li a{padding:9px 6px}}
 @media (min-width:961px) and (max-width:1100px){.layout{grid-template-columns:200px minmax(0,1fr);gap:24px}}
 @media (max-width:640px){.topbar-in{gap:8px}.brand{font-size:.98rem}.learner-chip{margin-left:auto}}
+
+/* cheat sheet with code examples */
+.cheat-v2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.cheat-v2>div{display:flex;flex-direction:column}
+.cheat-v2 p{margin:0 0 8px}
+.cheat-v2 pre.c{font-size:.82rem;padding:12px 14px;margin:4px 0 10px}
+.cheat-v2 .watch{font-size:.9rem;border-top:1px dashed var(--line);padding-top:8px;margin-top:auto}
